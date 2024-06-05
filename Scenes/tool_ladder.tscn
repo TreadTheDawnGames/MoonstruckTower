@@ -1,0 +1,93 @@
+[gd_scene load_steps=10 format=3 uid="uid://bw0h53cp0em5y"]
+
+[ext_resource type="Script" path="res://Scenes/Ladder.cs" id="1_oqf3g"]
+[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/OoSPlatformerTilesSprites.png" id="2_cgrqo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdox1"]
+size = Vector2(12, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r3bv5"]
+size = Vector2(12, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ti32"]
+size = Vector2(34.9925, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jclux"]
+size = Vector2(17, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bl384"]
+size = Vector2(12, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l6uvb"]
+size = Vector2(17, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1ymp"]
+size = Vector2(12, 48)
+
+[node name="ToolLadder" type="RigidBody2D"]
+z_index = -2
+collision_layer = 0
+script = ExtResource("1_oqf3g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -40)
+texture = ExtResource("2_cgrqo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(0, -24)
+texture = ExtResource("2_cgrqo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("2_cgrqo")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="ClimbableSurface" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClimbableSurface"]
+position = Vector2(0, -24)
+shape = SubResource("RectangleShape2D_kdox1")
+
+[node name="Lid" type="StaticBody2D" parent="."]
+collision_layer = 5
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lid"]
+position = Vector2(0, -47.5)
+shape = SubResource("RectangleShape2D_r3bv5")
+one_way_collision = true
+
+[node name="PickupArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_1ti32")
+debug_color = Color(0.782052, 0.435604, 1.73271e-06, 0.42)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="PickupArea"]
+position = Vector2(0, -51.5)
+shape = SubResource("RectangleShape2D_jclux")
+debug_color = Color(0.782052, 0.435604, 1.73271e-06, 0.42)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="PickupArea"]
+position = Vector2(0, -27)
+shape = SubResource("RectangleShape2D_bl384")
+debug_color = Color(0.782052, 0.435604, 1.73271e-06, 0.42)
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="PickupArea"]
+position = Vector2(0, 3.5)
+shape = SubResource("RectangleShape2D_l6uvb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.05444e-06, -24)
+rotation = -3.14159
+shape = SubResource("RectangleShape2D_b1ymp")

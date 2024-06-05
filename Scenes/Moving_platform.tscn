@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://d33tyqtrsqxtn"]
+
+[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/OoSPlatformerTilesSprites.png" id="1_x3qq1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5xhaq"]
+size = Vector2(16, 7)
+
+[node name="MovingPlatform" type="AnimatableBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_x3qq1")
+region_enabled = true
+region_rect = Rect2(0, 128, 16, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_5xhaq")
+one_way_collision = true
+debug_color = Color(0, 0, 1, 0.419608)

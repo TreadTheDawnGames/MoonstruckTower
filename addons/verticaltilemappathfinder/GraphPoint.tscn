@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://diy2tbnx5teg5"]
+
+[ext_resource type="Texture2D" uid="uid://b77hjjfoisoo1" path="res://addons/verticaltilemappathfinder/PathfindingPoint.png" id="1_grshk"]
+
+[node name="GraphPoint" type="Sprite2D"]
+texture = ExtResource("1_grshk")

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://0axl161yeqcm"]
+
+[ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="2_jnj2e"]
+[ext_resource type="Script" path="res://Scripts/Projectile.cs" id="2_uoi3q"]
+
+[node name="Projectile" type="CharacterBody2D"]
+collision_mask = 17
+script = ExtResource("2_uoi3q")
+
+[node name="HitBox2D" type="Area2D" parent="."]
+script = ExtResource("2_jnj2e")
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="Destroy"]
