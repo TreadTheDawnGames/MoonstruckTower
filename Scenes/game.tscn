@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
 [ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/OoSPlatformerTilesSprites.png" id="2_lbv7k"]
 [ext_resource type="PackedScene" uid="uid://d33tyqtrsqxtn" path="res://Scenes/Moving_platform.tscn" id="3_h10yl"]
-[ext_resource type="Script" path="res://addons/verticaltilemappathfinder/TileMapPathFind.cs" id="3_jl15l"]
+[ext_resource type="Script" path="res://addons/VerticalTileMapPathFinder/TileMapPathFind.cs" id="3_jl15l"]
 [ext_resource type="PackedScene" uid="uid://c6wel62w8vokb" path="res://Scenes/ladder.tscn" id="5_7yvrv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lpg4n"]

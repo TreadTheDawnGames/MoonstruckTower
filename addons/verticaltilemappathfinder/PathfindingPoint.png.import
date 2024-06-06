@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b77hjjfoisoo1"
-path="res://.godot/imported/PathfindingPoint.png-9a7a2aeccfc8de2599fb1c05e8a732d7.ctex"
+path="res://.godot/imported/PathfindingPoint.png-83f822e942d7fd5dabf18b28d5dd7429.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/verticaltilemappathfinder/PathfindingPoint.png"
-dest_files=["res://.godot/imported/PathfindingPoint.png-9a7a2aeccfc8de2599fb1c05e8a732d7.ctex"]
+source_file="res://addons/VerticalTileMapPathFinder/PathfindingPoint.png"
+dest_files=["res://.godot/imported/PathfindingPoint.png-83f822e942d7fd5dabf18b28d5dd7429.ctex"]
 
 [params]
 

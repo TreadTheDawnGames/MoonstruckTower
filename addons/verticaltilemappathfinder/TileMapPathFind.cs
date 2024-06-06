@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Linq;
 using System.Transactions;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 public class PointInfo
 {
@@ -30,6 +31,11 @@ public partial class TileMapPathFind : TileMap
 {
 	[Export]
 	public bool ShowDebugGraph = true;
+	[Export]
+	public int JumpDistance = 6;
+	[Export]
+	public int JumpHeight = 4;
+
 	private const int COLLISION_LAYER = 0;
 	private const int CELL_IS_EMPTY = -1;
 	private const int MAX_TILE_FALL_SCAN_DEPTH = 500;
@@ -61,6 +67,14 @@ public partial class TileMapPathFind : TileMap
 			AddFallPoint(tile);
 		}
 	}
+	private void DrawDebugLine(Vector2 to, Vector2 from, Color color)
+	{
+		if(ShowDebugGraph)
+		{
+			DrawLine(from, to, color);
+		}
+	}
+
 
 	private PointInfo GetPointInfo(Vector2I tile)
 	{
@@ -74,8 +88,113 @@ public partial class TileMapPathFind : TileMap
 		return null;
 	}
 
+    public override void _Draw()
+    {
+		if (ShowDebugGraph)
+		{
+			ConnectPoints();
+		}
+    }
+
+    #region Connect Graph Points
+    private void ConnectPoints()
+	{
+		foreach (var p1 in _pointInfoList)
+		{
+			ConnectHorizontalPoints(p1);
+			ConnectJumpPoints(p1);
+		}
+	}
+
+	private void ConnectJumpPoints(PointInfo p1)
+	{
+		foreach(var p2 in _pointInfoList)
+		{
+			ConnectHorizontalPlatformJumps(p1, p2);
+		}
+	}
+
+	private void ConnectHorizontalPlatformJumps(PointInfo p1, PointInfo p2)
+	{
+		if (p1.PointID == p2.PointID) return;
+
+		if(p2.Position.Y == p1.Position.Y && p1.IsRightEdge && p2.IsLeftEdge)
+		{
+			if(p2.Position.X>p1.Position.X)
+			{
+				Vector2 p2Map = LocalToMap(p2.Position); 
+				Vector2 p1Map = LocalToMap(p1.Position);
+
+				if (p2Map.DistanceTo(p1Map) < JumpDistance + 1)
+				{
+					_astarGraph.ConnectPoints(p1.PointID, p2.PointID);
+					DrawDebugLine(p1.Position, p2.Position, new Color(0,1,0,1));
+				}
+			}
+		}
+	}
+
+	private void ConnectHorizontalPoints(PointInfo p1)
+	{
+		if (p1.IsLeftEdge || p1.IsLeftWall || p1.IsFallTile)
+		{
+			PointInfo closest = null;
+
+			foreach (var p2 in _pointInfoList)
+			{
+				if (p1.PointID == p2.PointID) { continue; }
+
+				if ((p2.IsRightEdge || p2.IsRightWall || p2.IsFallTile) && p2.Position.Y == p1.Position.Y && p2.Position.X > p1.Position.X)
+				{
+					if (closest == null)
+					{
+						closest = new PointInfo(p2.PointID, p2.Position);
+					}
+
+					if (p2.Position.X < closest.Position.X)
+					{
+						closest.Position = p2.Position;
+						closest.PointID = p2.PointID;
+					}
+				}
+			}
+
+			if (closest != null)
+			{
+				if (!HorizontalConnectionCannotBeMade((Vector2I)p1.Position, (Vector2I)closest.Position))
+				{
+
+					_astarGraph.ConnectPoints(p1.PointID, closest.PointID);
+					DrawDebugLine(p1.Position, closest.Position, new Color(0, 1, 0, 1));
+				}
+			}
+		}
+	}
+
+	private bool HorizontalConnectionCannotBeMade(Vector2I p1, Vector2I p2)
+	{
+		Vector2I startScan = LocalToMap(p1);
+		Vector2I endScan = LocalToMap(p2);
+
+		for (int i = startScan.X; i < endScan.X; ++i)
+		{
+			if (GetCellSourceId(COLLISION_LAYER, new Vector2I(i, startScan.Y)) != CELL_IS_EMPTY || GetCellSourceId(COLLISION_LAYER, new Vector2I(i, startScan.Y + 1)) == CELL_IS_EMPTY)
+			{
+				{
+					return true;
+				}
+
+			}
+
+		}
+
+			return false;
+	}
+
+    #endregion
+
     #region Tile Fall Points
-	private Vector2I? GetStartScanTileForFallPoint(Vector2I tile)
+    private Vector2I? GetStartScanTileForFallPoint(Vector2I tile)
 	{
 		var tileAbove = new Vector2I(tile.X , tile.Y-1);
 		var point = GetPointInfo(tileAbove);

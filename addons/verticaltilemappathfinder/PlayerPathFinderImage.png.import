@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://35tlkqnyo0xe"
-path="res://.godot/imported/PlayerPathFinderImage.png-38dabd8d9374ad41ae1e19b3cebc7787.ctex"
+path="res://.godot/imported/PlayerPathFinderImage.png-d1628059b55e1880f723bc063d49158d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/verticaltilemappathfinder/PlayerPathFinderImage.png"
-dest_files=["res://.godot/imported/PlayerPathFinderImage.png-38dabd8d9374ad41ae1e19b3cebc7787.ctex"]
+source_file="res://addons/VerticalTileMapPathFinder/PlayerPathFinderImage.png"
+dest_files=["res://.godot/imported/PlayerPathFinderImage.png-d1628059b55e1880f723bc063d49158d.ctex"]
 
 [params]
 
