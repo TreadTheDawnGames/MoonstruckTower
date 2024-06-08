@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://diy2tbnx5teg5"]
+[gd_scene load_steps=3 format=3 uid="uid://diy2tbnx5teg5"]
 
 [ext_resource type="Texture2D" uid="uid://b77hjjfoisoo1" path="res://addons/VerticalTileMapPathFinder/PathfindingPoint.png" id="1_grshk"]
+[ext_resource type="Script" path="res://addons/VerticalTileMapPathFinder/GraphPoint.cs" id="2_lwujj"]
 
 [node name="GraphPoint" type="Sprite2D"]
 texture = ExtResource("1_grshk")
+script = ExtResource("2_lwujj")
+
+[node name="Timer" type="Timer" parent="."]

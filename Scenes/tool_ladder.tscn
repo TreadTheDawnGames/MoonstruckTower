@@ -13,7 +13,7 @@ size = Vector2(12, 1)
 size = Vector2(34.9925, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jclux"]
-size = Vector2(17, 7)
+size = Vector2(17, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bl384"]
 size = Vector2(12, 42)
@@ -27,6 +27,7 @@ size = Vector2(12, 48)
 [node name="ToolLadder" type="RigidBody2D"]
 z_index = -2
 collision_layer = 0
+collision_mask = 65
 script = ExtResource("1_oqf3g")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -74,7 +75,7 @@ shape = SubResource("RectangleShape2D_1ti32")
 debug_color = Color(0.782052, 0.435604, 1.73271e-06, 0.42)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="PickupArea"]
-position = Vector2(0, -51.5)
+position = Vector2(0, -53.5)
 shape = SubResource("RectangleShape2D_jclux")
 debug_color = Color(0.782052, 0.435604, 1.73271e-06, 0.42)
 

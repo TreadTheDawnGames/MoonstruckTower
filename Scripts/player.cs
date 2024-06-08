@@ -272,7 +272,7 @@ public partial class player : CharacterBody2D
         if (!attacking && !usingTool)
         {
 
-            if (IsOnFloor())
+            if (IsOnFloor()&&!onLadder)
             {
 
                 if (direction.X != 0f)
@@ -283,7 +283,7 @@ public partial class player : CharacterBody2D
                 {
                     animator.Play(new StringName("Duck"));
                 }
-                else
+                else 
                 {
                     animator.Play(new StringName("Idle"));
                 }
@@ -296,7 +296,7 @@ public partial class player : CharacterBody2D
             {
                 animator.Play("LadderStay");
             }
-            else
+            else  
             {
                 animator.Play(new StringName("Jump"));
             }
