@@ -111,7 +111,7 @@ public partial class PlayerPathfinder : CharacterBody2D
                 {
                     GoToNextPointInPath();
                     Jump(ref velocity);
-                    Dropthrough();
+                    Dropthrough(ref velocity);
                 }
             }
         }
@@ -129,7 +129,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         MoveAndSlide();
     }
 
-    private void Dropthrough()
+    private void Dropthrough(ref Vector2 velocity)
     {
         if (_prevTarget == null || _target == null || _target.IsPositionPoint)
         {
@@ -143,13 +143,16 @@ public partial class PlayerPathfinder : CharacterBody2D
         }
         if (_prevTarget.Position.Y < _target.Position.Y || UseDropthrough())
         {
+            GD.Print("Used Dropthrough");
             GlobalPosition += new Vector2(0, 2);
+            
+            velocity.Y = 0;     //override jump velocity
         }
     }
         private bool UseDropthrough()
     {
-        if (_prevTarget.IsDropthroughTile && _target.IsDropthroughFallTile
-            && _prevTarget.Position.Y < _target.Position.Y) // And the previous target is below the target tile
+        if (_prevTarget.IsDropthroughTile && _target.IsDropthroughFallTile&&
+             _prevTarget.Position.Y < _target.Position.Y) // And the previous target is below the target tile
         {
             return true;    // Return true, perform the fall
         }
@@ -160,7 +163,8 @@ public partial class PlayerPathfinder : CharacterBody2D
         // If the previous tile was a right edge, and the target tile is a left edge
         if (_prevTarget.IsRightEdge && _target.IsLeftEdge
         && _prevTarget.Position.Y <= _target.Position.Y // And the previous target is below the target tile
-        && _prevTarget.Position.X < _target.Position.X) // And the previous target is to the left of the target
+        && _prevTarget.Position.X < _target.Position.X  // And the previous target is to the left of the target
+        ) 
         {
             
             GD.Print("Jump because Right to Left");
@@ -177,7 +181,8 @@ public partial class PlayerPathfinder : CharacterBody2D
         // If the previous tile was a left edge, and the target tile is a right edge
         if (_prevTarget.IsLeftEdge && _target.IsRightEdge
         && _prevTarget.Position.Y <= _target.Position.Y // And the previous target is below the target tile
-        && _prevTarget.Position.X > _target.Position.X) // And the previous target is to the right of the target
+        && _prevTarget.Position.X > _target.Position.X  // And the previous target is to the right of the target
+        ) 
         {
             GD.Print("Jump because Left To Right");
 
@@ -229,8 +234,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         }
 
 
-
-        if (JumpToDropthrough()||JumpBecauseTooLow() || JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge())
+        if ((JumpToDropthrough()||JumpBecauseTooLow() || JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge())&&!UseDropthrough())
         {
             int heightDistance = _pathFind2D.LocalToMap(_target.Position).Y - _pathFind2D.LocalToMap(_prevTarget.Position).Y;
             if (Mathf.Abs(heightDistance) <= 1.5)

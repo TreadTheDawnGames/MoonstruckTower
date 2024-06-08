@@ -75,10 +75,7 @@ public partial class TileMapPathFind : TileMap
 
 		BuildGraph();
 
-		foreach(var item in _pointInfoList)
-		{
-			GetPointInfo(LocalToMap(item.Position)).PrintInfo();
-		}
+		
 
     }
 
