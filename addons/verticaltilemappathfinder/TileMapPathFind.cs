@@ -257,7 +257,7 @@ public partial class TileMapPathFind : TileMap
 
     public override void _Draw()
 	{
-		if (ShowDebugGraph)
+		//if (ShowDebugGraph)
 		{
 			ConnectPoints();
 		}
