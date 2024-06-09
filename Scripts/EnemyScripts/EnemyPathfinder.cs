@@ -1,9 +1,11 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 public partial class EnemyPathfinder : Pathfinder
 {
-
+    [Signal]
+    public delegate void UnreachablePointEventHandler();
     public int movementDirection = 0;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -18,12 +20,12 @@ public partial class EnemyPathfinder : Pathfinder
 
     public override void _Process(double delta)
     {
-        if (moveDirection.X - 2 > 0)
+        if (Velocity.X > 0)
         {
             movementDirection = 1;
 
         }
-        else if (moveDirection.X + 2 < 0)
+        else if (Velocity.X < 0)
         {
             movementDirection = -1;
 
@@ -33,7 +35,9 @@ public partial class EnemyPathfinder : Pathfinder
 
     public override void CreateAndGoToPath(Vector2 where)
     {
-        if (IsOnFloor())
+        var aboveWhere = _pathFind2D.ConvertPointPositionToMapPosition(where);
+        aboveWhere.Y += 1;
+        if(_pathFind2D.GetCellSourceId(0, aboveWhere)==-1&&IsOnFloor())
         {
 
             var spaceState = GetWorld2D().DirectSpaceState;
@@ -45,12 +49,13 @@ public partial class EnemyPathfinder : Pathfinder
                 Vector2I resultVector = (Vector2I)result["position"];
                 Vector2I goTo = new Vector2I(resultVector.X, resultVector.Y - 16);
 
-
-                _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(new Vector2(goTo.X, goTo.Y)), new Color(1f, 1f, 0, 1f), scale: 1.2f, pathfinder: this);
-
-                DoPathFinding(goTo);
                 
+                _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(new Vector2(goTo.X, goTo.Y)), new Color(1f, 1f, 0, 1f), scale: 1.2f, pathfinder: this);
+                
+                DoPathFinding(goTo);
+                return;
             }
         }
+        EmitSignal(SignalName.UnreachablePoint);
     }
 }

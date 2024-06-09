@@ -11,6 +11,7 @@ public partial class EnemyWanderState : EnemyState
     {
         base.SetUp(message);
         body.pathfinder.PathfindEnd += ()=> EndWander();
+        body.pathfinder.UnreachablePoint += ()=> UnreachablePoint();
     
     }
 
@@ -19,15 +20,22 @@ public partial class EnemyWanderState : EnemyState
     {
         base.OnStart(message);
         animator.Play("Walk");
-         
         float wanderDirection = GD.RandRange(-160, 160);
         Vector2 goTo = new Vector2(wanderDirection, -Math.Abs(wanderDirection));
+        GD.Print(Owner.Name + " started wandering to "+ goTo);
+
         body.pathfinder.CreateAndGoToPath(goTo);
     }
 
     void EndWander()
     {
         GD.Print("End wander");
+        machine.ChangeState("EnemyIdleState", null);
+    }
+    void UnreachablePoint()
+    {
+        animator.FlipH = !animator.FlipH;
+        GD.Print("Attempted to go to unreachable point");
         machine.ChangeState("EnemyIdleState", null);
     }
 

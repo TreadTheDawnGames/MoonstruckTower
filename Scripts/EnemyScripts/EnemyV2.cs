@@ -19,7 +19,7 @@ public partial class EnemyV2 : Node2D
 		machine = GetNode<EnemyStateMachine>("StateMachine");
 		flippables = GetNode<Node2D>("Flippables");
 
-		//machine.SetUp();
+		machine.SetUp();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -38,9 +38,9 @@ public partial class EnemyV2 : Node2D
 
 		if (Input.IsActionJustPressed("Debug-Pathfind"))
 		{
-			pathfinder.CreateAndGoToPath(GetGlobalMousePosition());
+			machine.ChangeState("EnemyWanderState", null);
 
 		}
 
-    }
+	}
 }

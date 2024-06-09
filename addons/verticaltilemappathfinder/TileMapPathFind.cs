@@ -213,7 +213,7 @@ public partial class TileMapPathFind : TileMap
 	{
 		System.Collections.Generic.Stack<PointInfo> pathStack = new System.Collections.Generic.Stack<PointInfo>();
 
-
+		
 		
 		//if endpoint == astar.getclosestpointonpath
         //var endPoint = GetPointInfo(LocalToMap(endPos));

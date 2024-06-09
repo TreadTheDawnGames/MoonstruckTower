@@ -28,7 +28,7 @@ public partial class Pathfinder : CharacterBody2D
     [Signal]
     public delegate void ReachedPointEventHandler();
 
-    protected Vector2 moveDirection = Vector2.Zero;
+    protected bool movingRight;
 
 
     public override void _Ready()
@@ -56,7 +56,7 @@ public partial class Pathfinder : CharacterBody2D
         if (_prevTarget != null)
         {
 
-            //GD.Print("Going to " + _target.Position);
+            GD.Print("Going to " + _target.Position);
 
             _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(1, 0, 0, 1f), scale: 0.75f, this);
         }
@@ -72,7 +72,7 @@ public partial class Pathfinder : CharacterBody2D
 
     }
 
-    public virtual void CreateAndGoToPath(Vector2 where) { GD.PrintErr("Pathfinder is not inteded to be used directly. Please write goTo parsing logic in a script that inherits it."); }
+    public virtual void CreateAndGoToPath(Vector2 where) { GD.PrintErr("Pathfinder is not inteded to be used directly. Please write goTo parsing logic in a script that inherits it.");  }
 
     public override void _Process(double delta)
     {
@@ -91,17 +91,20 @@ public partial class Pathfinder : CharacterBody2D
         if (!IsOnFloor())
             velocity.Y += gravity * (float)delta;
 
+            var moveDirection = Vector2.Zero;
         // if there is a target set
         if (_target != null)
         {
             // If the target is to the right of the current pusition
             if (_target.Position.X - 2 > Position.X)
             {
+                movingRight = true;
                 moveDirection.X = 1f;
             }
             // If the target is to the left of the current pusition
             else if (_target.Position.X + 2 < Position.X)
             {
+                movingRight = false;
                 moveDirection.X = -1f;
             }
             else
