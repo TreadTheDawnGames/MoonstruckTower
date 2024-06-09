@@ -15,7 +15,7 @@ public partial class EnemyDamageState : EnemyState
 
     public override void OnStart(Dictionary<string, object> message)
     {
-        base.OnStart(message);
+        /*base.OnStart(message);
         GD.Print(Owner.Name + " is being damaged");
         body.hitPoints -= (int)message["damage"];
 
@@ -30,12 +30,12 @@ public partial class EnemyDamageState : EnemyState
 
             return;
         }
-        animator.Play("Damage");
+        animator.Play("Damage");*/
     }
 
     void Destroy()
     {
-        if (animator.Animation == "Death")
+        /*if (animator.Animation == "Death")
         {
             body.Destroy();
         }
@@ -47,7 +47,7 @@ public partial class EnemyDamageState : EnemyState
                 machine.ChangeState("EnemyConfusedState", null);
             }
             else { machine.ChangeState("EnemyChaseState", null); }
-        }
+        }*/
 
     }
 }

@@ -1,39 +1,52 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-public partial class PlayerPathfinder : CharacterBody2D
+public partial class Pathfinder : CharacterBody2D
 {
     [Export]
-    public  float Speed = 100.0f;
+    public float Speed = 100.0f;
     [Export]
-    public  float JumpVelocity = -325.0f;
+    public float PixelJumpHeight = 64;
     [Export]
-    public  float SmallJumpVelocity = -250.0f;
+    public float SmallJumpVelocity = -250.0f;
     [Export]
-    public  float TinyJumpVelocity = -200.0f;
+    public float TinyJumpVelocity = -200.0f;
 
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
-    private TileMapPathFind _pathFind2D;
+    protected TileMapPathFind _pathFind2D;
     private Stack<PointInfo> _path = new Stack<PointInfo>();
-    private PointInfo _target = null;
+    protected PointInfo _target = null;
     private PointInfo _prevTarget = null;
     [Export]
     private float JumpDistanceHeightThreshold = 90.0f;
 
+    [Signal]
+    public delegate void PathfindEndEventHandler();
+    [Signal]
+    public delegate void ReachedPointEventHandler();
+
+    protected Vector2 moveDirection = Vector2.Zero;
+
+
     public override void _Ready()
     {
-        _pathFind2D = FindParent("Game").FindChild("TileMap") as TileMapPathFind;
+        //_pathFind2D = FindParent("Game").FindChild("TileMap") as TileMapPathFind;
+
+        _pathFind2D =(TileMapPathFind )GetTree().GetFirstNodeInGroup("PathfindMap")  ;
+
     }
 
     private void GoToNextPointInPath()
     {
+        EmitSignal(SignalName.ReachedPoint);
         // If there's no points in the path
         if (_path.Count <= 0)
         {
+            GD.Print("\n");
+            EmitSignal(SignalName.PathfindEnd);
             _prevTarget = null; // Set previous target to null
             _target = null;     // Set target to null
             return;             // Return out of the method
@@ -43,49 +56,35 @@ public partial class PlayerPathfinder : CharacterBody2D
         if (_prevTarget != null)
         {
 
-            GD.Print("Going to " + _target.Position);
-            
-            //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(1, 0, 0, 1f), scale:0.75f);
+            //GD.Print("Going to " + _target.Position);
+
+            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(1, 0, 0, 1f), scale: 0.75f, this);
         }
     }
 
-    private void DoPathFinding()
+    protected void DoPathFinding(Vector2I goTo)
     {
-        var mousePos = GetGlobalMousePosition();
 
-        var spaceState = GetWorld2D().DirectSpaceState;
-        // use global coordinates, not local to node
-        var query = PhysicsRayQueryParameters2D.Create(mousePos, new Vector2(mousePos[0], mousePos[1] + 1000));
-        var result = spaceState.IntersectRay(query);
+        _path = _pathFind2D.GetPlaform2DPath(this.Position, goTo);
 
-        if (result.Count > 0)
-        {
-            Vector2I resultVector = (Vector2I)result["position"];
-            Vector2I goTo = new Vector2I(resultVector.X, resultVector.Y - 16);
-            _path = _pathFind2D.GetPlaform2DPath(this.Position, goTo);
-              GoToNextPointInPath();
-        }
-
-            
-
-            
         
+            GoToNextPointInPath();
+
     }
+
+    public virtual void CreateAndGoToPath(Vector2 where) { GD.PrintErr("Pathfinder is not inteded to be used directly. Please write goTo parsing logic in a script that inherits it."); }
 
     public override void _Process(double delta)
     {
         // If the character is on the ground, and the left mouse button was clicked
         if (IsOnFloor() && Input.IsActionJustPressed("Debug-Pathfind"))
         {
-
-
-            DoPathFinding();
+                DoPathFinding((Vector2I)GetGlobalMousePosition());
         }
     }
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
-        Vector2 direction = Vector2.Zero;
 
 
         // Add the gravity.
@@ -98,12 +97,12 @@ public partial class PlayerPathfinder : CharacterBody2D
             // If the target is to the right of the current pusition
             if (_target.Position.X - 2 > Position.X)
             {
-                direction.X = 1f;
+                moveDirection.X = 1f;
             }
             // If the target is to the left of the current pusition
             else if (_target.Position.X + 2 < Position.X)
             {
-                direction.X = -1f;
+                moveDirection.X = -1f;
             }
             else
             {
@@ -116,9 +115,9 @@ public partial class PlayerPathfinder : CharacterBody2D
             }
         }
 
-        if (direction != Vector2.Zero)
+        if (moveDirection != Vector2.Zero)
         {
-            velocity.X = direction.X * Speed;
+            velocity.X = moveDirection.X * Speed;
         }
         else
         {
@@ -127,6 +126,7 @@ public partial class PlayerPathfinder : CharacterBody2D
 
         Velocity = velocity;
         MoveAndSlide();
+       moveDirection = Vector2.Zero;
     }
 
     private void Dropthrough(ref Vector2 velocity)
@@ -141,19 +141,34 @@ public partial class PlayerPathfinder : CharacterBody2D
         {
             return; // Return, no need to Drop
         }
-        if (_prevTarget.Position.Y < _target.Position.Y || UseDropthrough())
+        if (UseDropthrough()/*||UseDropthrouthBecauseLower()*/ )
         {
-            GD.Print("Used Dropthrough");
             GlobalPosition += new Vector2(0, 2);
-            
-            velocity.Y = 0;     //override jump velocity
+
+            //velocity.Y = 0;     //override jump velocity
         }
     }
-        private bool UseDropthrough()
+
+    bool UseDropthrouthBecauseLower()
     {
-        if (_prevTarget.IsDropthroughTile && _target.IsDropthroughFallTile&&
+        if (
              _prevTarget.Position.Y < _target.Position.Y) // And the previous target is below the target tile
         {
+            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_prevTarget.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
+            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
+
+            GD.Print("Used Dropthrough becuase lower");
+            return true;    // Return true, perform the fall
+        }
+        return false;
+    }
+    private bool UseDropthrough()
+    {
+        if (_prevTarget.IsDropthroughTile /*&& _target.IsDropthroughFallTile*/ &&
+             _prevTarget.Position.Y < _target.Position.Y
+             && IsOnFloor()) // And the previous target is below the target tile
+        {
+            GD.Print("Used Dropthrough because dropthrough");
             return true;    // Return true, perform the fall
         }
         return false;       // return false, don't perform the jump
@@ -164,9 +179,9 @@ public partial class PlayerPathfinder : CharacterBody2D
         if (_prevTarget.IsRightEdge && _target.IsLeftEdge
         && _prevTarget.Position.Y <= _target.Position.Y // And the previous target is below the target tile
         && _prevTarget.Position.X < _target.Position.X  // And the previous target is to the left of the target
-        ) 
+        )
         {
-            
+
             GD.Print("Jump because Right to Left");
 
             return true;    // Return true, perform the jump
@@ -182,7 +197,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         if (_prevTarget.IsLeftEdge && _target.IsRightEdge
         && _prevTarget.Position.Y <= _target.Position.Y // And the previous target is below the target tile
         && _prevTarget.Position.X > _target.Position.X  // And the previous target is to the right of the target
-        ) 
+        )
         {
             GD.Print("Jump because Left To Right");
 
@@ -198,7 +213,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         && _prevTarget.Position.Y >= _target.Position.Y // And the previous target is above the target tile
         && _prevTarget.Position.X == _target.Position.X) // And the previous target is to the right of the target
         {
-        GD.Print("Jump because Dropthrough");
+            GD.Print("Jump because Dropthrough");
             return true;    // Return true, perform the jump
         }
         return false;       // return false, don't perform the jump
@@ -206,7 +221,7 @@ public partial class PlayerPathfinder : CharacterBody2D
 
     bool JumpBecauseTooLow()
     {
-        if(_prevTarget.Position.Y -8 > _target.Position.Y)
+        if (_prevTarget.Position.Y - 8 > _target.Position.Y)
         {
             GD.Print("Jump because Too Low");
             return true;
@@ -234,10 +249,13 @@ public partial class PlayerPathfinder : CharacterBody2D
         }
 
 
-        if ((JumpToDropthrough()||JumpBecauseTooLow() || JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge())&&!UseDropthrough())
+        if ((JumpToDropthrough() || JumpBecauseTooLow() || JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge()) && !UseDropthrough())
         {
-            int heightDistance = _pathFind2D.LocalToMap(_target.Position).Y - _pathFind2D.LocalToMap(_prevTarget.Position).Y;
-            if (Mathf.Abs(heightDistance) <= 1.5)
+            float heightDistance = _target.Position.DistanceTo(_prevTarget.Position);
+
+            float jumpInPixels = -Mathf.Sqrt(2 * gravity * PixelJumpHeight * ((Mathf.Abs(heightDistance)/PixelJumpHeight)));
+            //JumpVelocity = -Mathf.Abs(heightDistance);
+            /*if (Mathf.Abs(heightDistance) <= 1.5)
             {
                 GD.Print("Tiny Jump");
                 velocity.Y = TinyJumpVelocity;
@@ -250,8 +268,10 @@ public partial class PlayerPathfinder : CharacterBody2D
             else
             {
                 GD.Print("High Jump");
-                velocity.Y = JumpVelocity;
-            }
+            }*/
+
+
+            velocity.Y = jumpInPixels; // JumpVelocity* (Mathf.Abs(heightDistance));
         }
     }
 

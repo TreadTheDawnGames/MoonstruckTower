@@ -5,15 +5,16 @@ using System.Collections.Generic;
 
 public partial class EnemyIdleState : EnemyState
 {
-    Timer timer;
+    Timer chillinTimer;
 
     
 
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
-        timer = GetNode<Timer>("Timer");
-        timer.Timeout += () => StartWander();
+
+        chillinTimer = GetNode<Timer>("Timer");
+        chillinTimer.Timeout += () => StartWander();
 
     }
 
@@ -21,10 +22,11 @@ public partial class EnemyIdleState : EnemyState
     {
         base.OnStart(message);
         animator.Play("Idle");
-        timer.WaitTime = GD.RandRange(0.5f, 2f);
-        GD.Print(body.Name + " is Idling for " + timer.WaitTime + " seconds");
+
+        chillinTimer.WaitTime = GD.RandRange(0.5f, 2f);
+        GD.Print(body.Name + " is Idling for " + chillinTimer.WaitTime + " seconds");
         
-        timer.Start();
+        chillinTimer.Start();
     }
 
     void StartWander()
@@ -36,7 +38,7 @@ public partial class EnemyIdleState : EnemyState
     public override void OnExit(string nextState)
     {
         base.OnExit(nextState);
-        timer.Stop();
+        chillinTimer.Stop();
         
     }
 

@@ -6,5 +6,3 @@
 [node name="GraphPoint" type="Sprite2D"]
 texture = ExtResource("1_grshk")
 script = ExtResource("2_lwujj")
-
-[node name="Timer" type="Timer" parent="."]

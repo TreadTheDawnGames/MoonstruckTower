@@ -6,6 +6,7 @@ using System.Linq;
 using System.Transactions;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using System.Net;
 
 public class PointInfo
 {
@@ -157,13 +158,71 @@ public partial class TileMapPathFind : TileMap
 		return pathStackReversed;
 	}
 
+	private Vector2 CheckForHorizontalPoints(Vector2 position, string debugName = "")
+	{
+		if (MapToLocal(LocalToMap(position)).Y == MapToLocal(LocalToMap(_astarGraph.GetClosestPositionInSegment(position))).Y)
+		{
+			Vector2 returnPos = position;
+			var leftPoint = new Vector2(position.X - 10000, position.Y);
+			var rightPoint = new Vector2(position.X + 10000, position.Y);
+
+			foreach (var point in _pointInfoList)
+			{                                    //position is to the left
+				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(position)).Y && point.Position.X < position.X)
+				{
+					if (point.Position.DistanceTo(position) < leftPoint.DistanceTo(position))
+					{
+						leftPoint = point.Position;
+						GD.Print(debugName + "Distance L " + leftPoint.DistanceTo(position));
+					}
+				}
+			                                   //position is to the Right
+				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(position)).Y && point.Position.X > position.X)
+				{
+					if (point.Position.DistanceTo(position) < rightPoint.DistanceTo(position))
+					{
+						rightPoint = point.Position;
+						GD.Print(debugName + "Distance R " + rightPoint.DistanceTo(position));
+					}
+				}
+				//check left and right for points
+				//if left is closer than right use that else vice versa
+			}
+			GD.Print(debugName +"left point: " + LocalToMap(rightPoint));
+
+			if (Mathf.Abs(leftPoint.DistanceTo(position)) < Mathf.Abs(rightPoint.DistanceTo(position)))
+			{
+                GD.Print(debugName + "Left returned");
+
+                returnPos = leftPoint;
+			}
+			else if (Mathf.Abs(leftPoint.DistanceTo(position)) > Mathf.Abs(rightPoint.DistanceTo(position)))
+			{
+                GD.Print(debugName + "Right returned");
+
+                returnPos = rightPoint;
+			}
+			GD.Print("Right: " + Mathf.Abs(rightPoint.DistanceTo(position)) + "\n Left: " + Mathf.Abs(leftPoint.DistanceTo(position)));
+
+			return returnPos;
+		}
+		else return position;
+    }
+
 	public System.Collections.Generic.Stack<PointInfo> GetPlaform2DPath(Vector2 startPos, Vector2 endPos)
 	{
-
-        AddVisualPoint(LocalToMap((Vector2I)endPos), new Color("#0b75f7"), temp:true);
 		System.Collections.Generic.Stack<PointInfo> pathStack = new System.Collections.Generic.Stack<PointInfo>();
-		// Find the path between the start and end position
-		var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(startPos), _astarGraph.GetClosestPoint(endPos));
+
+
+		
+		//if endpoint == astar.getclosestpointonpath
+        //var endPoint = GetPointInfo(LocalToMap(endPos));
+        //if (endPoint == null) endPoint = GetPointInfoAtPosition(endPos);
+        //var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(startPos), endPoint.Position);
+        
+
+        // Find the path between the start and end position
+        var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(CheckForHorizontalPoints(startPos, "Start ")), _astarGraph.GetClosestPoint(CheckForHorizontalPoints(endPos, "End ")));
 
 		if (idPath.Count() <= 0) { return pathStack; }      // If the the path has reached its goal, return the empty path stack
 
@@ -211,7 +270,7 @@ public partial class TileMapPathFind : TileMap
 				// If the endPoint is closer than the last point in the astar path
 				if (endPoint.Position.DistanceTo(penultimatePoint.Position) < currPoint.Position.DistanceTo(penultimatePoint.Position))
 				{
-					continue;                   // Skip addig the last point to the path stack
+					continue;                   // Skip adding the last point to the path stack
 				}
 				// If the last point is closer
 				else
@@ -223,7 +282,7 @@ public partial class TileMapPathFind : TileMap
 
 			pathStack.Push(currPoint);      // Add the current point			
 		}
-		pathStack.Push(endPoint);           // Add the end point to the path		
+		pathStack.Push(endPoint);           // Add the end point to the path
 		return ReversePathStack(pathStack); // Return the pathstack reversed		
 	}
 
@@ -237,6 +296,7 @@ public partial class TileMapPathFind : TileMap
 	{
 		if (ShowDebugGraph)
 		{
+			
 			DrawLine(from, to, color);
 		}
 	}
@@ -273,9 +333,11 @@ public partial class TileMapPathFind : TileMap
 			ConnectFallPoint(p1);
 		}
 	}
+
 	
 
-    private void ConnectFallPoint(PointInfo p1)
+
+    private void ConnectFallPoint(PointInfo p1, bool ignoreDraw = false)
 	{
 
 		if (p1.IsLeftEdge || p1.IsRightEdge)
@@ -287,12 +349,12 @@ public partial class TileMapPathFind : TileMap
 			if (FindFallPoints(tilePos) == null) return;
 			foreach(Vector2I? fallPoint in FindFallPoints(tilePos))
 			{
-				CreateConnectionForFallPoint(p1, fallPoint);
+				CreateConnectionForFallPoint(p1, fallPoint, ignoreDraw);
 			}
 		}
 	}
 
-	private void CreateConnectionForFallPoint(PointInfo p1, Vector2I? fallPoint)
+	private void CreateConnectionForFallPoint(PointInfo p1, Vector2I? fallPoint, bool ignoreDraw = false)
 	{
         if (fallPoint != null)
         {
@@ -303,24 +365,24 @@ public partial class TileMapPathFind : TileMap
             if (p1Map.DistanceTo(p2Map) <= JumpHeight)
             {
                 _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID);
-                DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 0, 1));
+                if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 0, 1));
             }
             else
             {
                 _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID, bidirectional: false);
-                DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 1, 0, 1));
+                if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 1, 0, 1));
             }
         }
     }
 
-	private void ConnectJumpPoints(PointInfo p1)
+	private void ConnectJumpPoints(PointInfo p1, bool ignoreDraw = false)
 	{
 		foreach(var p2 in _pointInfoList)
 		{
-			ConnectHorizontalPlatformJumps(p1, p2);
-            ConnectDiagonalJumpRightEdgeToLeftEdge(p1, p2);
-            ConnectDiagonalJumpLeftEdgeToRightEdge(p1, p2);
-			ConnectDropthroughPoints(p1, p2);
+			ConnectHorizontalPlatformJumps(p1, p2, ignoreDraw);
+            ConnectDiagonalJumpRightEdgeToLeftEdge(p1, p2, ignoreDraw);
+            ConnectDiagonalJumpLeftEdgeToRightEdge(p1, p2, ignoreDraw);
+			ConnectDropthroughPoints(p1, p2, ignoreDraw);
 		}
 	}
 /* if (p2.IsFallTile
@@ -328,7 +390,7 @@ public partial class TileMapPathFind : TileMap
 				&& p2.Position.Y > p1.Position.Y
 
                 && GetCellSourceId(COLLISION_LAYER, (Vector2I)p1.Position) == CELL_IS_EMPTY)*/
-    private void ConnectDropthroughPoints(PointInfo p1, PointInfo p2)
+    private void ConnectDropthroughPoints(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
     {
 		if (p1.IsDropthroughTile)
 		{
@@ -347,19 +409,19 @@ public partial class TileMapPathFind : TileMap
                 if (p1Map.DistanceTo(p2Map) <= JumpHeight)
                 {
                     _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID);
-                    DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 1, 1));
+                    if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 1, 1));
                 }
                 else
                 {
                     _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID, bidirectional: false);
-                    DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 0, 0, 1));
+                   if(!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 0, 0, 1));
                 }
             }
 
         }
     }
 
-    private void ConnectDiagonalJumpRightEdgeToLeftEdge(PointInfo p1, PointInfo p2)
+    private void ConnectDiagonalJumpRightEdgeToLeftEdge(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
 	{
 		if (p1.IsRightEdge)
 		{
@@ -368,16 +430,16 @@ public partial class TileMapPathFind : TileMap
 
 			if (p2.IsLeftEdge
 				&& p2.Position.X > p1.Position.X
-				&& p1.Position.X-p2.Position.X<=JumpHeight
+				//&& p1.Position.X-p2.Position.X<=JumpHeight
 				&& p2.Position.Y > p1.Position.Y
 				&& p2Map.DistanceTo(p1Map) < JumpDistance)
 			{
 				_astarGraph.ConnectPoints(p1.PointID, p2.PointID);
-				DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
+                if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
 			}
 		}
 	}
-	private void ConnectDiagonalJumpLeftEdgeToRightEdge(PointInfo p1, PointInfo p2)
+	private void ConnectDiagonalJumpLeftEdgeToRightEdge(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
 	{
 		if (p1.IsLeftEdge)
 		{
@@ -387,15 +449,15 @@ public partial class TileMapPathFind : TileMap
 			if (p2.IsRightEdge
 				&& p2.Position.X < p1.Position.X
 				&& p2.Position.Y > p1.Position.Y
-				&& p1.Position.X - p2.Position.X <= JumpHeight
+				//&& p1.Position.X - p2.Position.X <= JumpHeight
 				&& p2Map.DistanceTo(p1Map) < JumpDistance)
 			{
 				_astarGraph.ConnectPoints(p1.PointID, p2.PointID);
-				DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
+                if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
 			}
 		}
 	}
-	private void ConnectHorizontalPlatformJumps(PointInfo p1, PointInfo p2)
+	private void ConnectHorizontalPlatformJumps(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
 	{
 		if (p1.PointID == p2.PointID) return;
 
@@ -409,15 +471,15 @@ public partial class TileMapPathFind : TileMap
 				if (p2Map.DistanceTo(p1Map) < JumpDistance + 1)
 				{
 					_astarGraph.ConnectPoints(p1.PointID, p2.PointID);
-					DrawDebugLine(p1.Position, p2.Position, new Color(0,1,0,1));
+                    if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0,1,0,1));
 				}
 			}
 		}
 	}
 
-	private void ConnectHorizontalPoints(PointInfo p1)
+	private void ConnectHorizontalPoints(PointInfo p1, bool ignoreDraw = false)
 	{
-		if (p1.IsLeftEdge || p1.IsLeftWall || p1.IsFallTile || p1.IsDropthroughTile || p1.IsDropthroughFallTile)
+		if (p1.IsLeftEdge || p1.IsLeftWall || p1.IsFallTile || p1.IsDropthroughTile || p1.IsDropthroughFallTile )
 		{
 			PointInfo closest = null;
 
@@ -425,7 +487,7 @@ public partial class TileMapPathFind : TileMap
 			{
 				if (p1.PointID == p2.PointID) { continue; }
 
-				if ((p2.IsRightEdge || p2.IsRightWall || p2.IsFallTile || p2.IsDropthroughTile || p2.IsDropthroughFallTile) && p2.Position.Y == p1.Position.Y && p2.Position.X > p1.Position.X)
+				if ((p2.IsRightEdge || p2.IsRightWall || p2.IsFallTile || p2.IsDropthroughTile || p2.IsDropthroughFallTile ) && p2.Position.Y == p1.Position.Y && p2.Position.X > p1.Position.X)
 				{
 					
 
@@ -444,18 +506,18 @@ public partial class TileMapPathFind : TileMap
 			
 			if (closest != null)
 			{
-				if (HorizontalConnectionCannotBeMade((Vector2I)p1.Position, (Vector2I)closest.Position))
+				if (HorizontalConnectionCanBeMade((Vector2I)p1.Position, (Vector2I)closest.Position))
 				{
 					
 
 					_astarGraph.ConnectPoints(p1.PointID, closest.PointID);
-					DrawDebugLine(p1.Position, closest.Position, new Color(0, 1, 0, 1));
+					if(!ignoreDraw)DrawDebugLine(p1.Position, closest.Position, new Color(0, 1, 0, 1));
 				}
 			}
 		}
 	}
 
-	private bool HorizontalConnectionCannotBeMade(Vector2I p1, Vector2I p2)
+	private bool HorizontalConnectionCanBeMade(Vector2I p1, Vector2I p2)
 	{
 		Vector2I startScan = LocalToMap(p1);
 		Vector2I endScan = LocalToMap(p2);
@@ -605,7 +667,7 @@ public partial class TileMapPathFind : TileMap
         if (point.IsDropthroughTile)
         {
 
-            tileScan = new Vector2I(tile.X, tile.Y + 1);
+            tileScan = new Vector2I(tile.X, tile.Y );
             return tileScan;
         }
         
@@ -788,6 +850,7 @@ public partial class TileMapPathFind : TileMap
 		
 
 	}
+	
 
 	private void AddRightDropThroughStairPoints(Vector2I tile)
 	{
@@ -866,7 +929,7 @@ public partial class TileMapPathFind : TileMap
 
 
 
-    public void AddVisualPoint(Vector2I tile, Color? color = null, float scale = 1.0f, bool temp = false)
+    public void AddVisualPoint(Vector2I tile, Color? color = null, float scale = 1.0f, Pathfinder pathfinder = null)
 	{
 		if(!ShowDebugGraph) return;
 		GraphPoint visualPoint = _graphPoint.Instantiate() as GraphPoint;
@@ -876,7 +939,11 @@ public partial class TileMapPathFind : TileMap
 
 		if (visualPoint != null)
 		{
-
+            
+            if (pathfinder != null)
+			{
+				visualPoint.pathfinder = pathfinder;
+			}
 			if (color != null)
 			{
 				visualPoint.Modulate = (Color)color;
@@ -890,12 +957,10 @@ public partial class TileMapPathFind : TileMap
 		
 			visualPoint.Position = MapToLocal(tile);
 
-		
+			//GD.Print("Placed Visual Point at " + LocalToMap(visualPoint.Position));
+			
 			AddChild(visualPoint);
-			if ((bool)temp)
-			{
-				visualPoint.timer.Start();
-			}
+			
 		}
 	}
 

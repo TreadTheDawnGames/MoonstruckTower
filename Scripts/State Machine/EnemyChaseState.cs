@@ -8,20 +8,20 @@ public partial class EnemyChaseState : EnemyState
     Area2D rangeArea;
     public override void SetUp(Dictionary<string, object> message)
     {
-        base.SetUp(message);
+       /* base.SetUp(message);
         link = machine.link;
         rangeArea = GetNode<Area2D>(Owner.GetPath() + "/Flippables/InRange");
-        body.fov.BodyExited += (exitingBody) => TargetLost(exitingBody);
+        body.fov.BodyExited += (exitingBody) => TargetLost(exitingBody);*/
     }
     public override void OnStart(Dictionary<string, object> message)
     {
-        base.OnStart(message);
+       /* base.OnStart(message);
         
         GD.Print(body.Name + " is Chasing");
         animator.Play("Walk", 1.5f);
         statusAnimator.Play("!");
 
-        speedMultiplier = 1.5f;
+        speedMultiplier = 1.5f;*/
         
     }
 
@@ -31,7 +31,7 @@ public partial class EnemyChaseState : EnemyState
     {
 
 
-        Vector2 direction = link.GlobalPosition - body.GlobalPosition;
+        /*Vector2 direction = link.GlobalPosition - body.GlobalPosition;
         if (direction.Y > 0 && body.floorCheck.GetOverlappingBodies().Count == 0)
         {
             jumping = true;
@@ -52,22 +52,22 @@ public partial class EnemyChaseState : EnemyState
         {
             moveDirection = 0;
         }
-        base.UpdateState(delta);
+        base.UpdateState(delta);*/
         
     }
     void TargetLost(Node2D node)
     {
-        GD.Print("TargetLost");
+        /*GD.Print("TargetLost");
         body.hasTarget = true;
         if (node == link)
         {
             machine.ChangeState("EnemyConfusedState", null);            
-        }
+        }*/
     }
     public override void OnExit(string nextState)
     {
-        base.OnExit(nextState);
+        /*base.OnExit(nextState);
         speedMultiplier = 1f;
-        statusAnimator.Play("None");
+        statusAnimator.Play("None");*/
     }
 }

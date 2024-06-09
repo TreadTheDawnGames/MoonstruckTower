@@ -8,19 +8,19 @@ using System.Reflection.PortableExecutable;
 public partial class EnemyStateMachine : StateMachine
 {
     public player link;
-    public Enemy body;
+    public EnemyV2 body;
 
     // Called when the node enters the scene tree for the first time.
-    public  void Setup()
+    public  void SetUp()
 	{
         link = (player)GetTree().GetFirstNodeInGroup("Player");
 
-		body = Owner.GetNode<Enemy>(Owner.GetPath());
+		body = Owner.GetNode<EnemyV2>(Owner.GetPath()+"/EnemyLogic");
 		foreach (EnemyState enemyState in States)
 		{
             enemyState.SetUp(new Dictionary<string, object>() {
                 {"Machine", this },
-                {"Animator", Owner.GetNode<AnimatedSprite2D>(Owner.GetPath() + "/Animator") },
+                {"Animator", body.animator },
                 {"StatusAnimator", body.statusAnimator },
                 {"Body", body } });
 			
@@ -40,7 +40,7 @@ public partial class EnemyStateMachine : StateMachine
 	{
         
 
-            foreach (Node2D node in body.fov.GetOverlappingBodies())
+           /* foreach (Node2D node in body.fov.GetOverlappingBodies())
             {
                 if (node == link)
                 {
@@ -48,7 +48,7 @@ public partial class EnemyStateMachine : StateMachine
                         ChangeState("EnemyChaseState", null);
                     body.hasTarget = true;
                 }
-            }
+            }*/
         
     }
 }

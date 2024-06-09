@@ -46,7 +46,7 @@ public partial class Enemy : CharacterBody2D
 		fov = GetNode<Area2D>("Flippables/FOV");
 		floorCheck = GetNode<Area2D>("FloorCheck");
 
-		machine?.Setup();
+		machine?.SetUp();
 		statusAnimator.Play("None");
 
 	}

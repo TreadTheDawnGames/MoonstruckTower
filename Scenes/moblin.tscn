@@ -13,7 +13,6 @@
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyChaseState.cs" id="8_npaw1"]
 [ext_resource type="Script" path="res://Scenes/EnemyConfusedState.cs" id="10_y8kdv"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyDamageState.cs" id="11_8lo0d"]
-[ext_resource type="Script" path="res://Scenes/EnemyJumpState.cs" id="12_cagpt"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lfgw3"]
 atlas = ExtResource("2_h1pm8")
@@ -181,6 +180,44 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4k7xi"]
 size = Vector2(10, 15)
 
+[sub_resource type="CSharpScript" id="CSharpScript_jqbr1"]
+script/source = "using Godot;
+using System;
+
+public partial class EnemyJumpState : EnemyState
+{
+
+    public override void UpdateState(float delta)
+    {
+        Vector2 velocity = body.Velocity;
+        if (body.wallDetection.GetCollider() != null)
+        {
+            bool detectingDropthrough = false;
+            if ((body.jumpDetection.GetCollider() != null))
+            {
+
+                TileMap hit = (TileMap)body.jumpDetection.GetCollider();
+                TileData hitData = hit.GetCellTileData(0, hit.GetCoordsForBodyRid(body.jumpDetection.GetColliderRid()));
+
+                detectingDropthrough = (bool)hitData.GetCustomData(\"DropThroughTiles\");
+            }
+            if (body.wallDetection.GetCollider().IsClass(\"TileMap\"))
+            {
+                if (body.IsOnFloor() && !jumping && !(body.jumpDetection.GetCollider() == null && !detectingDropthrough))
+                {
+
+                    jumping = true;
+                    velocity.Y = body.jumpPower;
+                }
+            }
+        }
+        base.UpdateState(delta);
+
+
+    }
+}
+"
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nnicx"]
 radius = 8.0
 height = 22.0
@@ -205,7 +242,7 @@ speed = 45.0
 
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_8fwf8")
-animation = &"Attack"
+animation = &"Walk"
 
 [node name="StatusAnimator" type="AnimatedSprite2D" parent="Animator"]
 position = Vector2(0, -15)
@@ -254,7 +291,7 @@ script = ExtResource("10_y8kdv")
 one_shot = true
 
 [node name="Jump" type="Node" parent="StateMachine/States"]
-script = ExtResource("12_cagpt")
+script = SubResource("CSharpScript_jqbr1")
 
 [node name="Flippables" type="Node2D" parent="."]
 

@@ -8,7 +8,7 @@ public partial class EnemyState : State
 	public EnemyStateMachine machine;
 	public AnimatedSprite2D animator;
 	public AnimatedSprite2D statusAnimator;
-	public Enemy body;
+	public EnemyV2 body;
     public int moveDirection = 0;
     public float speedMultiplier = 1;
     public bool jumping = false;
@@ -18,12 +18,12 @@ public partial class EnemyState : State
         machine = (EnemyStateMachine)message["Machine"];
         animator = (AnimatedSprite2D)message["Animator"];
         statusAnimator = (AnimatedSprite2D)message["StatusAnimator"];
-        body = (Enemy)message["Body"];
+        body = (EnemyV2)message["Body"];
     }
     public override void UpdateState(float delta)
     {
       
-        base.UpdateState(delta);
+       /* base.UpdateState(delta);
         if (body.hitPoints > 0)
         {
             Vector2 velocity = body.Velocity;
@@ -64,7 +64,7 @@ public partial class EnemyState : State
             {
                 jumping = false;
             }
-        }
+        }*/
 
     }
 
