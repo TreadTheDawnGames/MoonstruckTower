@@ -45,7 +45,7 @@ public partial class Pathfinder : CharacterBody2D
         // If there's no points in the path
         if (_path.Count <= 0)
         {
-            GD.Print("\n");
+            //GD.Print("\n");
             EmitSignal(SignalName.PathfindEnd);
             _prevTarget = null; // Set previous target to null
             _target = null;     // Set target to null
@@ -56,7 +56,7 @@ public partial class Pathfinder : CharacterBody2D
         if (_prevTarget != null)
         {
 
-            GD.Print("Going to " + _target.Position);
+            //GD.Print("Going to " + _target.Position);
 
             _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(1, 0, 0, 1f), scale: 0.75f, this);
         }
@@ -72,9 +72,15 @@ public partial class Pathfinder : CharacterBody2D
 
     }
 
+    protected void StopPathfinding()
+    {
+        _path = new();
+        GoToNextPointInPath();
+    }
+
     public virtual void CreateAndGoToPath(Vector2 where) { GD.PrintErr("Pathfinder is not inteded to be used directly. Please write goTo parsing logic in a script that inherits it.");  }
 
-    public override void _Process(double delta)
+    public virtual void PathfinderProcess(double delta)
     {
         // If the character is on the ground, and the left mouse button was clicked
         if (IsOnFloor() && Input.IsActionJustPressed("Debug-Pathfind"))
@@ -82,7 +88,7 @@ public partial class Pathfinder : CharacterBody2D
                 DoPathFinding((Vector2I)GetGlobalMousePosition());
         }
     }
-    public override void _PhysicsProcess(double delta)
+    public virtual void PathfinderPhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
 
@@ -91,7 +97,7 @@ public partial class Pathfinder : CharacterBody2D
         if (!IsOnFloor())
             velocity.Y += gravity * (float)delta;
 
-            var moveDirection = Vector2.Zero;
+        var moveDirection = Vector2.Zero;
         // if there is a target set
         if (_target != null)
         {
@@ -160,7 +166,7 @@ public partial class Pathfinder : CharacterBody2D
             _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_prevTarget.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
             _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
 
-            GD.Print("Used Dropthrough becuase lower");
+           // GD.Print("Used Dropthrough becuase lower");
             return true;    // Return true, perform the fall
         }
         return false;
@@ -171,7 +177,7 @@ public partial class Pathfinder : CharacterBody2D
              _prevTarget.Position.Y < _target.Position.Y
              && IsOnFloor()) // And the previous target is below the target tile
         {
-            GD.Print("Used Dropthrough because dropthrough");
+          //  GD.Print("Used Dropthrough because dropthrough");
             return true;    // Return true, perform the fall
         }
         return false;       // return false, don't perform the jump
@@ -185,7 +191,7 @@ public partial class Pathfinder : CharacterBody2D
         )
         {
 
-            GD.Print("Jump because Right to Left");
+           // GD.Print("Jump because Right to Left");
 
             return true;    // Return true, perform the jump
         }
@@ -202,7 +208,7 @@ public partial class Pathfinder : CharacterBody2D
         && _prevTarget.Position.X > _target.Position.X  // And the previous target is to the right of the target
         )
         {
-            GD.Print("Jump because Left To Right");
+           // GD.Print("Jump because Left To Right");
 
             return true;    // Return true, perform the jump
         }
@@ -216,7 +222,7 @@ public partial class Pathfinder : CharacterBody2D
         && _prevTarget.Position.Y >= _target.Position.Y // And the previous target is above the target tile
         && _prevTarget.Position.X == _target.Position.X) // And the previous target is to the right of the target
         {
-            GD.Print("Jump because Dropthrough");
+           // GD.Print("Jump because Dropthrough");
             return true;    // Return true, perform the jump
         }
         return false;       // return false, don't perform the jump
@@ -226,7 +232,7 @@ public partial class Pathfinder : CharacterBody2D
     {
         if (_prevTarget.Position.Y - 8 > _target.Position.Y)
         {
-            GD.Print("Jump because Too Low");
+         //   GD.Print("Jump because Too Low");
             return true;
         }
         return false;

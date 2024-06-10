@@ -15,14 +15,21 @@ public partial class GraphPoint : Sprite2D
 	}*/
     public override void _PhysicsProcess(double delta)
     {
-        base._PhysicsProcess(delta);
-		if (pathfinder != null)
+		try
 		{
 
-			if (pathfinder.Position.DistanceTo(Position)<=10)
+			base._PhysicsProcess(delta);
+			if (pathfinder != null)
 			{
-				Destroy();
+
+				if (pathfinder.Position.DistanceTo(Position) <= 10)
+				{
+					Destroy();
+				}
 			}
+		}catch
+		{
+			
 		}
     }
 

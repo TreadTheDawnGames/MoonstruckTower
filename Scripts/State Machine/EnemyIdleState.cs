@@ -21,10 +21,13 @@ public partial class EnemyIdleState : EnemyState
     public override void OnStart(Dictionary<string, object> message)
     {
         base.OnStart(message);
+
+        
+
         animator.Play("Idle");
 
         chillinTimer.WaitTime = GD.RandRange(1, 5f);
-        GD.Print(body.Name + " is Idling for " + chillinTimer.WaitTime + " seconds");
+        GD.Print(logic.Name + " is Idling for " + chillinTimer.WaitTime + " seconds");
         
         chillinTimer.Start();
     }

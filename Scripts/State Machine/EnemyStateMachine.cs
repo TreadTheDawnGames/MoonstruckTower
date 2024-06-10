@@ -7,13 +7,11 @@ using System.Reflection.PortableExecutable;
 
 public partial class EnemyStateMachine : StateMachine
 {
-    public player link;
     public EnemyV2 body;
 
     // Called when the node enters the scene tree for the first time.
     public  void SetUp()
 	{
-        link = (player)GetTree().GetFirstNodeInGroup("Player");
 
 		body = Owner.GetNode<EnemyV2>(Owner.GetPath()+"/EnemyLogic");
 		foreach (EnemyState enemyState in States)

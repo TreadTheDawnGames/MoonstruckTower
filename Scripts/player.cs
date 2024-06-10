@@ -108,11 +108,11 @@ public partial class player : CharacterBody2D
         foreach (ITool tool in toolList)
         {
             tool.SetupTool(animator, this);
-            GD.Print("Added " + tool.name + " to Toolbag");
+            //GD.Print("Added " + tool.name + " to Toolbag");
         }
         toolBagList = toolList.ToArray();
         toolBagItemCount = toolList.Count;
-        GD.Print($"{toolBagItemCount} items in toolbag");
+        //GD.Print($"{toolBagItemCount} items in toolbag");
     }
 
     void HandleAttack(Vector2 direction)
@@ -171,12 +171,12 @@ public partial class player : CharacterBody2D
                 if (!selectedTool.useRelease)
                 {
                     selectedTool.Use(direction);
-                    GD.Print("Used " + selectedTool.name);
+                   // GD.Print("Used " + selectedTool.name);
                 }
                 else
                 {
                     selectedTool.PreUse(direction);
-                    GD.Print("PreUse for " + selectedTool.name);
+                   // GD.Print("PreUse for " + selectedTool.name);
                 }
                 usingTool = true;
 
@@ -223,7 +223,7 @@ public partial class player : CharacterBody2D
                 }
 
                 selectedTool = toolBagList[selectedToolIndex - 1];
-                GD.Print("Selected " + selectedTool.name);
+               // GD.Print("Selected " + selectedTool.name);
             }
         }
     }

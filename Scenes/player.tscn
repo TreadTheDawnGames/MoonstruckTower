@@ -451,8 +451,8 @@ height = 44.0
 size = Vector2(8, 15)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_8fi5b"]
-a = Vector2(80, 0)
-b = Vector2(-70, 0)
+a = Vector2(50, 0)
+b = Vector2(-50, 0)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 5
@@ -523,7 +523,7 @@ one_shot = true
 collision_layer = 0
 
 [node name="FloorCheckShape" type="CollisionShape2D" parent="FloorCheck"]
-position = Vector2(0, 16)
+position = Vector2(-1, 16)
 scale = Vector2(0.1, 0.1)
 shape = SubResource("SegmentShape2D_8fi5b")
 

@@ -116,7 +116,7 @@ public partial class TileMapPathFind : TileMap
 		var newInfoPoint = new PointInfo(-10000, position);     // Create a new PointInfo with the position
 		newInfoPoint.IsPositionPoint = true;                    // Mark it as a position point
 		var tile = LocalToMap(position);                        // Get the tile position		
-		GD.Print(tile);
+		//GD.Print(tile);
 
 		// If a tile is found below
 		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X, tile.Y + 1)) != CELL_IS_EMPTY)
@@ -173,7 +173,7 @@ public partial class TileMapPathFind : TileMap
 					if (point.Position.DistanceTo(position) < leftPoint.DistanceTo(position))
 					{
 						leftPoint = point.Position;
-						GD.Print(debugName + "Distance L " + leftPoint.DistanceTo(position));
+						//GD.Print(debugName + "Distance L " + leftPoint.DistanceTo(position));
 					}
 				}
 			                                   //position is to the Right
@@ -182,27 +182,27 @@ public partial class TileMapPathFind : TileMap
 					if (point.Position.DistanceTo(position) < rightPoint.DistanceTo(position))
 					{
 						rightPoint = point.Position;
-						GD.Print(debugName + "Distance R " + rightPoint.DistanceTo(position));
+					//	GD.Print(debugName + "Distance R " + rightPoint.DistanceTo(position));
 					}
 				}
 				//check left and right for points
 				//if left is closer than right use that else vice versa
 			}
-			GD.Print(debugName +"left point: " + LocalToMap(rightPoint));
+			//GD.Print(debugName +"left point: " + LocalToMap(rightPoint));
 
 			if (Mathf.Abs(leftPoint.DistanceTo(position)) < Mathf.Abs(rightPoint.DistanceTo(position)))
 			{
-                GD.Print(debugName + "Left returned");
+                //GD.Print(debugName + "Left returned");
 
                 returnPos = leftPoint;
 			}
 			else if (Mathf.Abs(leftPoint.DistanceTo(position)) > Mathf.Abs(rightPoint.DistanceTo(position)))
 			{
-                GD.Print(debugName + "Right returned");
+               // GD.Print(debugName + "Right returned");
 
                 returnPos = rightPoint;
 			}
-			GD.Print("Right: " + Mathf.Abs(rightPoint.DistanceTo(position)) + "\n Left: " + Mathf.Abs(leftPoint.DistanceTo(position)));
+			//GD.Print("Right: " + Mathf.Abs(rightPoint.DistanceTo(position)) + "\n Left: " + Mathf.Abs(leftPoint.DistanceTo(position)));
 
 			return returnPos;
 		}
@@ -220,7 +220,7 @@ public partial class TileMapPathFind : TileMap
         //if (endPoint == null) endPoint = GetPointInfoAtPosition(endPos);
         //var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(startPos), endPoint.Position);
         
-
+		
         // Find the path between the start and end position
         var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(CheckForHorizontalPoints(startPos, "Start ")), _astarGraph.GetClosestPoint(CheckForHorizontalPoints(endPos, "End ")));
 
@@ -263,7 +263,7 @@ public partial class TileMapPathFind : TileMap
 
 				if(endPoint == currPoint)
 				{
-					GD.Print("LAST POINT == CURRPOINT");
+					//GD.Print("LAST POINT == CURRPOINT");
 					continue;
 				}
 
@@ -871,7 +871,7 @@ public partial class TileMapPathFind : TileMap
 
 			if (GetCellSourceId(COLLISION_LAYER, LocalToMap(rightTile.Position)) != CELL_IS_EMPTY && rightTile.IsDropthroughTile)
 			{
-				GD.Print("YOU FOUND SOMETHING");
+				//GD.Print("YOU FOUND SOMETHING");
 				var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 
 				long existingPointId = TileAlreadyExistInGraph(tileAbove);

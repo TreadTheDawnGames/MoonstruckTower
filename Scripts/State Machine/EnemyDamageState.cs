@@ -15,39 +15,46 @@ public partial class EnemyDamageState : EnemyState
 
     public override void OnStart(Dictionary<string, object> message)
     {
-        /*base.OnStart(message);
+        base.OnStart(message);
         GD.Print(Owner.Name + " is being damaged");
-        body.hitPoints -= (int)message["damage"];
-
+        int damage = (int)message["damage"];
+        logic.hitPoints -= damage;
+        logic.takingDamage = true;
         //body.takingDamage = true;
-        if (body.hitPoints <= 0)
+        if (logic.hitPoints <= 0)
         {
 
-            body.hurtBox.SetDeferred("disabled", true);
-            body.collisionBox.SetDeferred("disabled", true);
-
+           // logic.hurtBox.SetDeferred("disabled", true);
+           // logic.collisionBox.SetDeferred("disabled", true);
+           // animator.Stop();
             animator.Play("Death");
 
-            return;
         }
-        animator.Play("Damage");*/
+        else
+        {
+            animator.Play("Damage");
+
+        }
     }
 
     void Destroy()
     {
-        /*if (animator.Animation == "Death")
-        {
-            body.Destroy();
-        }
-        else
-        {
-            if (!body.hasTarget)
+
+        logic.takingDamage = false;
+            if (animator.Animation == "Death")
             {
-
-                machine.ChangeState("EnemyConfusedState", null);
+                logic.pathfinder.Destroy ();
             }
-            else { machine.ChangeState("EnemyChaseState", null); }
-        }*/
+            else if (animator.Animation == "Damage")
+            {
+                if (!logic.canSee)
+                {
 
+                    machine.ChangeState("EnemyConfusedState", null);
+                }
+                else { machine.ChangeState("EnemyChaseState", new Dictionary<string, object> { { "goToPoint", logic.lastSighting } }); }
+            }
+
+        
     }
 }

@@ -23,26 +23,11 @@ public partial class Projectile : CharacterBody2D
 
 	void HitWorld(Node2D node)
 	{
-		//Attempt to make projectiles ignore dropthrough tiles
 
-        //bool detectingDropthrough = false;
-
-			//GD.Print(collisionBox.GetOverlappingBodies().Count+" collidingNodesFound. Types of: " );
-		
-
-			/*if (node.GetType() == typeof(TileMap))
-			{
-				GD.Print("TileMap");
-
-				TileMap hit = node.GetNode<TileMap>("TileMap");
-				TileData hitData = hit.GetCellTileData(0, hit.GetCoordsForBodyRid(collidingNode.GetRid()));
-
-				detectingDropthrough = (bool)hitData.GetCustomData("DropThroughTiles");
-			}*/
-		
+		var noyd = node.GetType();
         
 
-        if (node.GetType() == typeof(Enemy))
+        if (node.GetType() == typeof(EnemyPathfinder))
 		{
 			HitHurtBox(node);
 			
