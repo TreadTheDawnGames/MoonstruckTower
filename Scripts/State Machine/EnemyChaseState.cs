@@ -16,7 +16,6 @@ public partial class EnemyChaseState : EnemyState
         link = logic.link;
         repathTimer = GetNode<Timer>("Timer");
         logic.pathfinder.PathfindEnd += ()=> EndChase();
-        logic.pathfinder.UnreachablePoint += ()=> UnreachablePoint(lastLocation);
         repathTimer.Timeout += ()=> UpdateChaseLocation(lastLocation);
 
     }
@@ -36,19 +35,18 @@ public partial class EnemyChaseState : EnemyState
 
     void UpdateChaseLocation(Vector2 goToPoint)
     {
-        
-        
-            goToPoint.Y-=16;
-            logic.pathfinder.CreateAndGoToPath(goToPoint);
+        do
+        {
+
+            goToPoint.Y++;
+            
+        } while (logic.pathfinder.CreateAndGoToValidPath(goToPoint));
         
         repathTimer.Start();
         lastLocation = logic.lastSighting;
     }
 
-    void UnreachablePoint(Vector2 goToPoint)
-    {
-        
-    }
+   
 
     void EndChase()
     {
@@ -57,7 +55,7 @@ public partial class EnemyChaseState : EnemyState
             if (chasing)
             {
                 chasing = false;
-                logic.pathfinder.CreateAndGoToPath(lastLocation);
+                logic.pathfinder.CreateAndGoToValidPath(lastLocation);
             }
             else
             {

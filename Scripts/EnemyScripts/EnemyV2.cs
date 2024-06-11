@@ -14,7 +14,10 @@ public partial class EnemyV2 : Node2D
 	public bool canSee = false;
 	public CollisionShape2D hurtBox;
 	public CollisionShape2D collisionBox;
-	public bool takingDamage = false;
+	public HitBox2D hitBox;
+	public Area2D attackRangeArea;
+
+	public bool isBusy = false;
 	
 
 	[Export]
@@ -23,6 +26,8 @@ public partial class EnemyV2 : Node2D
 	int maxHP = 2;
 	public int hitPoints;
 	public Vector2 lastSighting;
+	public Timer damageTimer;
+	float damageWaitTime = 0.5f;
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -37,9 +42,16 @@ public partial class EnemyV2 : Node2D
 		flippables = GetNode<Node2D>("Flippables");
 		hurtBox = GetNode<CollisionShape2D>(flippables.GetPath()+"/HurtBox2D/HurtShape");
 		visionCast = GetNode<RayCast2D>("VisionCast");
+        hitBox = GetNode<HitBox2D>("Flippables/HitBox2D");
+        attackRangeArea = GetNode<Area2D>("Flippables/AttackRangeFinder");
+        damageTimer = GetNode<Timer>("DamageTimer");
+
+        damageTimer.Timeout += () => pathfinder.takingDamage = false;
+
         link = (player)GetTree().GetFirstNodeInGroup("Player");
 
         machine.SetUp();
+		attackRangeArea.BodyEntered += (node) => EnterAttackState(node);
 	}
 
    
@@ -56,16 +68,19 @@ public partial class EnemyV2 : Node2D
 		else
 			visionCast.TargetPosition = Vector2.Zero;
 
-
+		//facing right
         if (pathfinder.movementDirection > 0)
 		{
 			animator.FlipH = true;
 			flippables.Scale = new Vector2(-1, 1);
+			hitBox.damage = 1;
 		}
+		//facing left
         else if(pathfinder.movementDirection < 0) 
         {
 			animator.FlipH = false;
             flippables.Scale = new Vector2(1, 1);
+			hitBox.damage = -1;
         }
 
 		if (visionCast.GetColliderRid() == link.GetRid())
@@ -87,12 +102,13 @@ public partial class EnemyV2 : Node2D
 				//GD.Print("Can't See");
                 canSee = false;
 			}
-			if (machine.CurrentState != "EnemyChaseState" && canSee &&!takingDamage)
+			if (machine.CurrentState != "EnemyChaseState" && canSee &&!isBusy)
 			{
 
 				//GD.Print("I SEE YOU");
 				machine.ChangeState("EnemyChaseState", new Dictionary<string, object> { { "goToPoint", lastSighting } });
 			}
+			
 			//if facing the direction of link
 
 
@@ -111,20 +127,34 @@ public partial class EnemyV2 : Node2D
 
 	}
 
+	void EnterAttackState(Node2D node)
+	{
+		if (machine.CurrentState != "MoblinAttackState" && !isBusy)
+		{
+			if (node.GetType() == typeof(player))
+			{
+				machine.ChangeState("MoblinAttackState", null);
+			}
+		}
+	}
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
-		if(hitPoints>0 &&!takingDamage)
+		if(hitPoints>0)
 			pathfinder.PathfinderPhysicsProcess(delta);
-		else if (takingDamage)
+		else if (pathfinder.takingDamage)
 		{
 			pathfinder.HaltPathing();
 		}
-    }
+	}
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, HitBox2D box)
 	{
-        machine.ChangeState("EnemyDamageState", new Dictionary<string, object>() { { "damage", damage } });
+		if(!isBusy)
+		{
+			
+			machine.ChangeState("EnemyDamageState", new Dictionary<string, object>() { { "damage", damage },{ "hitBox", box } });
+		}
 
     }
 }

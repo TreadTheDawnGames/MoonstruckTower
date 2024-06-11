@@ -4,16 +4,11 @@ using System.Collections.Generic;
 
 public partial class MoblinAttackState : EnemyAttackState
 {
-    HitBox2D hitBox;
-    CollisionShape2D hitboxShape;
-    Timer timer;
     
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
-        hitBox = Owner.GetNode<HitBox2D>("Flippables/HitBox2D");
-        timer = GetNode<Timer>("Timer");
-        timer.Timeout += () => EndAttack();
+        animator.AnimationFinished += () => EndAttack();
     }
     public override void OnStart(Dictionary<string, object> message)
     {
@@ -21,21 +16,22 @@ public partial class MoblinAttackState : EnemyAttackState
         animator.Stop();
         animator.Play("Attack");
         base.OnStart(message);
-        hitBox.SetEnabled(true);
-        timer.Start();
+        logic.hitBox.SetEnabled(true);
+        logic.isBusy = true;
 
     }
 
     void EndAttack()
     {
-        machine.ChangeState("EnemyIdleState", null);
+        if(animator.Animation == "Attack")  
+            machine.ChangeState("EnemyIdleState", null);
     }
 
     public override void OnExit(string nextState)
     {
         base.OnExit(nextState);
-        hitBox.SetEnabled(false);
-        timer.Stop();
+        logic.hitBox.SetEnabled(false);
+        logic.isBusy = false;
     }
     
 }

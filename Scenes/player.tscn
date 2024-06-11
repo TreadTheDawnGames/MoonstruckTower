@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://cu3dkujga8gcn"]
+[gd_scene load_steps=69 format=3 uid="uid://cu3dkujga8gcn"]
 
 [ext_resource type="Script" path="res://Scripts/player.cs" id="1_0t378"]
 [ext_resource type="Texture2D" uid="uid://btgy5agxy3d2h" path="res://Assets/Link.png" id="1_s8cc8"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://cgpt33cbs3yrc" path="res://Assets/LinkBowVert.png" id="7_c37ub"]
 [ext_resource type="Texture2D" uid="uid://bgv1pfa45mf74" path="res://Assets/LinkPlaceLadder.png" id="10_ki7hp"]
 [ext_resource type="PackedScene" uid="uid://detdm2r8imhmx" path="res://Scenes/ladder_spawner.tscn" id="13_b14b5"]
+[ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="14_uuvc3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ydce0"]
 atlas = ExtResource("2_oyitg")
@@ -447,12 +448,17 @@ height = 44.0
 radius = 14.0
 height = 44.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mou0y"]
-size = Vector2(8, 15)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tqxlb"]
+radius = 4.0
+height = 15.0
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_8fi5b"]
-a = Vector2(50, 0)
-b = Vector2(-50, 0)
+a = Vector2(40, 0)
+b = Vector2(-40, 0)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ag3bv"]
+radius = 4.0
+height = 15.0
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 5
@@ -466,7 +472,9 @@ JumpVelocity = -275.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_cmkua")
-animation = &"Idle"
+animation = &"Attack"
+frame = 3
+frame_progress = 1.0
 
 [node name="HitBoxLeft" type="Area2D" parent="AnimatedSprite2D"]
 collision_layer = 0
@@ -512,7 +520,7 @@ disabled = true
 
 [node name="LinkCollider" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)
-shape = SubResource("RectangleShape2D_mou0y")
+shape = SubResource("CapsuleShape2D_tqxlb")
 debug_color = Color(0, 1, 0, 0.419608)
 
 [node name="CoyoteTimer" type="Timer" parent="."]
@@ -523,7 +531,7 @@ one_shot = true
 collision_layer = 0
 
 [node name="FloorCheckShape" type="CollisionShape2D" parent="FloorCheck"]
-position = Vector2(-1, 16)
+position = Vector2(0, 16)
 scale = Vector2(0.1, 0.1)
 shape = SubResource("SegmentShape2D_8fi5b")
 
@@ -532,3 +540,14 @@ shape = SubResource("SegmentShape2D_8fi5b")
 [node name="Bow" parent="Toolbag" instance=ExtResource("7_0hyqd")]
 
 [node name="LadderSpawner" parent="Toolbag" instance=ExtResource("13_b14b5")]
+
+[node name="HurtBox2D" type="Area2D" parent="."]
+script = ExtResource("14_uuvc3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox2D"]
+position = Vector2(0, 0.5)
+shape = SubResource("CapsuleShape2D_ag3bv")
+
+[node name="DamageTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true

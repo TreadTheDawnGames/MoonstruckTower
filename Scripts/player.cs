@@ -12,6 +12,7 @@ public partial class player : CharacterBody2D
     [Export] public float Speed = 150.0f;
     [Export] public float climbSpeed = 75.0f;
     [Export] public float JumpVelocity = -270.0f;
+    [Export] private float damageWaitTime = 0.5f;
 
     AnimatedSprite2D animator;
     Timer coyoteTimer;
@@ -24,6 +25,7 @@ public partial class player : CharacterBody2D
     CollisionShape2D linkCollider;
     Area2D floorCheck;
     RayCast2D floorScan;
+    Timer damageTimer;
 
     ITool selectedTool;
     ITool[] toolBagList;
@@ -40,6 +42,8 @@ public partial class player : CharacterBody2D
     public bool touchingLadder = false;
     public int ladderCount = 0;
     public bool onLadder = false;
+    bool takingDamage = false;
+    int damageDirection = 0;
 
     
     // Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -58,9 +62,12 @@ public partial class player : CharacterBody2D
         attackHitboxAirR = (HitBox2D)GetNode(new NodePath("AnimatedSprite2D/HitBoxAirRight"));
         attackHitboxAirL = (HitBox2D)GetNode(new NodePath("AnimatedSprite2D/HitBoxAirLeft"));
         linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
+        damageTimer = GetNode<Timer>("DamageTimer");
 
+        damageTimer.Timeout += () => takingDamage = false;
         coyoteTimer.Timeout += () => CoyoteDone();
         animator.AnimationFinished += () => AnimationDone();
+        damageTimer.Stop();
 
 
     }
@@ -197,15 +204,8 @@ public partial class player : CharacterBody2D
             }
         }
     }
-    void HandleDropthrough(float direction)
-    {
-        if (direction > 0 && Input.IsActionJustPressed("Jump") && IsOnFloor() && floorCheck.GetOverlappingBodies().Count == 0)
-        {
-            jumping = true;
-            GlobalPosition += new Vector2(0, 2);
-        }
-    }
 
+    
     void HandleToolSwap()
     {
         if (Input.IsActionJustPressed("SwapTool"))
@@ -227,6 +227,15 @@ public partial class player : CharacterBody2D
             }
         }
     }
+    void HandleDropthrough(float direction)
+    {
+        if (direction > 0 && Input.IsActionJustPressed("Jump") && IsOnFloor() && floorCheck.GetOverlappingBodies().Count == 0)
+        {
+            jumping = true;
+            GlobalPosition += new Vector2(0, 2);
+        }
+    }
+
 
     
     void HandleCoyoteTime()
@@ -326,9 +335,34 @@ public partial class player : CharacterBody2D
             touchingLadder = false;
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount, HitBox2D caller)
     {
+        var direction = Mathf.Sign(GlobalPosition.X-caller.GlobalPosition.X);
         GD.Print("PLAYER TOOK DAMAGE");
+
+
+        var hitVelX = Velocity.X;
+        var hitVelY = Velocity.Y;
+
+
+
+        if (floorCheck.GetOverlappingBodies().Count == 0)
+        {
+            hitVelX = direction * Speed*2;
+            GlobalPosition += new Vector2(0, 2);
+        }
+        else
+        {
+            hitVelX = direction * Speed*2;
+            hitVelY = -GD.RandRange(200, 300);
+
+        }
+        takingDamage = true;
+
+        Velocity = new Vector2(hitVelX, hitVelY);
+        
+        damageTimer.WaitTime = damageWaitTime;
+        damageTimer.Start();
     }
 
 
@@ -370,9 +404,9 @@ public partial class player : CharacterBody2D
 
 
         //HandleLadder
-        if (onLadder&&direction.Y!= 0f)
+        if (onLadder && direction.Y != 0f)
         {
-                GlobalPosition += direction;//new Vector2(direction.X, direction.Y * climbSpeed);
+            GlobalPosition += direction;//new Vector2(direction.X, direction.Y * climbSpeed);
         }
         // Handle Jump.
         if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || coyote) && !jumping)
@@ -385,7 +419,7 @@ public partial class player : CharacterBody2D
         {
             if (velocity.Y < -75)
             {
-                velocity.Y *=0.6f;
+                velocity.Y *= 0.6f;
 
             }
         }
@@ -395,24 +429,38 @@ public partial class player : CharacterBody2D
             velocity.Y += -1000 * (float)delta;
         }*/
 
-        if (direction != Vector2.Zero)
+
+
+
+        if (direction != Vector2.Zero && damageTimer.TimeLeft <= 0)
         {
             velocity.X = direction.X * (!onLadder ? Speed : climbSpeed);
+        }
+        else if (damageTimer.TimeLeft > 0 || (takingDamage && !IsOnFloor()))
+        {
+
+            velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.15);
+
         }
         else
         {
             velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
         }
 
-        if (usingTool || direction.Y > 0)
+        if ((usingTool || direction.Y > 0) && damageTimer.TimeLeft <= 0)
         {
             velocity.X /= 2.0f;
         }
 
+
         HandleAnimation(direction);
 
-        velocity.X = velocity.X * (float)delta*70;
+
+        velocity.X = velocity.X * (float)delta * 70;
+
+
         Velocity = velocity;
+
         MoveAndSlide();
 
         HandleCoyoteTime();

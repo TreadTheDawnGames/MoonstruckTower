@@ -26,7 +26,7 @@ public partial class HurtBox2D : Area2D
             GD.Print("Hurtbox Hit on " + Owner.Name);
             HitBox2D box = (HitBox2D)hitBox;
             if (box != null)
-                Owner.Call("TakeDamage", box.damage);
+                Owner.Call("TakeDamage", box.damage, box);
 
 
         }

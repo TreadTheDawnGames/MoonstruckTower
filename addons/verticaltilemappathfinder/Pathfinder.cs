@@ -163,8 +163,8 @@ public partial class Pathfinder : CharacterBody2D
         if (
              _prevTarget.Position.Y < _target.Position.Y) // And the previous target is below the target tile
         {
-            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_prevTarget.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
-            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
+            //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_prevTarget.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
+            //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
 
            // GD.Print("Used Dropthrough becuase lower");
             return true;    // Return true, perform the fall
@@ -263,6 +263,11 @@ public partial class Pathfinder : CharacterBody2D
             float heightDistance = _target.Position.DistanceTo(_prevTarget.Position);
 
             float jumpInPixels = -Mathf.Sqrt(2 * gravity * PixelJumpHeight * ((Mathf.Abs(heightDistance)/PixelJumpHeight)));
+            if(JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge())
+            {
+                jumpInPixels *= 0.75f;
+            }
+
             //JumpVelocity = -Mathf.Abs(heightDistance);
             /*if (Mathf.Abs(heightDistance) <= 1.5)
             {

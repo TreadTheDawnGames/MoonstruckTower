@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://enw2yb8pwfan"]
+[gd_scene load_steps=38 format=3 uid="uid://enw2yb8pwfan"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/EnemyPathfinder.cs" id="1_lgdqn"]
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/EnemyV2.cs" id="2_jdm75"]
@@ -12,6 +12,8 @@
 [ext_resource type="Script" path="res://Scenes/EnemyConfusedState.cs" id="10_rbc0i"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyDamageState.cs" id="11_tscki"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="12_d3htc"]
+[ext_resource type="Script" path="res://Scripts/State Machine/MoblinAttackState.cs" id="12_rqrp4"]
+[ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="13_iivw5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a7ir0"]
 atlas = ExtResource("3_w4h5p")
@@ -185,11 +187,19 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_w7e2v"]
+radius = 7.5
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_su7b8"]
 radius = 8.0
+height = 22.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uy7kw"]
+radius = 8.0
+height = 22.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0wf1l"]
 radius = 5.0
-height = 16.0
+height = 15.0
 
 [node name="MoblinV2" type="CharacterBody2D"]
 collision_layer = 16
@@ -197,6 +207,8 @@ collision_mask = 65
 floor_stop_on_slope = false
 platform_on_leave = 2
 script = ExtResource("1_lgdqn")
+Speed = 125.0
+PixelJumpHeight = 70.0
 
 [node name="EnemyLogic" type="Node2D" parent="."]
 script = ExtResource("2_jdm75")
@@ -205,9 +217,10 @@ maxHP = 10
 [node name="Animator" type="AnimatedSprite2D" parent="EnemyLogic"]
 position = Vector2(-1, 0)
 sprite_frames = SubResource("SpriteFrames_0vhdq")
-animation = &"Idle"
+animation = &"Attack"
 autoplay = "Idle"
-flip_h = true
+frame = 1
+frame_progress = 1.0
 
 [node name="StatusAnimator" type="AnimatedSprite2D" parent="EnemyLogic"]
 position = Vector2(0, -16)
@@ -244,6 +257,9 @@ one_shot = true
 [node name="Damage" type="Node" parent="EnemyLogic/StateMachine/States"]
 script = ExtResource("11_tscki")
 
+[node name="Attack" type="Node" parent="EnemyLogic/StateMachine/States"]
+script = ExtResource("12_rqrp4")
+
 [node name="Flippables" type="Node2D" parent="EnemyLogic"]
 
 [node name="HurtBox2D" type="Area2D" parent="EnemyLogic/Flippables"]
@@ -252,12 +268,36 @@ collision_mask = 32
 script = ExtResource("12_d3htc")
 
 [node name="HurtShape" type="CollisionShape2D" parent="EnemyLogic/Flippables/HurtBox2D"]
-position = Vector2(-1, 0)
+position = Vector2(-1, 0.5)
 shape = SubResource("CircleShape2D_w7e2v")
 
+[node name="HitBox2D" type="Area2D" parent="EnemyLogic/Flippables"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("13_iivw5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyLogic/Flippables/HitBox2D"]
+position = Vector2(-5, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_su7b8")
+disabled = true
+
+[node name="AttackRangeFinder" type="Area2D" parent="EnemyLogic/Flippables"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyLogic/Flippables/AttackRangeFinder"]
+position = Vector2(-5, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_uy7kw")
+
 [node name="VisionCast" type="RayCast2D" parent="EnemyLogic"]
+position = Vector2(-3, -5)
 target_position = Vector2(-29, 0)
 collision_mask = 9
 
+[node name="DamageTimer" type="Timer" parent="EnemyLogic"]
+
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
 shape = SubResource("CapsuleShape2D_0wf1l")
