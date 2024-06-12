@@ -10,6 +10,7 @@ public partial class MoblinAttackState : EnemyAttackState
         base.SetUp(message);
         animator.AnimationFinished += () => EndAttack();
     }
+   
     public override void OnStart(Dictionary<string, object> message)
     {
         GD.Print(logic.Name + " is Attacking");

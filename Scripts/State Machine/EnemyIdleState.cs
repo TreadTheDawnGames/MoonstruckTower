@@ -18,6 +18,8 @@ public partial class EnemyIdleState : EnemyState
 
     }
 
+    
+
     public override void OnStart(Dictionary<string, object> message)
     {
         base.OnStart(message);

@@ -14,6 +14,8 @@ public partial class EnemyConfusedState : EnemyState
         timer.Timeout += () => FlipLook();
     }
 
+    
+
     public override void OnStart(Dictionary<string, object> message)
     {
         base.OnStart(message);

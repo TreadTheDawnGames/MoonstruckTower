@@ -221,6 +221,7 @@ animation = &"Attack"
 autoplay = "Idle"
 frame = 1
 frame_progress = 1.0
+flip_h = true
 
 [node name="StatusAnimator" type="AnimatedSprite2D" parent="EnemyLogic"]
 position = Vector2(0, -16)
@@ -264,7 +265,7 @@ script = ExtResource("12_rqrp4")
 
 [node name="HurtBox2D" type="Area2D" parent="EnemyLogic/Flippables"]
 collision_layer = 32
-collision_mask = 32
+collision_mask = 0
 script = ExtResource("12_d3htc")
 
 [node name="HurtShape" type="CollisionShape2D" parent="EnemyLogic/Flippables/HurtBox2D"]

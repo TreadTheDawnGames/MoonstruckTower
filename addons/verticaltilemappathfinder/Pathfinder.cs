@@ -53,6 +53,8 @@ public partial class Pathfinder : CharacterBody2D
         }
         _prevTarget = _target;  // Set the previous target to the current target
         _target = _path.Pop();  // Set the target node to the next target in the stack
+        GD.Print("Going to "+ _target.Position);
+
         if (_prevTarget != null)
         {
 
@@ -102,20 +104,21 @@ public partial class Pathfinder : CharacterBody2D
         if (_target != null)
         {
             // If the target is to the right of the current pusition
-            if (_target.Position.X - 2 > Position.X)
+            if (_target.Position.X - 2 > GlobalPosition.X)
             {
                 movingRight = true;
                 moveDirection.X = 1f;
             }
             // If the target is to the left of the current pusition
-            else if (_target.Position.X + 2 < Position.X)
+            else if (_target.Position.X + 2 < GlobalPosition.X)
             {
                 movingRight = false;
                 moveDirection.X = -1f;
             }
             else
             {
-                if (IsOnFloor())
+
+                if (IsOnFloor() && GlobalPosition.DistanceTo(_target.Position)<2)
                 {
                     GoToNextPointInPath();
                     Jump(ref velocity);
@@ -146,7 +149,7 @@ public partial class Pathfinder : CharacterBody2D
         }
 
         // If the current target is above the next target and the next target is a fall tile
-        if (_prevTarget.Position.Y > _target.Position.Y && _target.IsFallTile)
+        if (GlobalPosition.Y > _target.Position.Y && _target.IsFallTile)
         {
             return; // Return, no need to Drop
         }
@@ -161,7 +164,7 @@ public partial class Pathfinder : CharacterBody2D
     bool UseDropthrouthBecauseLower()
     {
         if (
-             _prevTarget.Position.Y < _target.Position.Y) // And the previous target is below the target tile
+             GlobalPosition.Y < _target.Position.Y) // And the previous target is below the target tile
         {
             //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_prevTarget.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
             //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
@@ -186,8 +189,8 @@ public partial class Pathfinder : CharacterBody2D
     {
         // If the previous tile was a right edge, and the target tile is a left edge
         if (_prevTarget.IsRightEdge && _target.IsLeftEdge
-        && _prevTarget.Position.Y <= _target.Position.Y // And the previous target is below the target tile
-        && _prevTarget.Position.X < _target.Position.X  // And the previous target is to the left of the target
+        && GlobalPosition.Y <= _target.Position.Y // And the previous target is below the target tile
+        && GlobalPosition.X < _target.Position.X  // And the previous target is to the left of the target
         )
         {
 
@@ -204,8 +207,8 @@ public partial class Pathfinder : CharacterBody2D
     {
         // If the previous tile was a left edge, and the target tile is a right edge
         if (_prevTarget.IsLeftEdge && _target.IsRightEdge
-        && _prevTarget.Position.Y <= _target.Position.Y // And the previous target is below the target tile
-        && _prevTarget.Position.X > _target.Position.X  // And the previous target is to the right of the target
+        && GlobalPosition.Y <= _target.Position.Y // And the previous target is below the target tile
+        && GlobalPosition.X > _target.Position.X  // And the previous target is to the right of the target
         )
         {
            // GD.Print("Jump because Left To Right");
@@ -219,8 +222,8 @@ public partial class Pathfinder : CharacterBody2D
 
         // If the previous tile was a DropdownFall tile, and the target tile is a Dropthrough tile
         if (_prevTarget.IsDropthroughFallTile && _target.IsDropthroughTile
-        && _prevTarget.Position.Y >= _target.Position.Y // And the previous target is above the target tile
-        && _prevTarget.Position.X == _target.Position.X) // And the previous target is to the right of the target
+        && GlobalPosition.Y >= _target.Position.Y // And the previous target is above the target tile
+        && GlobalPosition.X == _target.Position.X) // And the previous target is to the right of the target
         {
            // GD.Print("Jump because Dropthrough");
             return true;    // Return true, perform the jump
@@ -230,7 +233,7 @@ public partial class Pathfinder : CharacterBody2D
 
     bool JumpBecauseTooLow()
     {
-        if (_prevTarget.Position.Y - 8 > _target.Position.Y)
+        if (GlobalPosition.Y - 8 > _target.Position.Y)
         {
          //   GD.Print("Jump because Too Low");
             return true;
@@ -245,14 +248,14 @@ public partial class Pathfinder : CharacterBody2D
         }
 
         // If the previous target is above the target, and the distance is less than the jump height threshold
-        if (_prevTarget.Position.Y < _target.Position.Y
-        && _prevTarget.Position.DistanceTo(_target.Position) < JumpDistanceHeightThreshold)
+        if (GlobalPosition.Y < _target.Position.Y
+        && GlobalPosition.DistanceTo(_target.Position) < JumpDistanceHeightThreshold)
         {
             return;
         }
 
         // If the current target is above the next target and the next target is a fall tile
-        if (_prevTarget.Position.Y < _target.Position.Y && _target.IsFallTile)
+        if (GlobalPosition.Y < _target.Position.Y && _target.IsFallTile)
         {
             return; // Return, no need to jump
         }
@@ -260,7 +263,7 @@ public partial class Pathfinder : CharacterBody2D
 
         if ((JumpToDropthrough() || JumpBecauseTooLow() || JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge()) && !UseDropthrough())
         {
-            float heightDistance = _target.Position.DistanceTo(_prevTarget.Position);
+            float heightDistance = _target.Position.DistanceTo(GlobalPosition);
 
             float jumpInPixels = -Mathf.Sqrt(2 * gravity * PixelJumpHeight * ((Mathf.Abs(heightDistance)/PixelJumpHeight)));
             if(JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge())

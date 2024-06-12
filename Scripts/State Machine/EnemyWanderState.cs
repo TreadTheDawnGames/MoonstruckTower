@@ -13,6 +13,8 @@ public partial class EnemyWanderState : EnemyState
     
     }
 
+    
+
     // Called when the node enters the scene tree for the first time.
     public override void OnStart(Dictionary<string, object> message)
     {
@@ -42,7 +44,8 @@ public partial class EnemyWanderState : EnemyState
         float wanderX = GD.RandRange(-160, 160);
         float wanderY = GD.RandRange(-160, 0);
 
-        return new Vector2(wanderX, wanderY);
+
+        return (logic.pathfinder.GlobalPosition + new Vector2(wanderX, wanderY)).Clamp(new Vector2(-240+16, wanderY), new Vector2(176-16, wanderY));
 
     }
 

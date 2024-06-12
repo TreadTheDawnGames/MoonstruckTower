@@ -7,16 +7,18 @@ public partial class EnemyChaseState : EnemyState
     player link;
     Area2D rangeArea;
     Timer repathTimer;
-    Vector2 lastLocation;
+    private Vector2 lastLocation;
+    public Vector2 LastLocation { get { return lastLocation; } set { if (lastLocation != value) locationUpdated = true; lastLocation = value; } }
     bool chasing = false;
+    bool locationUpdated = false;
+
 
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
         link = logic.link;
         repathTimer = GetNode<Timer>("Timer");
-        logic.pathfinder.PathfindEnd += ()=> EndChase();
-        repathTimer.Timeout += ()=> UpdateChaseLocation(lastLocation);
+        repathTimer.Timeout += () => UpdateChaseLocation(logic.lastSighting);
 
     }
     public override void OnStart(Dictionary<string, object> message)
@@ -25,56 +27,72 @@ public partial class EnemyChaseState : EnemyState
         chasing = true;
         animator.Play("Walk", 1.5f);
         statusAnimator.Play("!");
-        var goToPoint = (Vector2)message["goToPoint"];
-        lastLocation = goToPoint;
+        LastLocation = logic.lastSighting;
+        //lastLocation = goToPoint;
+        repathTimer.Start();
 
         UpdateChaseLocation(lastLocation);
+        logic.pathfinder.PathfindEnd += EndChase;
 
         GD.Print(logic.Name + " is Chasing to " + lastLocation);
     }
 
+    
+
     void UpdateChaseLocation(Vector2 goToPoint)
     {
-        do
-        {
-
-            goToPoint.Y++;
-            
-        } while (logic.pathfinder.CreateAndGoToValidPath(goToPoint));
-        
         repathTimer.Start();
-        lastLocation = logic.lastSighting;
+        LastLocation = goToPoint;
+        if (!locationUpdated)
+        {
+            //machine.ChangeState("EnemyConfusedState", null);
+            return;
+        }
+        locationUpdated = false;
+        if (isCurrentState)
+        {
+            //goToPoint.Y -= 16;
+            var attemps = -1;
+            do
+            {
+                if (!logic.pathfinder.CreateAndGoToValidPath(goToPoint))
+                {
+                    attemps++;
+                }
+                else
+                {
+                    break;
+                }
+                //goToPoint.Y++;
+
+            }
+            while (attemps <= 12);
+            //   repathTimer.Start();
+
+            if (attemps > 0) { GD.PrintErr("Failed find valid chase path"); }
+        LastLocation = goToPoint;
+        }
     }
 
-   
 
     void EndChase()
     {
-        if (isCurrentState)
+
+        GD.Print("End Chase");
+        if (logic.canSee)
         {
-            if (chasing)
-            {
-                chasing = false;
-                logic.pathfinder.CreateAndGoToValidPath(lastLocation);
-            }
-            else
-            {
+            machine.ChangeState("EnemyChaseState", null);
 
-                GD.Print("End Chase");
-                if (logic.canSee)
-                {
-                    machine.ChangeState("EnemyIdleState", new System.Collections.Generic.Dictionary<string, object> { { "goToPoint", logic.link.Position } });
-
-                }
-                else
-                    machine.ChangeState("EnemyConfusedState", new Dictionary<string, object> { { "canSee", logic.canSee } });
-            }
         }
+        else
+            machine.ChangeState("EnemyConfusedState", new Dictionary<string, object> { { "canSee", logic.canSee } });
+
     }
    
     public override void OnExit(string nextState)
     {
         base.OnExit(nextState);
+        logic.pathfinder.PathfindEnd -= EndChase;
 
         chasing = false;
         statusAnimator.Play("None");

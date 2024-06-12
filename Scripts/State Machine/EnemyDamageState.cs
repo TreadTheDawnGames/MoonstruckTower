@@ -15,6 +15,8 @@ public partial class EnemyDamageState : EnemyState
 
     }
 
+   
+
 
     public override void OnStart(Dictionary<string, object> message)
     {

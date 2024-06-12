@@ -46,15 +46,15 @@ public partial class EnemyV2 : Node2D
         attackRangeArea = GetNode<Area2D>("Flippables/AttackRangeFinder");
         damageTimer = GetNode<Timer>("DamageTimer");
 
-        damageTimer.Timeout += () => pathfinder.takingDamage = false;
 
         link = (player)GetTree().GetFirstNodeInGroup("Player");
 
         machine.SetUp();
+        damageTimer.Timeout += () => pathfinder.takingDamage = false;
 		attackRangeArea.BodyEntered += (node) => EnterAttackState(node);
 	}
 
-   
+    
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
@@ -85,13 +85,7 @@ public partial class EnemyV2 : Node2D
 
 		if (visionCast.GetColliderRid() == link.GetRid())
 		{	
-			if(Mathf.Sign(relitiveLinkPos.X) >= 0 && animator.FlipH)
-			{
-                lastSighting = link.GlobalPosition;
-
-                canSee = true;
-			}
-			else if(Mathf.Sign(relitiveLinkPos.X) <= 0 && !animator.FlipH)
+			if(((Mathf.Sign(relitiveLinkPos.X) >= 0 && animator.FlipH) || (Mathf.Sign(relitiveLinkPos.X) <= 0 && !animator.FlipH)) )
 			{
                 lastSighting = link.GlobalPosition;
 
@@ -102,6 +96,11 @@ public partial class EnemyV2 : Node2D
 				//GD.Print("Can't See");
                 canSee = false;
 			}
+                /*EnemyChaseState chaseState = (EnemyChaseState)machine.States[2];
+			
+                chaseState.LastLocation = lastSighting;*/
+
+            
 			if (machine.CurrentState != "EnemyChaseState" && canSee &&!isBusy)
 			{
 
@@ -109,12 +108,13 @@ public partial class EnemyV2 : Node2D
 				machine.ChangeState("EnemyChaseState", new Dictionary<string, object> { { "goToPoint", lastSighting } });
 			}
 			
-			//if facing the direction of link
 
 
-			
 
-		}
+
+
+
+        }
 		else
         {
             canSee = false;

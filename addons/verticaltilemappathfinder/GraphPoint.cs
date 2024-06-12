@@ -7,12 +7,16 @@ public partial class GraphPoint : Sprite2D
 
 
 	public Pathfinder pathfinder;
+	public Timer timer;
     // Called when the node enters the scene tree for the first time.
-    /*public override void _Ready()
+    public override void _Ready()
 	{
-		if(pathfinder!=null)
-			pathfinder.ReachedPoint += () => Destroy();
-	}*/
+		timer = GetNode<Timer>("Timer");
+		timer.Stop();
+		timer.Timeout += () => Destroy();
+	}
+
+    
     public override void _PhysicsProcess(double delta)
     {
 		try

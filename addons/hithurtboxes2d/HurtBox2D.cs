@@ -10,14 +10,10 @@ public partial class HurtBox2D : Area2D
         AreaEntered += (AreaEntered) => OnAreaEntered(AreaEntered);
     }
 
-    public override void _ExitTree()
-    {
-      //  if (!IsQueuedForDeletion())
-         //   AreaEntered -= (AreaEntered) => OnAreaEntered(AreaEntered);
-
-    }
-
     
+   
+
+
 
     public void OnAreaEntered(Area2D hitBox)
     {

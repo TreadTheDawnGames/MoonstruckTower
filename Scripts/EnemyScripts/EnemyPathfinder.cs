@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 
 public partial class EnemyPathfinder : Pathfinder
@@ -72,7 +73,7 @@ public partial class EnemyPathfinder : Pathfinder
 
            // _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(new Vector2I(resultVector.X, resultVector.Y)), new Color(0f, 1f, 0.5f, 1f), scale: 0.60f, pathfinder: this);
 
-            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(goTo), new Color(1f, 1f, 0, 1f), scale: 1.2f, pathfinder: this);
+            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(goTo), new Color(1f, 1f, 0, 1f), scale: 1.2f, pathfinder: this, timer: 1);
 
 
 
@@ -86,16 +87,26 @@ public partial class EnemyPathfinder : Pathfinder
 
     public bool CreateAndGoToValidPath(Vector2 where)
     {
-        if (_pathFind2D.GetCellSourceId(0, _pathFind2D.ConvertPointPositionToMapPosition(where)) == -1)
+        var whereTile = _pathFind2D.ConvertPointPositionToMapPosition(where);
+        var whereTileInfo = _pathFind2D.GetPointInfo(_pathFind2D.ConvertPointPositionToMapPosition(where));
+
+        if (_pathFind2D.GetCellSourceId(0, whereTile) == -1 || (_pathFind2D.GetCellSourceId(0, _pathFind2D.ConvertPointPositionToMapPosition(where)) != -1 && whereTileInfo != null && whereTileInfo.IsDropthroughTile))
         {
+            if((_pathFind2D.GetCellSourceId(0, _pathFind2D.ConvertPointPositionToMapPosition(where)) != -1 && whereTileInfo != null && whereTileInfo.IsDropthroughTile))
+            
+            {
+                GD.Print("valid because dropthrough");
+            }
 
             CreateAndGoToPath(where);
             return true;
         }
         else
         {
-            GD.PrintErr("Attemped to wander to inappropriate tile. ");
-            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 0.5f, 1, 1), scale: 1.5f);
+            GD.PrintErr("Attemped to go to inappropriate tile. ");
+            _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 0.5f, 1, 1), scale: 1.5f, timer: 1);
+
+
 
             return false;
         }

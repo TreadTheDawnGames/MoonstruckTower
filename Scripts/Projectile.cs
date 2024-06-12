@@ -19,9 +19,10 @@ public partial class Projectile : CharacterBody2D
 
     }
 
-    
+   
 
-	void HitWorld(Node2D node)
+
+    void HitWorld(Node2D node)
 	{
 
 		var noyd = node.GetType();

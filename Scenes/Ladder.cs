@@ -15,7 +15,9 @@ public partial class Ladder : Node2D
 		
 	}
 
-	void SetClimbing(Node node, bool isClimbing)
+    
+
+    void SetClimbing(Node node, bool isClimbing)
 	{
 		if (node is player)
 		{

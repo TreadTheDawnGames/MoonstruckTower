@@ -72,6 +72,8 @@ public partial class LadderSpawner : Node2D, ITool
         }
     }
 
+    
+
     private void HandleLadder()
     {
         if (ladderPlaced)

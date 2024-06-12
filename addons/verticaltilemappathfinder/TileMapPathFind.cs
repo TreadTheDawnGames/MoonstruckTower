@@ -158,7 +158,9 @@ public partial class TileMapPathFind : TileMap
 		return pathStackReversed;
 	}
 
-	private Vector2 CheckForHorizontalPoints(Vector2 position, string debugName = "")
+	PointInfo[] currentStack;
+
+    private Vector2 CheckForHorizontalPoints(Vector2 position, string debugName = "")
 	{
 		if (MapToLocal(LocalToMap(position)).Y == MapToLocal(LocalToMap(_astarGraph.GetClosestPositionInSegment(position))).Y)
 		{
@@ -213,14 +215,14 @@ public partial class TileMapPathFind : TileMap
 	{
 		System.Collections.Generic.Stack<PointInfo> pathStack = new System.Collections.Generic.Stack<PointInfo>();
 
-		
-		
-		//if endpoint == astar.getclosestpointonpath
+		System.Collections.Generic.Queue<PointInfo> pathQueue = new();
+
+        //if endpoint == astar.getclosestpointonpath
         //var endPoint = GetPointInfo(LocalToMap(endPos));
         //if (endPoint == null) endPoint = GetPointInfoAtPosition(endPos);
         //var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(startPos), endPoint.Position);
-        
-		
+
+
         // Find the path between the start and end position
         var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(CheckForHorizontalPoints(startPos, "Start ")), _astarGraph.GetClosestPoint(CheckForHorizontalPoints(endPos, "End ")));
 
@@ -283,6 +285,9 @@ public partial class TileMapPathFind : TileMap
 			pathStack.Push(currPoint);      // Add the current point			
 		}
 		pathStack.Push(endPoint);           // Add the end point to the path
+		
+		currentStack = pathStack.ToArray();
+		QueueRedraw();
 		return ReversePathStack(pathStack); // Return the pathstack reversed		
 	}
 
@@ -302,7 +307,7 @@ public partial class TileMapPathFind : TileMap
 	}
 
 
-	private PointInfo GetPointInfo(Vector2I tile)
+	public PointInfo GetPointInfo(Vector2I tile)
 	{
 		foreach (var pointInfo in _pointInfoList)
 		{
@@ -321,6 +326,12 @@ public partial class TileMapPathFind : TileMap
 		{
 			ConnectPoints();
 		}
+		if(currentStack!=null)
+			for(int i=1; i<currentStack.Length; i++)
+			{
+				DrawLine(currentStack[i].Position, currentStack[i - 1].Position, new Color("#FF6F00"), 2f);
+			}
+
 	}
 
 	#region Connect Graph Points
@@ -929,7 +940,7 @@ public partial class TileMapPathFind : TileMap
 
 
 
-    public void AddVisualPoint(Vector2I tile, Color? color = null, float scale = 1.0f, Pathfinder pathfinder = null)
+	public void AddVisualPoint(Vector2I tile, Color? color = null, float scale = 1.0f, Pathfinder pathfinder = null, float timer = 0)
 	{
 		if(!ShowDebugGraph) return;
 		GraphPoint visualPoint = _graphPoint.Instantiate() as GraphPoint;
@@ -954,12 +965,18 @@ public partial class TileMapPathFind : TileMap
 				visualPoint.Scale = new Vector2(scale, scale);
 			}
 
+			
 		
 			visualPoint.Position = MapToLocal(tile);
 
 			//GD.Print("Placed Visual Point at " + LocalToMap(visualPoint.Position));
 			
 			AddChild(visualPoint);
+			if (timer > 0)
+			{
+				visualPoint.timer.WaitTime = timer;
+				visualPoint.timer.Start();
+			}
 			
 		}
 	}
