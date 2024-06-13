@@ -110,6 +110,18 @@ public partial class TileMapPathFind : TileMap
 	{
 		return LocalToMap(tile);
 	}
+	public Vector2 ConvertPointPositionToLocalPosition(Vector2I tile)
+	{
+		return MapToLocal(tile);
+	}
+
+	public Vector2 ConvertPositionToLocalMapPosition(Vector2 position)
+	{
+
+		return MapToLocal(LocalToMap(position));
+	}
+
+
 	
     private PointInfo GetPointInfoAtPosition(Vector2 position)
 	{
@@ -146,7 +158,7 @@ public partial class TileMapPathFind : TileMap
 		return newInfoPoint;
 	}
 
-	private System.Collections.Generic.Stack<PointInfo> ReversePathStack(System.Collections.Generic.Stack<PointInfo> pathStack)
+	/*private System.Collections.Generic.Stack<PointInfo> ReversePathStack(System.Collections.Generic.Stack<PointInfo> pathStack)
 	{
 		System.Collections.Generic.Stack<PointInfo> pathStackReversed = new();
 
@@ -156,9 +168,9 @@ public partial class TileMapPathFind : TileMap
 			pathStackReversed.Push(pathStack.Pop());
 		}
 		return pathStackReversed;
-	}
+	}*/
 
-	PointInfo[] currentStack;
+	public System.Collections.Generic.Queue<PointInfo> currentQueue;
 
     private Vector2 CheckForHorizontalPoints(Vector2 position, string debugName = "")
 	{
@@ -211,9 +223,9 @@ public partial class TileMapPathFind : TileMap
 		else return position;
     }
 
-	public System.Collections.Generic.Stack<PointInfo> GetPlaform2DPath(Vector2 startPos, Vector2 endPos)
+	public System.Collections.Generic.Queue<PointInfo> GetPlaform2DPath(Vector2 startPos, Vector2 endPos)
 	{
-		System.Collections.Generic.Stack<PointInfo> pathStack = new System.Collections.Generic.Stack<PointInfo>();
+		//System.Collections.Generic.Stack<PointInfo> pathStack = new System.Collections.Generic.Stack<PointInfo>();
 
 		System.Collections.Generic.Queue<PointInfo> pathQueue = new();
 
@@ -226,7 +238,7 @@ public partial class TileMapPathFind : TileMap
         // Find the path between the start and end position
         var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(CheckForHorizontalPoints(startPos, "Start ")), _astarGraph.GetClosestPoint(CheckForHorizontalPoints(endPos, "End ")));
 
-		if (idPath.Count() <= 0) { return pathStack; }      // If the the path has reached its goal, return the empty path stack
+		if (idPath.Count() <= 0) { return pathQueue; }      // If the the path has reached its goal, return the empty path stack
 
 		var startPoint = GetPointInfoAtPosition(startPos);  // Create the point for the start position		
 		var endPoint = GetPointInfo(LocalToMap(endPos));
@@ -253,7 +265,7 @@ public partial class TileMapPathFind : TileMap
 				// If the start point is closer to the second path point than the current point
 				if (startPoint.Position.DistanceTo(secondPathPoint.Position) < currPoint.Position.DistanceTo(secondPathPoint.Position))
 				{
-					pathStack.Push(startPoint); // Add the start point to the path
+					pathQueue.Enqueue(startPoint); // Add the start point to the path
 					continue;                   // Skip adding the current point and go to the next point in the path
 				}
 			}
@@ -277,18 +289,37 @@ public partial class TileMapPathFind : TileMap
 				// If the last point is closer
 				else
 				{
-					pathStack.Push(currPoint);  // Add the current point to the path stack
+					pathQueue.Enqueue(currPoint);  // Add the current point to the path stack
 					break;                      // Break out of the for loop
 				}
 			}
 
-			pathStack.Push(currPoint);      // Add the current point			
+            pathQueue.Enqueue(currPoint);      // Add the current point			
 		}
-		pathStack.Push(endPoint);           // Add the end point to the path
+		pathQueue.Enqueue(endPoint);           // Add the end point to the path
 		
-		currentStack = pathStack.ToArray();
+		currentQueue = pathQueue;
 		QueueRedraw();
-		return ReversePathStack(pathStack); // Return the pathstack reversed		
+		return pathQueue;// ReversePathStack(pathStack); // Return the pathstack reversed		
+	}
+
+	public PointInfo GetNextPointInPath(Vector2 startPos, Vector2 endPos)
+	{
+
+		var path = GetPlaform2DPath(startPos, endPos);
+		if (path == null) return null;
+
+		if (path.Count > 0)
+		{
+
+			if (path.ElementAt(1) != null)
+				return path.ElementAt(1);
+			else if (path.ElementAt(0) != null)
+			{
+				return path.ElementAt(0);
+			}
+		}
+	    return null;
 	}
 
 	private PointInfo GetInfoPointByPointId(long pointId)
@@ -326,10 +357,10 @@ public partial class TileMapPathFind : TileMap
 		{
 			ConnectPoints();
 		}
-		if(currentStack!=null)
-			for(int i=1; i<currentStack.Length; i++)
+		if(currentQueue!=null)
+			for(int i=1; i<currentQueue.Count; i++)
 			{
-				DrawLine(currentStack[i].Position, currentStack[i - 1].Position, new Color("#FF6F00"), 2f);
+				DrawLine(currentQueue.ElementAt(i).Position, currentQueue.ElementAt(i - 1).Position, new Color("#FF6F00"), 2f);
 			}
 
 	}

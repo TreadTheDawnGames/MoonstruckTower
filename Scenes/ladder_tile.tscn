@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6wel62w8vokb"]
+
+[ext_resource type="Script" path="res://Scenes/Ladder.cs" id="1_8em4r"]
+[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/OoSPlatformerTilesSprites.png" id="1_ys68x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdox1"]
+size = Vector2(12, 16)
+
+[node name="LadderTile" type="Node2D"]
+z_index = -2
+script = ExtResource("1_8em4r")
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+texture = ExtResource("1_ys68x")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="ClimbableSurface" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClimbableSurface"]
+shape = SubResource("RectangleShape2D_kdox1")

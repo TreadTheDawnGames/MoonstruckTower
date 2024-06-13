@@ -209,6 +209,7 @@ platform_on_leave = 2
 script = ExtResource("1_lgdqn")
 Speed = 125.0
 PixelJumpHeight = 70.0
+JumpDistanceHeightThreshold = 16.0
 
 [node name="EnemyLogic" type="Node2D" parent="."]
 script = ExtResource("2_jdm75")

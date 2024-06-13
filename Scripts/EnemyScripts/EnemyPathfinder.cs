@@ -1,7 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Concurrent;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.IO;
 
 public partial class EnemyPathfinder : Pathfinder
 {
@@ -9,8 +11,11 @@ public partial class EnemyPathfinder : Pathfinder
     EnemyV2 logic;
     public bool takingDamage = false;
     public TileMapPathFind mapPather;
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+    public Vector2I savedTarget;
+    public Vector2 localMapPosition;
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
         base._Ready();
         mapPather = _pathFind2D;
@@ -43,6 +48,7 @@ public partial class EnemyPathfinder : Pathfinder
     {
 
         base.PathfinderProcess(delta);
+        localMapPosition = _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition);
         if (Velocity.X > 0)
         {
             movementDirection = 1;
@@ -56,9 +62,9 @@ public partial class EnemyPathfinder : Pathfinder
         else { movementDirection = 0; }
     }
 
-    public override void CreateAndGoToPath(Vector2 where)
+    protected override void CreateAndGoToPath(Vector2 where)
     {
-
+        if (!IsOnFloor()) return;
         _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 1f, 1, 1f), scale: 0.11f, pathfinder: this);
 
 
@@ -78,11 +84,23 @@ public partial class EnemyPathfinder : Pathfinder
 
 
             //_pathFind2D.AddVisualPoint(goTo, new Color(1f, 1f, 0, 1f), scale: 1.2f, pathfinder: this);
-                DoPathFinding(goTo);
+                QueueNextPointInPath(goTo);
             
             return;
         }
 
+    }
+
+    public void QueueNextPointInPath(Vector2I goTo)
+    {
+        if (goTo != savedTarget)
+        {
+            _path.Enqueue(_pathFind2D.GetNextPointInPath(this.Position, goTo));
+            savedTarget = _pathFind2D.ConvertPointPositionToMapPosition(goTo);
+        }
+
+
+        GoToNextPointInPath();
     }
 
     public bool CreateAndGoToValidPath(Vector2 where)
@@ -98,7 +116,7 @@ public partial class EnemyPathfinder : Pathfinder
                 GD.Print("valid because dropthrough");
             }
 
-            CreateAndGoToPath(where);
+            QueueNextPointInPath(whereTile);
             return true;
         }
         else

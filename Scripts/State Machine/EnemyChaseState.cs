@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 
 public partial class EnemyChaseState : EnemyState
 {
@@ -33,21 +34,31 @@ public partial class EnemyChaseState : EnemyState
 
         UpdateChaseLocation(lastLocation);
         logic.pathfinder.PathfindEnd += EndChase;
+        logic.pathfinder.ReachedPoint += PointReached;
 
         GD.Print(logic.Name + " is Chasing to " + lastLocation);
     }
 
-    
+    void PointReached()
+    {
+        if (logic.pathfinder.localMapPosition != logic.pathfinder.savedTarget)
+        {
+            UpdateChaseLocation(lastLocation);
+        }
+        //queue next point
+        //else
+        //ExitChase
+    }
 
     void UpdateChaseLocation(Vector2 goToPoint)
     {
-        repathTimer.Start();
+        /*repathTimer.Start();
         LastLocation = goToPoint;
         if (!locationUpdated)
         {
             //machine.ChangeState("EnemyConfusedState", null);
             return;
-        }
+        }*/
         locationUpdated = false;
         if (isCurrentState)
         {
@@ -70,7 +81,7 @@ public partial class EnemyChaseState : EnemyState
             //   repathTimer.Start();
 
             if (attemps > 0) { GD.PrintErr("Failed find valid chase path"); }
-        LastLocation = goToPoint;
+        //LastLocation = goToPoint;
         }
     }
 
@@ -93,6 +104,7 @@ public partial class EnemyChaseState : EnemyState
     {
         base.OnExit(nextState);
         logic.pathfinder.PathfindEnd -= EndChase;
+        logic.pathfinder.ReachedPoint -= PointReached;
 
         chasing = false;
         statusAnimator.Play("None");

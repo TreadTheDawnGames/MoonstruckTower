@@ -119,11 +119,11 @@ public partial class EnemyV2 : Node2D
         {
             canSee = false;
 		}
-		if (Input.IsActionJustPressed("Debug-Pathfind"))
+		/*if (Input.IsActionJustPressed("Debug-Pathfind"))
 		{
 			machine.ChangeState("EnemyWanderState", null);
 
-		}
+		}*/
 
 	}
 

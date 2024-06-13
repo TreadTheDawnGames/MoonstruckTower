@@ -8,20 +8,16 @@ public partial class Pathfinder : CharacterBody2D
     public float Speed = 100.0f;
     [Export]
     public float PixelJumpHeight = 64;
-    [Export]
-    public float SmallJumpVelocity = -250.0f;
-    [Export]
-    public float TinyJumpVelocity = -200.0f;
-
+   
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
     protected TileMapPathFind _pathFind2D;
-    private Stack<PointInfo> _path = new Stack<PointInfo>();
+    protected Queue<PointInfo> _path = new Queue<PointInfo>();
     protected PointInfo _target = null;
-    private PointInfo _prevTarget = null;
+    protected PointInfo _prevTarget = null;
     [Export]
-    private float JumpDistanceHeightThreshold = 90.0f;
+    private float JumpDistanceHeightThreshold = 48f;
 
     [Signal]
     public delegate void PathfindEndEventHandler();
@@ -39,9 +35,10 @@ public partial class Pathfinder : CharacterBody2D
 
     }
 
-    private void GoToNextPointInPath()
+    protected void GoToNextPointInPath()
     {
-        EmitSignal(SignalName.ReachedPoint);
+       
+        
         // If there's no points in the path
         if (_path.Count <= 0)
         {
@@ -52,8 +49,10 @@ public partial class Pathfinder : CharacterBody2D
             return;             // Return out of the method
         }
         _prevTarget = _target;  // Set the previous target to the current target
-        _target = _path.Pop();  // Set the target node to the next target in the stack
+        _target = _path.Dequeue();  // Set the target node to the next target in the stack
         GD.Print("Going to "+ _target.Position);
+if(_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition) == _target.Position)
+            EmitSignal(SignalName.ReachedPoint);
 
         if (_prevTarget != null)
         {
@@ -64,7 +63,7 @@ public partial class Pathfinder : CharacterBody2D
         }
     }
 
-    protected void DoPathFinding(Vector2I goTo)
+    protected virtual void DoPathFinding(Vector2I goTo)
     {
 
         _path = _pathFind2D.GetPlaform2DPath(this.Position, goTo);
@@ -80,7 +79,7 @@ public partial class Pathfinder : CharacterBody2D
         GoToNextPointInPath();
     }
 
-    public virtual void CreateAndGoToPath(Vector2 where) { GD.PrintErr("Pathfinder is not inteded to be used directly. Please write goTo parsing logic in a script that inherits it.");  }
+    protected virtual void CreateAndGoToPath(Vector2 where) { GD.PrintErr("Pathfinder is not inteded to be used directly. Please write goTo parsing logic in a script that inherits it.");  }
 
     public virtual void PathfinderProcess(double delta)
     {
@@ -118,7 +117,7 @@ public partial class Pathfinder : CharacterBody2D
             else
             {
 
-                if (IsOnFloor() && GlobalPosition.DistanceTo(_target.Position)<2)
+                if (IsOnFloor() && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).DistanceTo(_target.Position)<16)
                 {
                     GoToNextPointInPath();
                     Jump(ref velocity);
@@ -149,7 +148,7 @@ public partial class Pathfinder : CharacterBody2D
         }
 
         // If the current target is above the next target and the next target is a fall tile
-        if (GlobalPosition.Y > _target.Position.Y && _target.IsFallTile)
+        if (_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y > _target.Position.Y && _target.IsFallTile)
         {
             return; // Return, no need to Drop
         }
@@ -164,23 +163,24 @@ public partial class Pathfinder : CharacterBody2D
     bool UseDropthrouthBecauseLower()
     {
         if (
-             GlobalPosition.Y < _target.Position.Y) // And the previous target is below the target tile
+             _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y < _target.Position.Y) // And the previous target is below the target tile
         {
             //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_prevTarget.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
             //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
 
-           // GD.Print("Used Dropthrough becuase lower");
+            GD.Print("Used Dropthrough becuase lower");
             return true;    // Return true, perform the fall
         }
         return false;
     }
     private bool UseDropthrough()
     {
-        if (_prevTarget.IsDropthroughTile /*&& _target.IsDropthroughFallTile*/ &&
-             _prevTarget.Position.Y < _target.Position.Y
-             && IsOnFloor()) // And the previous target is below the target tile
+        if (_prevTarget.IsDropthroughTile /*&& _target.IsDropthroughFallTile*/
+         && _prevTarget.Position.Y < _target.Position.Y // And the previous target is above the target tile
+         && _target.Position.X == _prevTarget.Position.X
+         && IsOnFloor()) 
         {
-          //  GD.Print("Used Dropthrough because dropthrough");
+            GD.Print("Used Dropthrough because dropthrough");
             return true;    // Return true, perform the fall
         }
         return false;       // return false, don't perform the jump
@@ -189,8 +189,8 @@ public partial class Pathfinder : CharacterBody2D
     {
         // If the previous tile was a right edge, and the target tile is a left edge
         if (_prevTarget.IsRightEdge && _target.IsLeftEdge
-        && GlobalPosition.Y <= _target.Position.Y // And the previous target is below the target tile
-        && GlobalPosition.X < _target.Position.X  // And the previous target is to the left of the target
+        && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y >= _target.Position.Y // And the previous target is below the target tile
+        && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).X < _target.Position.X  // And the previous target is to the left of the target
         )
         {
 
@@ -207,8 +207,8 @@ public partial class Pathfinder : CharacterBody2D
     {
         // If the previous tile was a left edge, and the target tile is a right edge
         if (_prevTarget.IsLeftEdge && _target.IsRightEdge
-        && GlobalPosition.Y <= _target.Position.Y // And the previous target is below the target tile
-        && GlobalPosition.X > _target.Position.X  // And the previous target is to the right of the target
+        && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y >= _target.Position.Y // And the previous target is below the target tile
+        && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).X > _target.Position.X  // And the previous target is to the right of the target
         )
         {
            // GD.Print("Jump because Left To Right");
@@ -222,8 +222,8 @@ public partial class Pathfinder : CharacterBody2D
 
         // If the previous tile was a DropdownFall tile, and the target tile is a Dropthrough tile
         if (_prevTarget.IsDropthroughFallTile && _target.IsDropthroughTile
-        && GlobalPosition.Y >= _target.Position.Y // And the previous target is above the target tile
-        && GlobalPosition.X == _target.Position.X) // And the previous target is to the right of the target
+        && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y >= _target.Position.Y // And the previous target is above the target tile
+        && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).X == _target.Position.X) // And the previous target is to the right of the target
         {
            // GD.Print("Jump because Dropthrough");
             return true;    // Return true, perform the jump
@@ -233,7 +233,7 @@ public partial class Pathfinder : CharacterBody2D
 
     bool JumpBecauseTooLow()
     {
-        if (GlobalPosition.Y - 8 > _target.Position.Y)
+        if (_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y - 8 > _target.Position.Y)
         {
          //   GD.Print("Jump because Too Low");
             return true;
@@ -248,14 +248,15 @@ public partial class Pathfinder : CharacterBody2D
         }
 
         // If the previous target is above the target, and the distance is less than the jump height threshold
-        if (GlobalPosition.Y < _target.Position.Y
-        && GlobalPosition.DistanceTo(_target.Position) < JumpDistanceHeightThreshold)
+        if (_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y < _target.Position.Y
+        && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).DistanceTo(_target.Position) < JumpDistanceHeightThreshold
+        )
         {
             return;
         }
 
         // If the current target is above the next target and the next target is a fall tile
-        if (GlobalPosition.Y < _target.Position.Y && _target.IsFallTile)
+        if (_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y < _target.Position.Y && _target.IsFallTile)
         {
             return; // Return, no need to jump
         }
@@ -263,13 +264,13 @@ public partial class Pathfinder : CharacterBody2D
 
         if ((JumpToDropthrough() || JumpBecauseTooLow() || JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge()) && !UseDropthrough())
         {
-            float heightDistance = _target.Position.DistanceTo(GlobalPosition);
+            float heightDistance = _target.Position.DistanceTo(_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition));
 
             float jumpInPixels = -Mathf.Sqrt(2 * gravity * PixelJumpHeight * ((Mathf.Abs(heightDistance)/PixelJumpHeight)));
-            if(JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge())
+            /*if(JumpRightEdgeToLeftEdge() || JumpLeftEdgeToRightEdge())
             {
                 jumpInPixels *= 0.75f;
-            }
+            }*/
 
             //JumpVelocity = -Mathf.Abs(heightDistance);
             /*if (Mathf.Abs(heightDistance) <= 1.5)
