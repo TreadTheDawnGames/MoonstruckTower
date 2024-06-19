@@ -28,7 +28,7 @@ public partial class EnemyIdleState : EnemyState
 
         animator.Play("Idle");
 
-        chillinTimer.WaitTime = GD.RandRange(1, 5f);
+        chillinTimer.WaitTime = 10000;//GD.RandRange(1, 5f);
         GD.Print(logic.Name + " is Idling for " + chillinTimer.WaitTime + " seconds");
         
         chillinTimer.Start();

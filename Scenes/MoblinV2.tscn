@@ -208,7 +208,7 @@ floor_stop_on_slope = false
 platform_on_leave = 2
 script = ExtResource("1_lgdqn")
 Speed = 125.0
-PixelJumpHeight = 70.0
+PixelJumpHeight = 50.0
 
 [node name="EnemyLogic" type="Node2D" parent="."]
 script = ExtResource("2_jdm75")
@@ -221,7 +221,6 @@ animation = &"Attack"
 autoplay = "Idle"
 frame = 1
 frame_progress = 1.0
-flip_h = true
 
 [node name="StatusAnimator" type="AnimatedSprite2D" parent="EnemyLogic"]
 position = Vector2(0, -16)
@@ -238,6 +237,7 @@ script = ExtResource("6_ju4bc")
 script = ExtResource("6_ossxn")
 
 [node name="Timer" type="Timer" parent="EnemyLogic/StateMachine/States/Idle"]
+wait_time = 4096.0
 
 [node name="Wander" type="Node" parent="EnemyLogic/StateMachine/States"]
 script = ExtResource("7_4oi0c")

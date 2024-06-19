@@ -76,9 +76,9 @@ public partial class TileMapPathFind : TileMap
 
 		BuildGraph();
 
-		
 
-    }
+
+	}
 
 	private void BuildGraph()
 	{
@@ -88,35 +88,39 @@ public partial class TileMapPathFind : TileMap
 			AddRightEdgePoint(tile);
 			AddLeftWallPoint(tile);
 			AddRightWallPoint(tile);
-            AddFallPoint(tile);
+			AddFallPoint(tile);
 			AddDropthroughPoints(tile);
 			//AddRightDropThroughStairPoints(tile);
-        }
+		}
 
-		
+
 	}
 
 	private void AddDropthroughPoints(Vector2I tile)
 	{
-			AddDropthroughPoint(tile);
-			AddDropthroughFallPoint(tile);
+		AddDropthroughPoint(tile);
+		AddDropthroughFallPoint(tile);
 
-		
+
 	}
-	
 
-    #region Helper Methods
+
+	#region Helper Methods
 	public Vector2I ConvertPointPositionToMapPosition(Vector2 tile)
 	{
 		return LocalToMap(tile);
 	}
-	
+    public Vector2 ConvertPositionToLocalMapPosition(Vector2 position)
+    {
+
+        return MapToLocal(LocalToMap(position));
+    }
     private PointInfo GetPointInfoAtPosition(Vector2 position)
 	{
 		var newInfoPoint = new PointInfo(-10000, position);     // Create a new PointInfo with the position
 		newInfoPoint.IsPositionPoint = true;                    // Mark it as a position point
 		var tile = LocalToMap(position);                        // Get the tile position		
-		//GD.Print(tile);
+																//GD.Print(tile);
 
 		// If a tile is found below
 		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X, tile.Y + 1)) != CELL_IS_EMPTY)
@@ -141,6 +145,11 @@ public partial class TileMapPathFind : TileMap
 			{
 				newInfoPoint.IsRightEdge = true;  // Flag that it's a right edge
 			}
+			// If tile is dropthrough
+			if (GetCellTileData(0, tile)!=null&&(bool)GetCellTileData(0,tile).GetCustomData("DropThroughTiles"))
+			{
+				newInfoPoint.IsDropthroughTile = true;
+			}
 		}
 
 		return newInfoPoint;
@@ -159,32 +168,37 @@ public partial class TileMapPathFind : TileMap
 	}
 
 	PointInfo[] currentStack;
+	Vector2 closerPoint;
+	Vector2 fartherPoint;
+	Vector2 startPos;
 
-    private Vector2 CheckForHorizontalPoints(Vector2 position, string debugName = "")
+	private Vector2 CheckForHorizontalPoints(Vector2 startPos, string debugName = "")
 	{
-		if (MapToLocal(LocalToMap(position)).Y == MapToLocal(LocalToMap(_astarGraph.GetClosestPositionInSegment(position))).Y)
+		if (MapToLocal(LocalToMap(startPos)).Y == MapToLocal(LocalToMap(_astarGraph.GetClosestPositionInSegment(startPos))).Y)
 		{
-			Vector2 returnPos = position;
-			var leftPoint = new Vector2(position.X - 10000, position.Y);
-			var rightPoint = new Vector2(position.X + 10000, position.Y);
+			Vector2 returnPos = startPos;
+			this.startPos = startPos;
+
+			var leftPoint = new Vector2(startPos.X - 10000, startPos.Y);
+			var rightPoint = new Vector2(startPos.X + 10000, startPos.Y);
 
 			foreach (var point in _pointInfoList)
 			{                                    //position is to the left
-				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(position)).Y && point.Position.X < position.X)
+				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(startPos)).Y && point.Position.X < startPos.X)
 				{
-					if (point.Position.DistanceTo(position) < leftPoint.DistanceTo(position))
+					if (point.Position.DistanceTo(startPos) < leftPoint.DistanceTo(startPos))
 					{
 						leftPoint = point.Position;
 						//GD.Print(debugName + "Distance L " + leftPoint.DistanceTo(position));
 					}
 				}
-			                                   //position is to the Right
-				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(position)).Y && point.Position.X > position.X)
+				//position is to the Right
+				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(startPos)).Y && point.Position.X > startPos.X)
 				{
-					if (point.Position.DistanceTo(position) < rightPoint.DistanceTo(position))
+					if (point.Position.DistanceTo(startPos) < rightPoint.DistanceTo(startPos))
 					{
 						rightPoint = point.Position;
-					//	GD.Print(debugName + "Distance R " + rightPoint.DistanceTo(position));
+						//	GD.Print(debugName + "Distance R " + rightPoint.DistanceTo(position));
 					}
 				}
 				//check left and right for points
@@ -192,47 +206,127 @@ public partial class TileMapPathFind : TileMap
 			}
 			//GD.Print(debugName +"left point: " + LocalToMap(rightPoint));
 
-			if (Mathf.Abs(leftPoint.DistanceTo(position)) < Mathf.Abs(rightPoint.DistanceTo(position)))
-			{
-                //GD.Print(debugName + "Left returned");
 
-                returnPos = leftPoint;
+
+			if (Mathf.Abs(leftPoint.DistanceTo(startPos)) < Mathf.Abs(rightPoint.DistanceTo(startPos)))
+			{
+				//GD.Print(debugName + "Left returned");
+
+				closerPoint = leftPoint;
+				fartherPoint = rightPoint;
 			}
-			else if (Mathf.Abs(leftPoint.DistanceTo(position)) > Mathf.Abs(rightPoint.DistanceTo(position)))
+			else if (Mathf.Abs(leftPoint.DistanceTo(startPos)) > Mathf.Abs(rightPoint.DistanceTo(startPos)))
 			{
-               // GD.Print(debugName + "Right returned");
+				// GD.Print(debugName + "Right returned");
 
-                returnPos = rightPoint;
+				closerPoint = rightPoint;
+				fartherPoint = leftPoint;
+			}
+			else
+			{
+				closerPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
+				fartherPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
 			}
 			//GD.Print("Right: " + Mathf.Abs(rightPoint.DistanceTo(position)) + "\n Left: " + Mathf.Abs(leftPoint.DistanceTo(position)));
 
-			return returnPos;
-		}
-		else return position;
-    }
 
-	public System.Collections.Generic.Stack<PointInfo> GetPlaform2DPath(Vector2 startPos, Vector2 endPos)
+			var closestPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
+			var spaceState = GetWorld2D().DirectSpaceState;
+			var closestQuery = PhysicsRayQueryParameters2D.Create(startPos, closestPoint, 0b1);
+			var closestResult = spaceState.IntersectRay(closestQuery);
+
+            if (closestResult.Count > 0 )
+			{
+				
+				Vector2I position = (Vector2I)closestResult["position"];
+
+
+				GD.Print("ClosestPoint has obstruction: "+position);
+				AddVisualPoint(LocalToMap(position), new Color(0.86f, 0.56f, 0.25f, 1), scale:0.25f);
+
+				var query = PhysicsRayQueryParameters2D.Create(startPos, closestPoint, 0b1); 
+
+				var result = spaceState.IntersectRay(query);
+				
+			QueueRedraw();
+
+				if (result.Count > 0)
+				{
+                    Vector2I closerPosition = (Vector2I)result["position"];
+                    GD.Print("CloserPoint has obstruction: " + closerPosition);
+
+                    AddVisualPoint(LocalToMap(closerPosition), new Color(1f, 0.25f, 0.6f, 1), scale: 0.25f);
+
+                    var furtherQuery = PhysicsRayQueryParameters2D.Create(startPos, fartherPoint, 0b1);
+					var fartherResult = spaceState.IntersectRay(furtherQuery);
+					if (fartherResult.Count == 0)
+					{
+						returnPos = fartherPoint;
+					}
+					else
+					{
+                        Vector2I furtherPosition = (Vector2I)fartherResult["position"];
+                        GD.Print("FurtherPoint has obstruction: " + furtherPosition);
+
+                        AddVisualPoint(LocalToMap(furtherPosition), new Color(0.1f, 1f, 0.26f, 1), scale: 0.25f);
+
+
+					}
+
+				}
+				else
+				{
+					returnPos = closerPoint;
+				}
+			}
+			else
+			{
+				returnPos = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
+
+			}
+			return returnPos;
+
+		}
+		else return startPos;
+	}
+
+
+
+	public System.Collections.Generic.Queue<PointInfo> GetPlaform2DPath(Vector2 startPos, Vector2 endPos)
 	{
-		System.Collections.Generic.Stack<PointInfo> pathStack = new System.Collections.Generic.Stack<PointInfo>();
+		//System.Collections.Generic.Stack<PointInfo> pathQueue = new System.Collections.Generic.Stack<PointInfo>();
 
 		System.Collections.Generic.Queue<PointInfo> pathQueue = new();
 
-        //if endpoint == astar.getclosestpointonpath
-        //var endPoint = GetPointInfo(LocalToMap(endPos));
-        //if (endPoint == null) endPoint = GetPointInfoAtPosition(endPos);
-        //var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(startPos), endPoint.Position);
+		//if endpoint == astar.getclosestpointonpath
+		//var endPoint = GetPointInfo(LocalToMap(endPos));
+		//if (endPoint == null) endPoint = GetPointInfoAtPosition(endPos);
+		//var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(startPos), endPoint.Position);
 
 
-        // Find the path between the start and end position
-        var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(CheckForHorizontalPoints(startPos, "Start ")), _astarGraph.GetClosestPoint(CheckForHorizontalPoints(endPos, "End ")));
+		// Find the path between the start and end position
+		var idPath = _astarGraph.GetIdPath(_astarGraph.GetClosestPoint(CheckForHorizontalPoints(startPos, "Start ")), _astarGraph.GetClosestPoint(endPos));
 
-		if (idPath.Count() <= 0) { return pathStack; }      // If the the path has reached its goal, return the empty path stack
+		if (idPath.Count() <= 0) { return pathQueue; }      // If the the path has reached its goal, return the empty path stack
 
 		var startPoint = GetPointInfoAtPosition(startPos);  // Create the point for the start position		
 		var endPoint = GetPointInfo(LocalToMap(endPos));
-		if(endPoint == null) endPoint = GetPointInfoAtPosition(endPos);      // Create the point for the end position		
+		if (endPoint == null)
+		{
+			var aboveEndPoint = GetPointInfo(LocalToMap(new Vector2(endPos.X, endPos.Y - 16)));
+			if (aboveEndPoint != null)
+			{
+				endPoint= aboveEndPoint;
+			}
+			else
+			{
+	            endPoint = GetPointInfoAtPosition(endPos);      // Create the point for the end position		
+
+			}
+
+		}
 		var numPointsInPath = idPath.Count();               // Get number of points in the astar path
-		
+
 
 		// loop through all the points in the path
 		for (int i = 0; i < numPointsInPath; ++i)
@@ -253,7 +347,7 @@ public partial class TileMapPathFind : TileMap
 				// If the start point is closer to the second path point than the current point
 				if (startPoint.Position.DistanceTo(secondPathPoint.Position) < currPoint.Position.DistanceTo(secondPathPoint.Position))
 				{
-					pathStack.Push(startPoint); // Add the start point to the path
+					pathQueue.Enqueue(startPoint); // Add the start point to the path
 					continue;                   // Skip adding the current point and go to the next point in the path
 				}
 			}
@@ -263,7 +357,7 @@ public partial class TileMapPathFind : TileMap
 				// Get the penultimate point in the astar path list
 				var penultimatePoint = GetInfoPointByPointId(idPath[i - 1]);
 
-				if(endPoint == currPoint)
+				if (endPoint == currPoint)
 				{
 					//GD.Print("LAST POINT == CURRPOINT");
 					continue;
@@ -277,18 +371,18 @@ public partial class TileMapPathFind : TileMap
 				// If the last point is closer
 				else
 				{
-					pathStack.Push(currPoint);  // Add the current point to the path stack
+					pathQueue.Enqueue(currPoint);  // Add the current point to the path stack
 					break;                      // Break out of the for loop
 				}
 			}
 
-			pathStack.Push(currPoint);      // Add the current point			
+			pathQueue.Enqueue(currPoint);      // Add the current point			
 		}
-		pathStack.Push(endPoint);           // Add the end point to the path
-		
-		currentStack = pathStack.ToArray();
-		QueueRedraw();
-		return ReversePathStack(pathStack); // Return the pathstack reversed		
+		pathQueue.Enqueue(endPoint);           // Add the end point to the path
+
+		currentStack = pathQueue.ToArray();
+		//QueueRedraw();
+		return pathQueue; // Return the pathstack reversed		
 	}
 
 	private PointInfo GetInfoPointByPointId(long pointId)
@@ -301,7 +395,7 @@ public partial class TileMapPathFind : TileMap
 	{
 		if (ShowDebugGraph)
 		{
-			
+
 			DrawLine(from, to, color);
 		}
 	}
@@ -318,19 +412,31 @@ public partial class TileMapPathFind : TileMap
 		}
 		return null;
 	}
-    #endregion
+	#endregion
 
-    public override void _Draw()
+	public override void _Draw()
 	{
 		//if (ShowDebugGraph)
 		{
 			ConnectPoints();
 		}
-		if(currentStack!=null)
-			for(int i=1; i<currentStack.Length; i++)
+		if (startPos != Vector2.Zero && closerPoint != Vector2.Zero && fartherPoint != Vector2.Zero)
+		{
+
+			DrawLine(startPos, fartherPoint, new Color(1, 1, 1, 1));
+			DrawLine(startPos, closerPoint, new Color(1, 1, 1, 1));
+			DrawLine(startPos, GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position, new Color(1, 1, 1, 1));
+		}
+
+
+		if (currentStack != null)
+		{
+
+			for (int i = 1; i < currentStack.Length; i++)
 			{
 				DrawLine(currentStack[i].Position, currentStack[i - 1].Position, new Color("#FF6F00"), 2f);
 			}
+		}
 
 	}
 
@@ -345,10 +451,10 @@ public partial class TileMapPathFind : TileMap
 		}
 	}
 
-	
 
 
-    private void ConnectFallPoint(PointInfo p1, bool ignoreDraw = false)
+
+	private void ConnectFallPoint(PointInfo p1, bool ignoreDraw = false)
 	{
 
 		if (p1.IsLeftEdge || p1.IsRightEdge)
@@ -358,7 +464,7 @@ public partial class TileMapPathFind : TileMap
 			tilePos.Y += 1;
 
 			if (FindFallPoints(tilePos) == null) return;
-			foreach(Vector2I? fallPoint in FindFallPoints(tilePos))
+			foreach (Vector2I? fallPoint in FindFallPoints(tilePos))
 			{
 				CreateConnectionForFallPoint(p1, fallPoint, ignoreDraw);
 			}
@@ -367,72 +473,72 @@ public partial class TileMapPathFind : TileMap
 
 	private void CreateConnectionForFallPoint(PointInfo p1, Vector2I? fallPoint, bool ignoreDraw = false)
 	{
-        if (fallPoint != null)
-        {
-            var pointInfo = GetPointInfo((Vector2I)fallPoint);
-            Vector2 p2Map = LocalToMap(p1.Position);
-            Vector2 p1Map = LocalToMap(pointInfo.Position);
+		if (fallPoint != null)
+		{
+			var pointInfo = GetPointInfo((Vector2I)fallPoint);
+			Vector2 p2Map = LocalToMap(p1.Position);
+			Vector2 p1Map = LocalToMap(pointInfo.Position);
 
-            if (p1Map.DistanceTo(p2Map) <= JumpHeight)
-            {
-                _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID);
-                if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 0, 1));
-            }
-            else
-            {
-                _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID, bidirectional: false);
-                if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 1, 0, 1));
-            }
-        }
-    }
+			if (p1Map.DistanceTo(p2Map) <= JumpHeight)
+			{
+				_astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID);
+				if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 0, 1));
+			}
+			else
+			{
+				_astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID, bidirectional: false);
+				if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 1, 0, 1));
+			}
+		}
+	}
 
 	private void ConnectJumpPoints(PointInfo p1, bool ignoreDraw = false)
 	{
-		foreach(var p2 in _pointInfoList)
+		foreach (var p2 in _pointInfoList)
 		{
 			ConnectHorizontalPlatformJumps(p1, p2, ignoreDraw);
-            ConnectDiagonalJumpRightEdgeToLeftEdge(p1, p2, ignoreDraw);
-            ConnectDiagonalJumpLeftEdgeToRightEdge(p1, p2, ignoreDraw);
+			ConnectDiagonalJumpRightEdgeToLeftEdge(p1, p2, ignoreDraw);
+			ConnectDiagonalJumpLeftEdgeToRightEdge(p1, p2, ignoreDraw);
 			ConnectDropthroughPoints(p1, p2, ignoreDraw);
 		}
 	}
-/* if (p2.IsFallTile
-				&& p2.Position.X == p1.Position.X
-				&& p2.Position.Y > p1.Position.Y
+	/* if (p2.IsFallTile
+					&& p2.Position.X == p1.Position.X
+					&& p2.Position.Y > p1.Position.Y
 
-                && GetCellSourceId(COLLISION_LAYER, (Vector2I)p1.Position) == CELL_IS_EMPTY)*/
-    private void ConnectDropthroughPoints(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
-    {
+					&& GetCellSourceId(COLLISION_LAYER, (Vector2I)p1.Position) == CELL_IS_EMPTY)*/
+	private void ConnectDropthroughPoints(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
+	{
 		if (p1.IsDropthroughTile)
 		{
 
-            var tilePos = LocalToMap(p1.Position);
+			var tilePos = LocalToMap(p1.Position);
 
-            tilePos.Y += 1;
+			tilePos.Y += 1;
 
-            Vector2I? fallPoint = FindDropthroughFallPoint(tilePos);
-            if (fallPoint != null)
-            {
-                var pointInfo = GetPointInfo((Vector2I)fallPoint);
-                Vector2 p2Map = LocalToMap(p1.Position);
-                Vector2 p1Map = LocalToMap(pointInfo.Position);
+			Vector2I? fallPoint = FindDropthroughFallPoint(tilePos);
+			if (fallPoint != null)
+			{
+				var pointInfo = GetPointInfo((Vector2I)fallPoint);
+				Vector2 p2Map = LocalToMap(p1.Position);
+				Vector2 p1Map = LocalToMap(pointInfo.Position);
 
-                if (p1Map.DistanceTo(p2Map) <= JumpHeight)
-                {
-                    _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID);
-                    if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 1, 1));
-                }
-                else
-                {
-                    _astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID, bidirectional: false);
-                   if(!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 0, 0, 1));
-                }
-            }
+				if (p1Map.DistanceTo(p2Map) <= JumpHeight)
+				{
+					_astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID);
+					if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(0, 1, 1, 1));
+				}
+				else
+				{
+					_astarGraph.ConnectPoints(p1.PointID, pointInfo.PointID, bidirectional: false);
+					if (!ignoreDraw) DrawDebugLine(p1.Position, pointInfo.Position, new Color(1, 0, 0, 1));
+				}
+			}
 
-        }
-    }
+		}
+	}
 
-    private void ConnectDiagonalJumpRightEdgeToLeftEdge(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
+	private void ConnectDiagonalJumpRightEdgeToLeftEdge(PointInfo p1, PointInfo p2, bool ignoreDraw = false)
 	{
 		if (p1.IsRightEdge)
 		{
@@ -446,7 +552,7 @@ public partial class TileMapPathFind : TileMap
 				&& p2Map.DistanceTo(p1Map) < JumpDistance)
 			{
 				_astarGraph.ConnectPoints(p1.PointID, p2.PointID);
-                if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
+				if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
 			}
 		}
 	}
@@ -464,7 +570,7 @@ public partial class TileMapPathFind : TileMap
 				&& p2Map.DistanceTo(p1Map) < JumpDistance)
 			{
 				_astarGraph.ConnectPoints(p1.PointID, p2.PointID);
-                if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
+				if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
 			}
 		}
 	}
@@ -472,17 +578,17 @@ public partial class TileMapPathFind : TileMap
 	{
 		if (p1.PointID == p2.PointID) return;
 
-		if(p2.Position.Y == p1.Position.Y && p1.IsRightEdge && p2.IsLeftEdge)
+		if (p2.Position.Y == p1.Position.Y && p1.IsRightEdge && p2.IsLeftEdge)
 		{
-			if(p2.Position.X>p1.Position.X)
+			if (p2.Position.X > p1.Position.X)
 			{
-				Vector2 p2Map = LocalToMap(p2.Position); 
+				Vector2 p2Map = LocalToMap(p2.Position);
 				Vector2 p1Map = LocalToMap(p1.Position);
 
 				if (p2Map.DistanceTo(p1Map) < JumpDistance + 1)
 				{
 					_astarGraph.ConnectPoints(p1.PointID, p2.PointID);
-                    if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0,1,0,1));
+					if (!ignoreDraw) DrawDebugLine(p1.Position, p2.Position, new Color(0, 1, 0, 1));
 				}
 			}
 		}
@@ -490,7 +596,7 @@ public partial class TileMapPathFind : TileMap
 
 	private void ConnectHorizontalPoints(PointInfo p1, bool ignoreDraw = false)
 	{
-		if (p1.IsLeftEdge || p1.IsLeftWall || p1.IsFallTile || p1.IsDropthroughTile || p1.IsDropthroughFallTile )
+		if (p1.IsLeftEdge || p1.IsLeftWall || p1.IsFallTile || p1.IsDropthroughTile || p1.IsDropthroughFallTile)
 		{
 			PointInfo closest = null;
 
@@ -498,9 +604,9 @@ public partial class TileMapPathFind : TileMap
 			{
 				if (p1.PointID == p2.PointID) { continue; }
 
-				if ((p2.IsRightEdge || p2.IsRightWall || p2.IsFallTile || p2.IsDropthroughTile || p2.IsDropthroughFallTile ) && p2.Position.Y == p1.Position.Y && p2.Position.X > p1.Position.X)
+				if ((p2.IsRightEdge || p2.IsRightWall || p2.IsFallTile || p2.IsDropthroughTile || p2.IsDropthroughFallTile) && p2.Position.Y == p1.Position.Y && p2.Position.X > p1.Position.X)
 				{
-					
+
 
 					if (closest == null)
 					{
@@ -514,15 +620,15 @@ public partial class TileMapPathFind : TileMap
 					}
 				}
 			}
-			
+
 			if (closest != null)
 			{
 				if (HorizontalConnectionCanBeMade((Vector2I)p1.Position, (Vector2I)closest.Position))
 				{
-					
+
 
 					_astarGraph.ConnectPoints(p1.PointID, closest.PointID);
-					if(!ignoreDraw)DrawDebugLine(p1.Position, closest.Position, new Color(0, 1, 0, 1));
+					if (!ignoreDraw) DrawDebugLine(p1.Position, closest.Position, new Color(0, 1, 0, 1));
 				}
 			}
 		}
@@ -545,7 +651,7 @@ public partial class TileMapPathFind : TileMap
 
 		}
 
-			return true;
+		return true;
 	}
 
 	#endregion
@@ -559,10 +665,10 @@ public partial class TileMapPathFind : TileMap
 
 
 		if (point == null) return null;
-		
+
 		var tileScan = Vector2I.Zero;
 
-		
+
 		if (isLeft)
 		{
 			tileScan = new Vector2I(tile.X - 1, tile.Y - 1);
@@ -578,21 +684,21 @@ public partial class TileMapPathFind : TileMap
 		return null;
 
 	}
-   
+
 
 	private Vector2I? FindFallPoint(Vector2 tile, bool isLeft)
 	{
 		var scan = GetStartScanTileForFallPoint((Vector2I)tile, isLeft);
-		if(scan == null ) return null;
+		if (scan == null) return null;
 
 		var tileScan = (Vector2I)scan;
-		Vector2I? fallTile= null;
+		Vector2I? fallTile = null;
 
-		for (int i = 0; i<MAX_TILE_FALL_SCAN_DEPTH; ++i)
+		for (int i = 0; i < MAX_TILE_FALL_SCAN_DEPTH; ++i)
 		{
-			if(GetCellSourceId(COLLISION_LAYER, new Vector2I(tileScan.X, tileScan.Y+1))!= CELL_IS_EMPTY)
+			if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tileScan.X, tileScan.Y + 1)) != CELL_IS_EMPTY)
 			{
-				fallTile = tileScan; 
+				fallTile = tileScan;
 				break;
 			}
 			tileScan.Y++;
@@ -602,7 +708,7 @@ public partial class TileMapPathFind : TileMap
 
 	private Vector2I?[] FindFallPoints(Vector2I tile)
 	{
-        System.Collections.Generic.List<Vector2I?> fallTiles = new();
+		System.Collections.Generic.List<Vector2I?> fallTiles = new();
 		var mapToLocal = MapToLocal(tile);
 		var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 		if (GetPointInfo(tileAbove) != null)
@@ -619,7 +725,7 @@ public partial class TileMapPathFind : TileMap
 
 		}
 		return fallTiles.ToArray();
-    }
+	}
 
 	private void AddFallPoint(Vector2I tile)
 	{
@@ -627,18 +733,18 @@ public partial class TileMapPathFind : TileMap
 
 		//if (FindFallPoints(tile) == null) return;
 
-		foreach(var fallTile in FindFallPoints(tile))
+		foreach (var fallTile in FindFallPoints(tile))
 		{
-			if(fallTile != null)
+			if (fallTile != null)
 			{
 				CreateFallPoint((Vector2I)fallTile);
 			}
 		}
-		
 
-		
 
-        
+
+
+
 
 
 	}
@@ -649,106 +755,106 @@ public partial class TileMapPathFind : TileMap
 
 		long existingPointId = TileAlreadyExistInGraph((Vector2I)fallTile);
 
-        if (existingPointId == -1)
-        {
-            long pointId = _astarGraph.GetAvailablePointId();
-            var pointInfo = new PointInfo(pointId, fallTileLocal);
-            pointInfo.IsDropthroughFallTile = true;
-            _pointInfoList.Add(pointInfo);
-            _astarGraph.AddPoint(pointId, fallTileLocal);
-            AddVisualPoint((Vector2I)fallTile, new Color(1, 0.35f, 0.1f, 1), scale: 0.35f);
-        }
-        else
-        {
-            _pointInfoList.Single(x => x.PointID == existingPointId).IsDropthroughFallTile = true;
-            AddVisualPoint((Vector2I)fallTile, new Color("#ef7d57"), scale: 0.30f);
-        }
-    }
+		if (existingPointId == -1)
+		{
+			long pointId = _astarGraph.GetAvailablePointId();
+			var pointInfo = new PointInfo(pointId, fallTileLocal);
+			pointInfo.IsDropthroughFallTile = true;
+			_pointInfoList.Add(pointInfo);
+			_astarGraph.AddPoint(pointId, fallTileLocal);
+			AddVisualPoint((Vector2I)fallTile, new Color(1, 0.35f, 0.1f, 1), scale: 0.35f);
+		}
+		else
+		{
+			_pointInfoList.Single(x => x.PointID == existingPointId).IsDropthroughFallTile = true;
+			AddVisualPoint((Vector2I)fallTile, new Color("#ef7d57"), scale: 0.30f);
+		}
+	}
 
-    private Vector2I? GetStartScanTileForDropthroughFallPoint(Vector2I tile)
-    {
-        var tileAbove = new Vector2I(tile.X, tile.Y - 1);
-        var point = GetPointInfo(tileAbove);
-
-
-        if (point == null) return null;
-
-        var tileScan = Vector2I.Zero;
-
-        if (point.IsDropthroughTile)
-        {
-
-            tileScan = new Vector2I(tile.X, tile.Y );
-            return tileScan;
-        }
-        
+	private Vector2I? GetStartScanTileForDropthroughFallPoint(Vector2I tile)
+	{
+		var tileAbove = new Vector2I(tile.X, tile.Y - 1);
+		var point = GetPointInfo(tileAbove);
 
 
-        return null;
+		if (point == null) return null;
 
-    }
+		var tileScan = Vector2I.Zero;
+
+		if (point.IsDropthroughTile)
+		{
+
+			tileScan = new Vector2I(tile.X, tile.Y);
+			return tileScan;
+		}
 
 
-    private Vector2I? FindDropthroughFallPoint(Vector2 tile)
-    {
-        var scan = GetStartScanTileForDropthroughFallPoint((Vector2I)tile);
-        if (scan == null) return null;
 
-        var tileScan = (Vector2I)scan;
-        Vector2I? fallTile = null;
+		return null;
 
-        for (int i = 0; i < MAX_TILE_FALL_SCAN_DEPTH; ++i)
-        {
-            if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tileScan.X, tileScan.Y + 1)) != CELL_IS_EMPTY)
-            {
-                fallTile = tileScan;
-                break;
-            }
-            tileScan.Y++;
-        }
-        return fallTile;
-    }
+	}
 
-    private void AddDropthroughFallPoint(Vector2I tile)
-    {
-        Vector2I? fallTile = FindDropthroughFallPoint(tile);
-        if (fallTile == null) return;
-        var fallTileLocal = (Vector2I)MapToLocal((Vector2I)fallTile);
 
-        long existingPointId = TileAlreadyExistInGraph((Vector2I)fallTile);
+	private Vector2I? FindDropthroughFallPoint(Vector2 tile)
+	{
+		var scan = GetStartScanTileForDropthroughFallPoint((Vector2I)tile);
+		if (scan == null) return null;
 
-        if (existingPointId == -1)
-        {
-            long pointId = _astarGraph.GetAvailablePointId();
-            var pointInfo = new PointInfo(pointId, fallTileLocal);
-            pointInfo.IsDropthroughFallTile = true;
-            _pointInfoList.Add(pointInfo);
-            _astarGraph.AddPoint(pointId, fallTileLocal);
-            AddVisualPoint((Vector2I)fallTile, new Color(1, 1f, 0f, 1), scale: 0.16f);
-        }
-        else
-        {
-            _pointInfoList.Single(x => x.PointID == existingPointId).IsDropthroughFallTile = true;
-            AddVisualPoint((Vector2I)fallTile, new Color(1,1,0,1), scale: 0.11f);
-        }
-    }
-    #endregion
+		var tileScan = (Vector2I)scan;
+		Vector2I? fallTile = null;
 
-    #region Tile Edge & Wall Graph Points
-    private void AddLeftEdgePoint(Vector2I tile)
+		for (int i = 0; i < MAX_TILE_FALL_SCAN_DEPTH; ++i)
+		{
+			if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tileScan.X, tileScan.Y + 1)) != CELL_IS_EMPTY)
+			{
+				fallTile = tileScan;
+				break;
+			}
+			tileScan.Y++;
+		}
+		return fallTile;
+	}
+
+	private void AddDropthroughFallPoint(Vector2I tile)
+	{
+		Vector2I? fallTile = FindDropthroughFallPoint(tile);
+		if (fallTile == null) return;
+		var fallTileLocal = (Vector2I)MapToLocal((Vector2I)fallTile);
+
+		long existingPointId = TileAlreadyExistInGraph((Vector2I)fallTile);
+
+		if (existingPointId == -1)
+		{
+			long pointId = _astarGraph.GetAvailablePointId();
+			var pointInfo = new PointInfo(pointId, fallTileLocal);
+			pointInfo.IsDropthroughFallTile = true;
+			_pointInfoList.Add(pointInfo);
+			_astarGraph.AddPoint(pointId, fallTileLocal);
+			AddVisualPoint((Vector2I)fallTile, new Color(1, 1f, 0f, 1), scale: 0.16f);
+		}
+		else
+		{
+			_pointInfoList.Single(x => x.PointID == existingPointId).IsDropthroughFallTile = true;
+			AddVisualPoint((Vector2I)fallTile, new Color(1, 1, 0, 1), scale: 0.11f);
+		}
+	}
+	#endregion
+
+	#region Tile Edge & Wall Graph Points
+	private void AddLeftEdgePoint(Vector2I tile)
 	{
 		if (TileAboveExist(tile))
 		{
 			return;
 		}
 
-		if(GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X - 1, tile.Y)) == CELL_IS_EMPTY)
+		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X - 1, tile.Y)) == CELL_IS_EMPTY)
 		{
-			var tileAbove = new Vector2I(tile.X, tile.Y-1);
+			var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 
 			long existingPointId = TileAlreadyExistInGraph(tileAbove);
 
-			if(existingPointId == -1)
+			if (existingPointId == -1)
 			{
 				long pointId = _astarGraph.GetAvailablePointId();
 				var pointInfo = new PointInfo(pointId, (Vector2I)MapToLocal(tileAbove));
@@ -763,7 +869,7 @@ public partial class TileMapPathFind : TileMap
 				AddVisualPoint(tileAbove, new Color("#a73eff"));
 			}
 		}
-		
+
 
 	}
 	private void AddRightEdgePoint(Vector2I tile)
@@ -773,13 +879,13 @@ public partial class TileMapPathFind : TileMap
 			return;
 		}
 
-		if(GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X + 1, tile.Y)) == CELL_IS_EMPTY )
+		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X + 1, tile.Y)) == CELL_IS_EMPTY)
 		{
-			var tileAbove = new Vector2I(tile.X, tile.Y-1);
+			var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 
 			long existingPointId = TileAlreadyExistInGraph(tileAbove);
 
-			if(existingPointId == -1)
+			if (existingPointId == -1)
 			{
 				long pointId = _astarGraph.GetAvailablePointId();
 				var pointInfo = new PointInfo(pointId, (Vector2I)MapToLocal(tileAbove));
@@ -791,10 +897,10 @@ public partial class TileMapPathFind : TileMap
 			else
 			{
 				_pointInfoList.Single(x => x.PointID == existingPointId).IsRightEdge = true;
-				AddVisualPoint(tileAbove, new Color("#ffcd75"), scale:0.8f);
+				AddVisualPoint(tileAbove, new Color("#ffcd75"), scale: 0.8f);
 			}
 		}
-		
+
 
 	}
 	private void AddLeftWallPoint(Vector2I tile)
@@ -804,53 +910,53 @@ public partial class TileMapPathFind : TileMap
 			return;
 		}
 
-		if(GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X - 1, tile.Y - 1)) != CELL_IS_EMPTY)
+		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X - 1, tile.Y - 1)) != CELL_IS_EMPTY)
 		{
-			var tileAbove = new Vector2I(tile.X, tile.Y-1);
+			var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 
 			long existingPointId = TileAlreadyExistInGraph(tileAbove);
 
-			if(existingPointId == -1)
+			if (existingPointId == -1)
 			{
 				long pointId = _astarGraph.GetAvailablePointId();
 				var pointInfo = new PointInfo(pointId, (Vector2I)MapToLocal(tileAbove));
 				pointInfo.IsLeftWall = true;
 				_pointInfoList.Add(pointInfo);
 				_astarGraph.AddPoint(pointId, (Vector2I)MapToLocal(tileAbove));
-				AddVisualPoint(tileAbove, new Color(0,0,1,1));
+				AddVisualPoint(tileAbove, new Color(0, 0, 1, 1));
 			}
 			else
 			{
 				_pointInfoList.Single(x => x.PointID == existingPointId).IsLeftWall = true;
-				AddVisualPoint(tileAbove, new Color(0,0,0,1));
+				AddVisualPoint(tileAbove, new Color(0, 0, 0, 1));
 			}
 		}
-		
+
 
 	}
 	private void AddRightWallPoint(Vector2I tile)
 	{
-        // If a tile exist above, it's not an edge
-        if (TileAboveExist(tile))
+		// If a tile exist above, it's not an edge
+		if (TileAboveExist(tile))
 		{
 			return;
 		}
 
-        // If the tile to the up-right (X + 1, Y -1) is not empty
-        if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X + 1, tile.Y-1)) != CELL_IS_EMPTY)
+		// If the tile to the up-right (X + 1, Y -1) is not empty
+		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X + 1, tile.Y - 1)) != CELL_IS_EMPTY)
 		{
 			var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 
-            long existingPointId = TileAlreadyExistInGraph(tileAbove);
+			long existingPointId = TileAlreadyExistInGraph(tileAbove);
 
-			if(existingPointId == -1)
+			if (existingPointId == -1)
 			{
 				long pointId = _astarGraph.GetAvailablePointId();
 				var pointInfo = new PointInfo(pointId, (Vector2I)MapToLocal(tileAbove));
 				pointInfo.IsRightWall = true;
 				_pointInfoList.Add(pointInfo);
 				_astarGraph.AddPoint(pointId, (Vector2I)MapToLocal(tileAbove));
-				AddVisualPoint(tileAbove, new Color(0,0,0,1));
+				AddVisualPoint(tileAbove, new Color(0, 0, 0, 1));
 			}
 			else
 			{
@@ -858,10 +964,10 @@ public partial class TileMapPathFind : TileMap
 				AddVisualPoint(tileAbove, new Color("566cB6"), 0.65f);
 			}
 		}
-		
+
 
 	}
-	
+
 
 	private void AddRightDropThroughStairPoints(Vector2I tile)
 	{
@@ -874,7 +980,7 @@ public partial class TileMapPathFind : TileMap
 		PointInfo rightTile = GetPointInfo(LocalToMap(tile));
 
 
-        if (rightTile != null)
+		if (rightTile != null)
 		{
 			/*GD.Print("Got point info");
 			GD.Print(LocalToMap(rightTile.Position));
@@ -890,17 +996,17 @@ public partial class TileMapPathFind : TileMap
 			}
 		}
 
-    }
+	}
 
-    //need to fix the "not set to an instance of an object" problem
+	//need to fix the "not set to an instance of an object" problem
 
-    private void AddDropthroughPoint(Vector2I tile)
+	private void AddDropthroughPoint(Vector2I tile)
 	{
-        // If a tile exist above, it's not an edge
-        if (TileAboveExist(tile))
-        {
-            return;
-        }
+		// If a tile exist above, it's not an edge
+		if (TileAboveExist(tile))
+		{
+			return;
+		}
 
 		var tileData = GetCellTileData(0, tile);
 
@@ -911,47 +1017,47 @@ public partial class TileMapPathFind : TileMap
 		if ((bool)tileData.GetCustomData("DropThroughTiles"))
 		{
 			//Correctly being called
-            var tileAbove = new Vector2I(tile.X, tile.Y - 1);
+			var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 
-            long existingPointId = TileAlreadyExistInGraph(tileAbove);
+			long existingPointId = TileAlreadyExistInGraph(tileAbove);
 
-            if (existingPointId == -1)
-            {
-                long pointId = _astarGraph.GetAvailablePointId();
-                var pointInfo = new PointInfo(pointId, (Vector2I)MapToLocal(tileAbove));
-                pointInfo.IsDropthroughTile = true;
-                _pointInfoList.Add(pointInfo);
-                _astarGraph.AddPoint(pointId, (Vector2I)MapToLocal(tileAbove));
-                AddVisualPoint(tileAbove, new Color(1, 0, 1, 1), 0.25f);
-            }
-            else
-            {
-				
-					_pointInfoList.Single(x => x.PointID == existingPointId).IsDropthroughTile = true;
-					AddVisualPoint(tileAbove, new Color(1, 0, 1, 1), 0.20f);
-				
-            }
-        }
-		
+			if (existingPointId == -1)
+			{
+				long pointId = _astarGraph.GetAvailablePointId();
+				var pointInfo = new PointInfo(pointId, (Vector2I)MapToLocal(tileAbove));
+				pointInfo.IsDropthroughTile = true;
+				_pointInfoList.Add(pointInfo);
+				_astarGraph.AddPoint(pointId, (Vector2I)MapToLocal(tileAbove));
+				AddVisualPoint(tileAbove, new Color(1, 0, 1, 1), 0.25f);
+			}
+			else
+			{
+
+				_pointInfoList.Single(x => x.PointID == existingPointId).IsDropthroughTile = true;
+				AddVisualPoint(tileAbove, new Color(1, 0, 1, 1), 0.20f);
+
+			}
+		}
 
 
-    }
+
+	}
 
 
 
 
 	public void AddVisualPoint(Vector2I tile, Color? color = null, float scale = 1.0f, Pathfinder pathfinder = null, float timer = 0)
 	{
-		if(!ShowDebugGraph) return;
+		if (!ShowDebugGraph) return;
 		GraphPoint visualPoint = _graphPoint.Instantiate() as GraphPoint;
 
 		PointInfo point = GetPointInfo(tile);
-		
+
 
 		if (visualPoint != null)
 		{
-            
-            if (pathfinder != null)
+
+			if (pathfinder != null)
 			{
 				visualPoint.pathfinder = pathfinder;
 			}
@@ -965,19 +1071,20 @@ public partial class TileMapPathFind : TileMap
 				visualPoint.Scale = new Vector2(scale, scale);
 			}
 
+
 			
-		
-			visualPoint.Position = MapToLocal(tile);
+				visualPoint.Position = MapToLocal(tile);
+			
 
 			//GD.Print("Placed Visual Point at " + LocalToMap(visualPoint.Position));
-			
+
 			AddChild(visualPoint);
 			if (timer > 0)
 			{
 				visualPoint.timer.WaitTime = timer;
 				visualPoint.timer.Start();
 			}
-			
+
 		}
 	}
 
@@ -999,17 +1106,31 @@ public partial class TileMapPathFind : TileMap
 	}
 	private bool TileAboveExist(Vector2I tile)
 	{
-		if(GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X, tile.Y-1)) == CELL_IS_EMPTY)
+		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X, tile.Y - 1)) == CELL_IS_EMPTY)
 		{
 			return false;
 		}
 		return true;
 	}
 
-    #endregion
+	#endregion
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
 	{
-	}
+        if (Input.IsActionJustPressed("Debug-GetTileInfoAtPoint"))
+        {
+			PointInfo info = GetPointInfo(ConvertPointPositionToMapPosition(GetGlobalMousePosition()));
+
+            if (info != null)
+			{
+				info.PrintInfo();
+			}
+			else
+			{
+				GD.Print("No tile info for this location");
+			}
+
+        }
+    }
 }
