@@ -18,7 +18,7 @@ public partial class PlayerPathfinder : CharacterBody2D
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
     private TileMapPathFind _pathFind2D;
-    private Stack<PointInfo> _path = new Stack<PointInfo>();
+    private Queue<PointInfo> _path = new Queue<PointInfo>();
     private PointInfo _target = null;
     private PointInfo _prevTarget = null;
     [Export]
@@ -39,7 +39,7 @@ public partial class PlayerPathfinder : CharacterBody2D
             return;             // Return out of the method
         }
         _prevTarget = _target;  // Set the previous target to the current target
-        _target = _path.Pop();  // Set the target node to the next target in the stack
+        _target = _path.Dequeue();  // Set the target node to the next target in the stack
         if (_prevTarget != null)
         {
 

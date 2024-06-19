@@ -37,11 +37,17 @@ public partial class EnemyPathfinder : Pathfinder
             Velocity = new Vector2((float)Mathf.Lerp(Velocity.X, 0, 0.15), velocityY);
             MoveAndSlide();
         }
+
+        
+
     }
 
     public override void PathfinderProcess(double delta)
     {
-
+        if (IsOnFloor() && Input.IsActionJustPressed("Debug-Pathfind"))
+        {
+            CreateAndGoToValidPath((Vector2I)GetGlobalMousePosition());
+        }
         base.PathfinderProcess(delta);
         if (Velocity.X > 0)
         {
@@ -56,10 +62,10 @@ public partial class EnemyPathfinder : Pathfinder
         else { movementDirection = 0; }
     }
 
-    public override void CreateAndGoToPath(Vector2 where)
+    protected override void CreateAndGoToPath(Vector2 where)
     {
 
-        _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 1f, 1, 1f), scale: 0.11f, pathfinder: this);
+        //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 1f, 1, 1f), scale: 0.11f, pathfinder: this);
 
 
         var spaceState = GetWorld2D().DirectSpaceState;
@@ -103,6 +109,27 @@ public partial class EnemyPathfinder : Pathfinder
         }
         else
         {
+            var tileData = _pathFind2D.GetCellTileData(0, new Vector2I(whereTile.X, whereTile.Y));
+            if (tileData != null)
+            {
+                if ((bool)tileData.GetCustomData("DropThroughTiles"))
+                {
+                    GD.Print("This is a dropthrough tile");
+                    whereTile = new Vector2I(whereTile.X, whereTile.Y - 1);
+                    //make end point the tile above selected tile
+                    DoPathFinding(whereTile);
+                    return true;
+                }
+            }
+            else
+            {
+                GD.Print("Data is null");
+            }
+            ///if tile is on dropthrough layer
+            ///return true
+            ///
+
+
             GD.PrintErr("Attemped to go to inappropriate tile. ");
             _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 0.5f, 1, 1), scale: 1.5f, timer: 1);
 
