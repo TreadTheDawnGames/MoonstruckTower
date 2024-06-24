@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bw0h53cp0em5y"]
 
-[ext_resource type="Script" path="res://Scenes/Ladder.cs" id="1_oqf3g"]
+[ext_resource type="Script" path="res://Scripts/Ladder.cs" id="1_oqf3g"]
 [ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/OoSPlatformerTilesSprites.png" id="2_cgrqo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kdox1"]

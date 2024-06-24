@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://detdm2r8imhmx"]
 
-[ext_resource type="Script" path="res://Scripts/LadderSpawner.cs" id="1_4abiq"]
+[ext_resource type="Script" path="res://Scripts/Tools/LadderSpawner.cs" id="1_4abiq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n086x"]
 radius = 4.0

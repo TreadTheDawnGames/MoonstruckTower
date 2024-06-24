@@ -3,10 +3,13 @@ using System;
 
 public partial class HurtBox2D : Area2D
 {
+
+    [Export] public uint layers;
+
     public override void _Ready()
     {
         CollisionLayer = 0;
-        CollisionMask = 2;
+        CollisionMask = layers;
         AreaEntered += (AreaEntered) => OnAreaEntered(AreaEntered);
     }
 

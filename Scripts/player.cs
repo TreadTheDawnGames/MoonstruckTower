@@ -16,10 +16,8 @@ public partial class player : CharacterBody2D
 
     AnimatedSprite2D animator;
     Timer coyoteTimer;
-    HitBox2D attackHitboxR;
-    HitBox2D attackHitboxL;
-    HitBox2D attackHitboxAirL;
-    HitBox2D attackHitboxAirR;
+    HitBox2D attackHitbox;
+    HitBox2D attackHitboxAir;
 
 
     CollisionShape2D linkCollider;
@@ -27,11 +25,13 @@ public partial class player : CharacterBody2D
     RayCast2D floorScan;
     Timer damageTimer;
 
+    Node2D flippables;
+
     ITool selectedTool;
     ITool[] toolBagList;
     int toolBagItemCount;
     int selectedToolIndex = 0;
-    Node toolBag;
+    Node2D toolBag;
     public bool usingTool = false;
 
     int coyoteFrames = 6;
@@ -51,16 +51,14 @@ public partial class player : CharacterBody2D
 
     public override void _Ready()
     {
-
-        toolBag = (Node)GetNode(new NodePath("Toolbag"));
+        flippables = GetNode<Node2D>("Flippables");
+        toolBag = GetNode<Node2D>(new NodePath("Flippables/Toolbag"));
         floorCheck = (Area2D)GetNode(new NodePath("FloorCheck"));
         animator = (AnimatedSprite2D)GetNode(new NodePath("AnimatedSprite2D"));
         coyoteTimer = (Timer)GetNode(new NodePath("CoyoteTimer"));
         coyoteTimer.WaitTime = coyoteFrames / 60.0;
-        attackHitboxR = (HitBox2D)GetNode(new NodePath("AnimatedSprite2D/HitBoxRight"));
-        attackHitboxL = (HitBox2D)GetNode(new NodePath("AnimatedSprite2D/HitBoxLeft"));
-        attackHitboxAirR = (HitBox2D)GetNode(new NodePath("AnimatedSprite2D/HitBoxAirRight"));
-        attackHitboxAirL = (HitBox2D)GetNode(new NodePath("AnimatedSprite2D/HitBoxAirLeft"));
+        attackHitbox = (HitBox2D)GetNode(new NodePath("Flippables/HitBox"));
+        attackHitboxAir = (HitBox2D)GetNode(new NodePath("Flippables/HitBoxAir"));
         linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
         damageTimer = GetNode<Timer>("DamageTimer");
 
@@ -68,8 +66,7 @@ public partial class player : CharacterBody2D
         coyoteTimer.Timeout += () => CoyoteDone();
         animator.AnimationFinished += () => AnimationDone();
         damageTimer.Stop();
-
-
+        
     }
 
    
@@ -87,10 +84,8 @@ public partial class player : CharacterBody2D
             attacking = false;
             
 
-                attackHitboxR.SetEnabled(false);
-                attackHitboxL.SetEnabled(false);
-                attackHitboxAirL.SetEnabled(false);
-                attackHitboxAirR.SetEnabled(false);
+                attackHitbox.SetEnabled(false);
+                attackHitboxAir.SetEnabled(false);
 
             
         }
@@ -149,15 +144,13 @@ public partial class player : CharacterBody2D
 
             if (animator.Animation == new StringName("Attack") || animator.Animation == new StringName("AttackWalk"))
             {
-                attackHitboxR.SetEnabled(flipped);
-                attackHitboxL.SetEnabled(!flipped);
+                attackHitbox.SetEnabled(true);
 
             }
 
             if (animator.Animation == "AttackAir" || animator.Animation == "AttackLadder")
             {
-                attackHitboxAirR.SetEnabled(flipped);
-                attackHitboxAirL.SetEnabled(!flipped);
+                attackHitboxAir.SetEnabled(true);
 
 
             }
@@ -170,6 +163,14 @@ public partial class player : CharacterBody2D
 
     void HandleTool(Vector2 direction)
     {
+        if (direction.X > 0)
+        {
+            flippables.Scale = new Vector2(-1, 1);
+        }
+        else if (direction.X < 0)
+        {
+            flippables.Scale = new Vector2(1, 1);
+        }
 
         if (Input.IsActionJustPressed("Tool") && !attacking && !usingTool)
         {
@@ -272,8 +273,7 @@ public partial class player : CharacterBody2D
         if (IsOnFloor() && animator.Animation == "AttackAir")
         {
             attacking = false;
-            attackHitboxAirL.SetEnabled(false);
-            attackHitboxAirR.SetEnabled(false);
+            attackHitboxAir.SetEnabled(false);
 
 
             //because the attack is canceled
@@ -391,10 +391,10 @@ public partial class player : CharacterBody2D
         {
             onLadder = true;
         }
+        
 
 
-
-        if (!touchingLadder)
+            if (!touchingLadder)
         {
             onLadder = false;
         }

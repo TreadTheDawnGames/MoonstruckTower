@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 public partial class Pathfinder : CharacterBody2D
 {
     [Export]
@@ -22,7 +23,12 @@ public partial class Pathfinder : CharacterBody2D
     public delegate void PathfindEndEventHandler();
     [Signal]
     public delegate void ReachedPointEventHandler();
+    [Signal]
+    public delegate void UnableToReachPointEventHandler();
     protected bool movingRight;
+
+    protected bool queueRepath = false;
+
     public override void _Ready()
     {
         //_pathFind2D = FindParent("Game").FindChild("TileMap") as TileMapPathFind;
@@ -33,6 +39,27 @@ public partial class Pathfinder : CharacterBody2D
     protected void GoToNextPointInPath()
     {
 
+        var globalLocalMapPosision = _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition);
+        if(_target!=null)
+        {
+            if ((_target.Position.X + 2 > globalLocalMapPosision.X && _target.Position.X - 2 < globalLocalMapPosision.X) && (_target.Position.Y + 2 > globalLocalMapPosision.Y && _target.Position.Y - 2 < globalLocalMapPosision.Y))
+            {
+                GD.Print("Reached point " + _target.Position);
+                EmitSignal(SignalName.ReachedPoint);
+            }
+            if ((_target.Position.X + 2 > globalLocalMapPosision.X && _target.Position.X - 2 < globalLocalMapPosision.X) && !(_target.Position.Y + 2 > globalLocalMapPosision.Y && _target.Position.Y - 2 < globalLocalMapPosision.Y))
+            {
+                GD.Print("Under or Over point " + _target.Position);
+                EmitSignal(SignalName.UnableToReachPoint);
+               
+                //when under or over target path queue repath.
+                
+                //EmitSignal(SignalName.UnableToReachPoint);
+                //_path = new();
+            }
+        }
+
+        
 
         // If there's no points in the path
         if (_path.Count <= 0)
@@ -43,9 +70,12 @@ public partial class Pathfinder : CharacterBody2D
             _target = null;     // Set target to null
             return;             // Return out of the method
         }
+        
         _prevTarget = _target;  // Set the previous target to the current target
         _target = _path.Dequeue();  // Set the target node to the next target in the stack
-       // GD.Print("Going to " + _target.Position);
+                                    // GD.Print("Going to " + _target.Position);
+
+            
         if (_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition) == _target.Position)
             EmitSignal(SignalName.ReachedPoint);
 
@@ -58,7 +88,7 @@ public partial class Pathfinder : CharacterBody2D
 
     protected virtual void DoPathFinding(Vector2I goTo)
     {
-        _pathFind2D.AddVisualPoint(goTo);
+        //_pathFind2D.AddVisualPoint(goTo);
 
         _path = _pathFind2D.GetPlaform2DPath(this.GlobalPosition, goTo);
 
@@ -66,7 +96,9 @@ public partial class Pathfinder : CharacterBody2D
     }
     protected void StopPathfinding()
     {
-        _path = new();
+        
+            _path.Clear();
+//        _path = new();
         GoToNextPointInPath();
     }
 
@@ -110,6 +142,9 @@ public partial class Pathfinder : CharacterBody2D
                 //Result is enemy freezed below/above target. Fix by adding freeze timer?
                 if (IsOnFloor() && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).DistanceTo(_target.Position) < 16)
                 {
+                    
+                    
+
                     GoToNextPointInPath();
                     Jump(ref velocity);
                     Dropthrough(ref velocity);

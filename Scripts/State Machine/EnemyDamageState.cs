@@ -24,10 +24,11 @@ public partial class EnemyDamageState : EnemyState
         GD.Print(Owner.Name + " is being damaged");
         int damage = (int)message["damage"];
         HitBox2D caller = (HitBox2D)message["hitBox"];
-
+        
         logic.hitPoints -= damage;
         logic.isBusy = true;
         logic.pathfinder.takingDamage = true;
+        logic.pathfinder.HaltPathing();
         //body.takingDamage = true;
         if (logic.hitPoints <= 0)
         {
@@ -73,7 +74,7 @@ public partial class EnemyDamageState : EnemyState
 
                     machine.ChangeState("EnemyConfusedState", null);
                 }
-                else { machine.ChangeState("EnemyChaseState", new Dictionary<string, object> { { "goToPoint", logic.lastSighting } }); }
+                else { machine.ChangeState("EnemyChaseState", null); }
             }
 
         

@@ -1,11 +1,19 @@
 using Godot;
 using System;
 
-public partial class EnemyHitbox : HitBox2D
+public partial class LockEye : Lock
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	
+
+    protected override void UnlockMe()
 	{
+		if (!unlocked)
+		{
+			base.UnlockMe();
+
+			sprite.Play("Close");
+			door.Open();
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

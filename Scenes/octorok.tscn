@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://ci2g16f7srbtt"]
 
-[ext_resource type="Script" path="res://Scenes/Enemy.cs" id="1_8487s"]
+[ext_resource type="Script" path="res://Scripts/EnemyScripts/Enemy.cs" id="1_8487s"]
 [ext_resource type="Texture2D" uid="uid://1tjrr1yer7ev" path="res://Assets/OctorokDamagedUnity.png" id="2_bja4t"]
 [ext_resource type="Texture2D" uid="uid://cbbo4i17ahk2d" path="res://Assets/OoSOctorokUnity.png" id="2_ppk7d"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="3_h2tco"]

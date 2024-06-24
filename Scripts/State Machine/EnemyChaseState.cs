@@ -9,38 +9,72 @@ public partial class EnemyChaseState : EnemyState
     Timer repathTimer;
     private Vector2 lastLocation;
     public Vector2 LastLocation { get { return lastLocation; } set { if (lastLocation != value) locationUpdated = true; lastLocation = value; } }
-    bool chasing = false;
-    bool locationUpdated = false;
-
+    bool locationUpdated = true;
+    bool allowPointRepath = true;
+    bool allowTimerRepath = true;
+    bool overrideAllowRepath = true;
 
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
         link = logic.link;
         repathTimer = GetNode<Timer>("Timer");
-        repathTimer.Timeout += () => UpdateChaseLocation(logic.lastSighting);
+        //repathTimer.Timeout += () => UpdateChaseLocation(logic.lastSighting);
 
     }
     public override void OnStart(Dictionary<string, object> message)
     {
-       base.OnStart(message);
-        chasing = true;
+        /*statusAnimator.Play("!");
+        logic.pathfinder.HaltPathing();
+        logic.isAlerted = true;*/
+        base.OnStart(message);
+        AllowTimerRepath();
+        AllowPositionRepath();
         animator.Play("Walk", 1.5f);
-        statusAnimator.Play("!");
         LastLocation = logic.lastSighting;
         //lastLocation = goToPoint;
         repathTimer.Start();
 
         UpdateChaseLocation(lastLocation);
         logic.pathfinder.PathfindEnd += EndChase;
+        logic.pathfinder.ReachedPoint += AllowPositionRepath;
+        logic.pathfinder.UnableToReachPoint+= OverrideAllowRepath;
+        repathTimer.Timeout += AllowTimerRepath;
 
         GD.Print(logic.Name + " is Chasing to " + lastLocation);
+
     }
 
-    
+    void AllowPositionRepath()
+    {
+        allowPointRepath = true;
+    }
+
+    void AllowTimerRepath()
+    {
+        allowTimerRepath = true;
+    }
+
+    void OverrideAllowRepath()
+    {
+        overrideAllowRepath = true;
+    }
+
+    public override void UpdateState(float delta)
+    {
+        base.UpdateState(delta);
+        if(allowPointRepath && allowTimerRepath || overrideAllowRepath  /*|| (allowTimerRepath && logic.pathfinder.IsOnFloor())*/)
+        {
+            UpdateChaseLocation(lastLocation);
+            allowPointRepath=false;
+            allowTimerRepath = false;
+            overrideAllowRepath = false;
+        }
+    }
 
     void UpdateChaseLocation(Vector2 goToPoint)
     {
+        // if inRangeofcurrentTargetpoint 
         repathTimer.Start();
         LastLocation = goToPoint;
         if (!locationUpdated)
@@ -49,8 +83,6 @@ public partial class EnemyChaseState : EnemyState
             return;
         }
         locationUpdated = false;
-        if (isCurrentState)
-        {
             //goToPoint.Y -= 16;
             var attemps = -1;
             do
@@ -70,8 +102,6 @@ public partial class EnemyChaseState : EnemyState
             //   repathTimer.Start();
 
             if (attemps > 0) { GD.PrintErr("Failed find valid chase path"); }
-        LastLocation = goToPoint;
-        }
     }
 
 
@@ -93,8 +123,13 @@ public partial class EnemyChaseState : EnemyState
     {
         base.OnExit(nextState);
         logic.pathfinder.PathfindEnd -= EndChase;
+        logic.pathfinder.ReachedPoint -= AllowPositionRepath;
+        logic.pathfinder.UnableToReachPoint -= OverrideAllowRepath;
 
-        chasing = false;
+        repathTimer.Timeout -= AllowTimerRepath;
+
+        logic.isAlerted = false;
+        locationUpdated = true;
         statusAnimator.Play("None");
         repathTimer.Stop();
     }

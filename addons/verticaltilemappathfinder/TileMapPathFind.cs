@@ -110,12 +110,12 @@ public partial class TileMapPathFind : TileMap
 	{
 		return LocalToMap(tile);
 	}
-    public Vector2 ConvertPositionToLocalMapPosition(Vector2 position)
-    {
+	public Vector2 ConvertPositionToLocalMapPosition(Vector2 position)
+	{
 
-        return MapToLocal(LocalToMap(position));
-    }
-    private PointInfo GetPointInfoAtPosition(Vector2 position)
+		return MapToLocal(LocalToMap(position));
+	}
+	private PointInfo GetPointInfoAtPosition(Vector2 position)
 	{
 		var newInfoPoint = new PointInfo(-10000, position);     // Create a new PointInfo with the position
 		newInfoPoint.IsPositionPoint = true;                    // Mark it as a position point
@@ -146,7 +146,7 @@ public partial class TileMapPathFind : TileMap
 				newInfoPoint.IsRightEdge = true;  // Flag that it's a right edge
 			}
 			// If tile is dropthrough
-			if (GetCellTileData(0, tile)!=null&&(bool)GetCellTileData(0,tile).GetCustomData("DropThroughTiles"))
+			if (GetCellTileData(0, tile) != null && (bool)GetCellTileData(0, tile).GetCustomData("DropThroughTiles"))
 			{
 				newInfoPoint.IsDropthroughTile = true;
 			}
@@ -169,8 +169,9 @@ public partial class TileMapPathFind : TileMap
 
 	PointInfo[] currentStack;
 	Vector2 closerPoint;
-	Vector2 fartherPoint;
+	Vector2 furtherPoint;
 	Vector2 startPos;
+	bool drawClosestPointLines = false;
 
 	private Vector2 CheckForHorizontalPoints(Vector2 startPos, string debugName = "")
 	{
@@ -183,7 +184,8 @@ public partial class TileMapPathFind : TileMap
 			var rightPoint = new Vector2(startPos.X + 10000, startPos.Y);
 
 			foreach (var point in _pointInfoList)
-			{                                    //position is to the left
+			{                                    
+				//position is same height and to the left
 				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(startPos)).Y && point.Position.X < startPos.X)
 				{
 					if (point.Position.DistanceTo(startPos) < leftPoint.DistanceTo(startPos))
@@ -192,85 +194,93 @@ public partial class TileMapPathFind : TileMap
 						//GD.Print(debugName + "Distance L " + leftPoint.DistanceTo(position));
 					}
 				}
-				//position is to the Right
+				//position is same height and to the right
 				if (MapToLocal(LocalToMap(point.Position)).Y == MapToLocal(LocalToMap(startPos)).Y && point.Position.X > startPos.X)
 				{
 					if (point.Position.DistanceTo(startPos) < rightPoint.DistanceTo(startPos))
 					{
 						rightPoint = point.Position;
-						//	GD.Print(debugName + "Distance R " + rightPoint.DistanceTo(position));
 					}
 				}
-				//check left and right for points
-				//if left is closer than right use that else vice versa
 			}
-			//GD.Print(debugName +"left point: " + LocalToMap(rightPoint));
 
 
-
+			//if left is closer
 			if (Mathf.Abs(leftPoint.DistanceTo(startPos)) < Mathf.Abs(rightPoint.DistanceTo(startPos)))
 			{
-				//GD.Print(debugName + "Left returned");
-
 				closerPoint = leftPoint;
-				fartherPoint = rightPoint;
+				furtherPoint = rightPoint;
 			}
+			//if right is closer
 			else if (Mathf.Abs(leftPoint.DistanceTo(startPos)) > Mathf.Abs(rightPoint.DistanceTo(startPos)))
 			{
-				// GD.Print(debugName + "Right returned");
-
 				closerPoint = rightPoint;
-				fartherPoint = leftPoint;
+				furtherPoint = leftPoint;
 			}
+			//if neither are closer
 			else
 			{
 				closerPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
-				fartherPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
+				furtherPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
 			}
-			//GD.Print("Right: " + Mathf.Abs(rightPoint.DistanceTo(position)) + "\n Left: " + Mathf.Abs(leftPoint.DistanceTo(position)));
 
-
-			var closestPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
+			//Setup Raycasting
+			var nearestPoint = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
 			var spaceState = GetWorld2D().DirectSpaceState;
-			var closestQuery = PhysicsRayQueryParameters2D.Create(startPos, closestPoint, 0b1);
-			var closestResult = spaceState.IntersectRay(closestQuery);
 
-            if (closestResult.Count > 0 )
+			//Raycast for closest point
+			var nearestQuery = PhysicsRayQueryParameters2D.Create(startPos, nearestPoint, 0b1);
+			var nearestResult = spaceState.IntersectRay(nearestQuery);
+
+			if (nearestResult.Count > 0)
 			{
-				
-				Vector2I position = (Vector2I)closestResult["position"];
 
 
-				GD.Print("ClosestPoint has obstruction: "+position);
-				AddVisualPoint(LocalToMap(position), new Color(0.86f, 0.56f, 0.25f, 1), scale:0.25f);
-
-				var query = PhysicsRayQueryParameters2D.Create(startPos, closestPoint, 0b1); 
-
-				var result = spaceState.IntersectRay(query);
-				
-			QueueRedraw();
-
-				if (result.Count > 0)
+				//Result for closest point raycast
+				Vector2I nearestPosition = (Vector2I)nearestResult["position"];
+				GD.Print("ClosestPoint has obstruction: ");
+				foreach (var raycastCollisionResult in nearestResult)
 				{
-                    Vector2I closerPosition = (Vector2I)result["position"];
-                    GD.Print("CloserPoint has obstruction: " + closerPosition);
+					GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
+				}
+				GD.Print();
+				AddVisualPoint(LocalToMap(nearestPosition), new Color(0.86f, 0.56f, 0.25f, 1), scale: 0.35f);
+				drawClosestPointLines = true;
 
+				//raycast for closer horizontal point
+				var closerQuery = PhysicsRayQueryParameters2D.Create(startPos, closerPoint, 0b1);
+				var closerResult = spaceState.IntersectRay(closerQuery);
+
+
+				if (closerResult.Count > 0)
+				{
+					//result for closest point raycast
+					Vector2I closerPosition = (Vector2I)closerResult["position"];
+					GD.Print("CloserPoint has obstruction: " + closerPosition);
+                    foreach (var raycastCollisionResult in closerResult)
+                    {
+                        GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
+                    }
                     AddVisualPoint(LocalToMap(closerPosition), new Color(1f, 0.25f, 0.6f, 1), scale: 0.25f);
 
-                    var furtherQuery = PhysicsRayQueryParameters2D.Create(startPos, fartherPoint, 0b1);
-					var fartherResult = spaceState.IntersectRay(furtherQuery);
-					if (fartherResult.Count == 0)
+					//raycast for further point
+					var furtherQuery = PhysicsRayQueryParameters2D.Create(startPos, furtherPoint, 0b1);
+					var furtherResult = spaceState.IntersectRay(furtherQuery);
+					if (furtherResult.Count > 0)
 					{
-						returnPos = fartherPoint;
+						//result for further point
+						Vector2I furtherPosition = (Vector2I)furtherResult["position"];
+						GD.Print("FurtherPoint has obstruction: " + furtherPosition);
+                        foreach (var raycastCollisionResult in furtherResult)
+                        {
+                            GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
+                        }
+
+                        AddVisualPoint(LocalToMap(furtherPosition), new Color(0.1f, 1f, 0.26f, 1), scale: 0.15f);
 					}
 					else
 					{
-                        Vector2I furtherPosition = (Vector2I)fartherResult["position"];
-                        GD.Print("FurtherPoint has obstruction: " + furtherPosition);
-
-                        AddVisualPoint(LocalToMap(furtherPosition), new Color(0.1f, 1f, 0.26f, 1), scale: 0.25f);
-
-
+						returnPos = furtherPoint;
 					}
 
 				}
@@ -284,8 +294,8 @@ public partial class TileMapPathFind : TileMap
 				returnPos = GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position;
 
 			}
+			QueueRedraw();
 			return returnPos;
-
 		}
 		else return startPos;
 	}
@@ -316,11 +326,11 @@ public partial class TileMapPathFind : TileMap
 			var aboveEndPoint = GetPointInfo(LocalToMap(new Vector2(endPos.X, endPos.Y - 16)));
 			if (aboveEndPoint != null)
 			{
-				endPoint= aboveEndPoint;
+				endPoint = aboveEndPoint;
 			}
 			else
 			{
-	            endPoint = GetPointInfoAtPosition(endPos);      // Create the point for the end position		
+				endPoint = GetPointInfoAtPosition(endPos);      // Create the point for the end position		
 
 			}
 
@@ -420,10 +430,10 @@ public partial class TileMapPathFind : TileMap
 		{
 			ConnectPoints();
 		}
-		if (startPos != Vector2.Zero && closerPoint != Vector2.Zero && fartherPoint != Vector2.Zero)
+		if (startPos != Vector2.Zero && closerPoint != Vector2.Zero && furtherPoint != Vector2.Zero && drawClosestPointLines)
 		{
 
-			DrawLine(startPos, fartherPoint, new Color(1, 1, 1, 1));
+			DrawLine(startPos, furtherPoint, new Color(1, 1, 1, 1));
 			DrawLine(startPos, closerPoint, new Color(1, 1, 1, 1));
 			DrawLine(startPos, GetInfoPointByPointId(_astarGraph.GetClosestPoint(startPos)).Position, new Color(1, 1, 1, 1));
 		}
@@ -1072,9 +1082,9 @@ public partial class TileMapPathFind : TileMap
 			}
 
 
-			
-				visualPoint.Position = MapToLocal(tile);
-			
+
+			visualPoint.Position = MapToLocal(tile);
+
 
 			//GD.Print("Placed Visual Point at " + LocalToMap(visualPoint.Position));
 
@@ -1118,11 +1128,11 @@ public partial class TileMapPathFind : TileMap
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-        if (Input.IsActionJustPressed("Debug-GetTileInfoAtPoint"))
-        {
+		if (Input.IsActionJustPressed("Debug-GetTileInfoAtPoint"))
+		{
 			PointInfo info = GetPointInfo(ConvertPointPositionToMapPosition(GetGlobalMousePosition()));
 
-            if (info != null)
+			if (info != null)
 			{
 				info.PrintInfo();
 			}
@@ -1131,6 +1141,6 @@ public partial class TileMapPathFind : TileMap
 				GD.Print("No tile info for this location");
 			}
 
-        }
-    }
+		}
+	}
 }

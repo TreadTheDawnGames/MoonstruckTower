@@ -18,6 +18,7 @@ public partial class EnemyV2 : Node2D
 	public Area2D attackRangeArea;
 
 	public bool isBusy = false;
+	public bool isAlerted = false;
 	
 
 	[Export]
@@ -101,14 +102,19 @@ public partial class EnemyV2 : Node2D
                 chaseState.LastLocation = lastSighting;*/
 
             
-			if (machine.CurrentState != "EnemyChaseState" && canSee &&!isBusy)
+			if (machine.CurrentState != "EnemyAlertedState" && !isAlerted && canSee &&!isBusy)
 			{
+				
 
 				//GD.Print("I SEE YOU");
-				machine.ChangeState("EnemyChaseState", new Dictionary<string, object> { { "goToPoint", lastSighting } });
+				machine.ChangeState("EnemyAlertedState", new Dictionary<string, object> { { "goToPoint", lastSighting } });
 			}
 			
+			/*if(isAlerted && pathfinder.IsOnFloor()&&!isB)
+			{
+                machine.ChangeState("EnemyChaseState", new Dictionary<string, object> { { "goToPoint", lastSighting } });
 
+            }*/
 
 
 
@@ -142,10 +148,7 @@ public partial class EnemyV2 : Node2D
         base._PhysicsProcess(delta);
 		if(hitPoints>0)
 			pathfinder.PathfinderPhysicsProcess(delta);
-		else if (pathfinder.takingDamage)
-		{
-			pathfinder.HaltPathing();
-		}
+		
 	}
 
     public void TakeDamage(int damage, HitBox2D box)

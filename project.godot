@@ -99,6 +99,11 @@ Debug-GetTileInfoAtPoint={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":81,"key_label":0,"unicode":113,"echo":false,"script":null)
 ]
 }
+Debug-TimeSlowToggle={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":84,"key_label":0,"unicode":116,"echo":false,"script":null)
+]
+}
 
 [layer_names]
 
@@ -109,6 +114,8 @@ Debug-GetTileInfoAtPoint={
 2d_physics/layer_5="Enemies"
 2d_physics/layer_6="EnemyHurtBoxes"
 2d_physics/layer_7="DropThroughTile"
+2d_physics/layer_8="Arrow"
+2d_physics/layer_9="Switch"
 
 [rendering]
 

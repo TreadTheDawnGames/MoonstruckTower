@@ -12,14 +12,18 @@ public partial class Bow : Node, ITool
     int arrowCount = 99999;
 	PackedScene projectile;
 	Marker2D arrowSpawnPoint;
+    Area2D spawnArea;
 	AnimatedSprite2D linkSprite;
     player link;
+    AudioStreamPlayer2D audioPlayer;
     public bool animating {  get; private set; } 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-        projectile = GD.Load<PackedScene>("res://Scenes/arrow.tscn");
-		arrowSpawnPoint = (Marker2D)GetNode<Marker2D>(new NodePath("BowSpawner"));//Owner.GetNode<Marker2D>(new NodePath("ProjectileSpawn"));
+        audioPlayer = GetNode<AudioStreamPlayer2D>("Audio");
+        projectile = GD.Load<PackedScene>("res://Scenes/Tools/Bow/arrow.tscn");
+		arrowSpawnPoint = GetNode<Marker2D>(new NodePath("BowSpawner"));
+        spawnArea = GetNode<Area2D>("BowSpawner/Area2D");
 	}
 
     void Charge()
@@ -42,48 +46,46 @@ public partial class Bow : Node, ITool
 
     void ShootH()
     {
-        bool flipped = linkSprite.FlipH;
+        if (spawnArea.GetOverlappingBodies().Count == 0)
+        {
+            bool flipped = linkSprite.FlipH;
 
 
-        arrowSpawnPoint.Set("position", flipped ? new Vector2(6, 2) : new Vector2(-6, 2));
+            arrowSpawnPoint.Set("position", new Vector2(-6, 0));
 
+            var arrow = projectile.Instantiate<Projectile>();
+            arrow.shootDirection = Vector2.Right;
 
-        var arrow = projectile.Instantiate<Projectile>();
-        arrow.shootDirection = Vector2.Right;
+            arrow.GlobalPosition = arrowSpawnPoint.GlobalPosition;
+            arrow.GlobalRotation = flipped ? Mathf.DegToRad(180f) : Mathf.DegToRad(0f);
+            arrow.speed *= flipped ? 1 : -1;
 
-        arrow.GlobalPosition = arrowSpawnPoint.GlobalPosition;
-        arrow.GlobalRotation = flipped ? Mathf.DegToRad(180f) : Mathf.DegToRad(0f);
-        arrow.speed *= flipped ? 1 : -1;
+            GetTree().Root.AddChild(arrow);
 
-        GetTree().Root.AddChild(arrow);
-
-        GD.Print("Used Bow");
-        link.usingTool = false;
-        charged = false;
+        }
+            GD.Print("Used Bow");
+            link.usingTool = false;
+            charged = false;
     }
     void ShootV()
     {
-        arrowSpawnPoint.Set("position", new Vector2(0,-6));
 
+       
+            arrowSpawnPoint.Set("position", new Vector2(0, -6));
 
-        var arrow = projectile.Instantiate<Projectile>();
-        arrow.shootDirection = Vector2.Up;
-        arrow.GlobalPosition = arrowSpawnPoint.GlobalPosition;
-        arrow.GlobalRotation = Mathf.DegToRad(90f);
+            var arrow = projectile.Instantiate<Projectile>();
+            arrow.shootDirection = Vector2.Up;
+            arrow.GlobalPosition = arrowSpawnPoint.GlobalPosition;
+            arrow.GlobalRotation = Mathf.DegToRad(90f);
 
-        GetTree().Root.AddChild(arrow);
+            GetTree().Root.AddChild(arrow);
 
-        GD.Print("Used Bow");
-        link.usingTool = false;
-        charged = false;
+        
+            GD.Print("Used Bow");
+            link.usingTool = false;
+            charged = false;
     }
-	void Shoot(Vector2 direction)
-	{
-        if (linkSprite.Animation == new StringName("BowShoot") && direction.Y == 0)
-            ShootH();
-        else if (linkSprite.Animation == new StringName("BowShootVert") && direction.Y < 0)
-            ShootV();
-    }
+	
 
 	public bool Identify()
 	{
@@ -91,24 +93,30 @@ public partial class Bow : Node, ITool
 		return true;
 	}
 
-	public void Use(Vector2 direction)
-	{
+    public void Use(Vector2 direction)
+    {
+
+
+
+
+
         if (charged)
         {
-            if(linkSprite.Animation == "BowHoldVert"|| linkSprite.Animation == "BowWalkVert")
+
+            if (linkSprite.Animation == "BowHoldVert" || linkSprite.Animation == "BowWalkVert")
             {
                 linkSprite.Play("BowShootVert");
                 ShootV();
             }
-            else if(linkSprite.Animation == "BowHold" || linkSprite.Animation == "BowWalk")
+            else if (linkSprite.Animation == "BowHold" || linkSprite.Animation == "BowWalk")
             {
                 linkSprite.Play("BowShoot");
                 ShootH();
             }
 
         }
-            //Shoot();
-	}
+
+    }
 
     public void PreUse(Vector2 direction)
     {

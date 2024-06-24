@@ -9,6 +9,9 @@ public partial class EnemyPathfinder : Pathfinder
     EnemyV2 logic;
     public bool takingDamage = false;
     public TileMapPathFind mapPather;
+    public Vector2 lastLocation;
+    bool pathfindCalledButNotOnFloor = false;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -20,10 +23,18 @@ public partial class EnemyPathfinder : Pathfinder
             _pathFind2D = (TileMapPathFind)GetTree().GetFirstNodeInGroup("PathfindMap");
 
         }
+
+        //UnableToReachPoint += () => CreateAndGoToValidPath(_target.Position);
     }
 
     public override void PathfinderPhysicsProcess(double delta)
     {
+        if((pathfindCalledButNotOnFloor||queueRepath)&&IsOnFloor())
+        {
+            CreateAndGoToValidPath(lastLocation);
+            pathfindCalledButNotOnFloor= false;
+            queueRepath = false;
+        }
         if(!takingDamage)
         {
            base.PathfinderPhysicsProcess(delta);
@@ -38,7 +49,6 @@ public partial class EnemyPathfinder : Pathfinder
             MoveAndSlide();
         }
 
-        
 
     }
 
@@ -67,13 +77,13 @@ public partial class EnemyPathfinder : Pathfinder
 
         //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 1f, 1, 1f), scale: 0.11f, pathfinder: this);
 
-
         var spaceState = GetWorld2D().DirectSpaceState;
-        var query = PhysicsRayQueryParameters2D.Create(where, new Vector2(where[0], where[1] + 1000), CollisionMask);
+        var query = PhysicsRayQueryParameters2D.Create(where, new Vector2(where[0], where[1] + 64), CollisionMask);
         var result = spaceState.IntersectRay(query);
 
         if (result.Count > 0)
         {
+
             Vector2I resultVector = (Vector2I)result["position"];
             Vector2I goTo = new Vector2I(resultVector.X, resultVector.Y - 16);
 
@@ -93,6 +103,16 @@ public partial class EnemyPathfinder : Pathfinder
 
     public bool CreateAndGoToValidPath(Vector2 where)
     {
+        if (!IsOnFloor()&&_target==null)
+        {
+            HaltPathing();
+            
+            pathfindCalledButNotOnFloor = true;
+            lastLocation = where;
+            return false;
+        }
+
+
         var whereTile = _pathFind2D.ConvertPointPositionToMapPosition(where);
         var whereTileInfo = _pathFind2D.GetPointInfo(_pathFind2D.ConvertPointPositionToMapPosition(where));
 
@@ -117,7 +137,7 @@ public partial class EnemyPathfinder : Pathfinder
                     GD.Print("This is a dropthrough tile");
                     whereTile = new Vector2I(whereTile.X, whereTile.Y - 1);
                     //make end point the tile above selected tile
-                    DoPathFinding(whereTile);
+                    CreateAndGoToPath(where);//DoPathFinding(whereTile);
                     return true;
                 }
             }
@@ -130,7 +150,7 @@ public partial class EnemyPathfinder : Pathfinder
             ///
 
 
-            GD.PrintErr("Attemped to go to inappropriate tile. ");
+            GD.PushWarning("Attemped to go to inappropriate tile. ");
             _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(where), new Color(1f, 0.5f, 1, 1), scale: 1.5f, timer: 1);
 
 

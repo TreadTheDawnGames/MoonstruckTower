@@ -33,6 +33,7 @@ public partial class MoblinAttackState : EnemyAttackState
         base.OnExit(nextState);
         logic.hitBox.SetEnabled(false);
         logic.isBusy = false;
+        logic.isAlerted = false;
     }
     
 }

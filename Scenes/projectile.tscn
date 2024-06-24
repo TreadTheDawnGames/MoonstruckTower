@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://0axl161yeqcm"]
 
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="2_jnj2e"]
-[ext_resource type="Script" path="res://Scripts/Projectile.cs" id="2_uoi3q"]
+[ext_resource type="Script" path="res://Scripts/Tools/Projectile.cs" id="2_uoi3q"]
 
 [node name="Projectile" type="CharacterBody2D"]
 collision_mask = 17

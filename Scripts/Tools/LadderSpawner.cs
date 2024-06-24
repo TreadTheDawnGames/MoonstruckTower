@@ -21,7 +21,7 @@ public partial class LadderSpawner : Node2D, ITool
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-        ladderScene = GD.Load<PackedScene>("res://Scenes/tool_ladder.tscn");
+        ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
         ladderGrabber = GetNode<Area2D>("LadderGrabber");
         ladderSpawnpoint = GetNode<Marker2D>("LadderSpawnpoint");
 	}

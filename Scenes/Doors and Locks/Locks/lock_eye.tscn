@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://b572ef6jxv3tx"]
+
+[ext_resource type="Texture2D" uid="uid://boncxsm37ulxy" path="res://Assets/EyeLockLR.png" id="1_wji6r"]
+[ext_resource type="Script" path="res://Scripts/Locks and Doors/Locks/LockEye.cs" id="2_uj4du"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8ctn"]
+atlas = ExtResource("1_wji6r")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ek5l"]
+atlas = ExtResource("1_wji6r")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cnkhp"]
+atlas = ExtResource("1_wji6r")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jx463"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8ctn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ek5l")
+}],
+"loop": false,
+"name": &"Close",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cnkhp")
+}],
+"loop": true,
+"name": &"Open",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g5ndy"]
+size = Vector2(13, 12)
+
+[node name="EyeLock" type="Area2D"]
+collision_mask = 128
+script = ExtResource("2_uj4du")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jx463")
+animation = &"Open"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.5, 0)
+shape = SubResource("RectangleShape2D_g5ndy")

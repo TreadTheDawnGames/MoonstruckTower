@@ -5,12 +5,13 @@ using System.Collections.Generic;
 public partial class HitBox2D : Area2D
 {
     [Export] public int damage = 1;
+    [Export] public uint layers;
 
     CollisionShape2D[] myShape;
 
     public override void _Ready()
     {
-        CollisionLayer = 2;
+        CollisionLayer = layers;
         CollisionMask = 0;
 
         List<CollisionShape2D> nodes = new List<CollisionShape2D>();
@@ -21,6 +22,7 @@ public partial class HitBox2D : Area2D
         }
         myShape = nodes.ToArray() ;
     }
+
 
     public void SetEnabled(bool enabled)
     {

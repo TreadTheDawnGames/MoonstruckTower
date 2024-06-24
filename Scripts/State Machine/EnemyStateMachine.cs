@@ -29,24 +29,4 @@ public partial class EnemyStateMachine : StateMachine
         GD.Print(Owner.Name + " is " + state.Name);
 
     }
-
-
-
-    
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-	{
-        
-
-           /* foreach (Node2D node in body.fov.GetOverlappingBodies())
-            {
-                if (node == link)
-                {
-                    if (state == States[0]|| state == States[3]|| state == States[5])
-                        ChangeState("EnemyChaseState", null);
-                    body.hasTarget = true;
-                }
-            }*/
-        
-    }
 }
