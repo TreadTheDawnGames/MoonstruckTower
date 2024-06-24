@@ -34,7 +34,7 @@ public partial class MultiDoor : Door
 
     public override bool Close()
     {
-        if (base.Close())
+        if (!base.Close())
         {
             return false;
         }

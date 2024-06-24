@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://dx2jlctrirqip"]
+[gd_scene load_steps=11 format=3 uid="uid://dx2jlctrirqip"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_11jo3"]
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
 [ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/OoSPlatformerTilesSprites.png" id="2_lbv7k"]
 [ext_resource type="Script" path="res://addons/VerticalTileMapPathFinder/TileMapPathFind.cs" id="3_jl15l"]
-[ext_resource type="PackedScene" uid="uid://c6wel62w8vokb" path="res://Scenes/ladder.tscn" id="5_7yvrv"]
+[ext_resource type="PackedScene" uid="uid://c5j6pvr4kowjw" path="res://Scenes/Doors and Locks/Doors/multi_door.tscn" id="6_87dq5"]
+[ext_resource type="PackedScene" uid="uid://d3pfjso4vlks5" path="res://Scenes/Doors and Locks/Doors/door_jump_thru.tscn" id="6_h38ib"]
+[ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="8_yovqr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lpg4n"]
 texture = ExtResource("2_lbv7k")
@@ -961,5 +963,14 @@ position_smoothing_enabled = true
 [node name="AudioListener2D" type="AudioListener2D" parent="Player/Camera2D"]
 current = true
 
-[node name="Ladder" parent="." instance=ExtResource("5_7yvrv")]
-position = Vector2(69, 16)
+[node name="MultiDoor" parent="." instance=ExtResource("6_87dq5")]
+position = Vector2(-192, -55)
+
+[node name="JumpThruDoor" parent="MultiDoor" instance=ExtResource("6_h38ib")]
+position = Vector2(-8, 8)
+
+[node name="JumpThruDoor2" parent="MultiDoor" instance=ExtResource("6_h38ib")]
+position = Vector2(8, 8)
+
+[node name="LockSwitch" parent="MultiDoor" instance=ExtResource("8_yovqr")]
+position = Vector2(39, 31)

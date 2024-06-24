@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ix40tkd4y4a8"
+path="res://.godot/imported/SwitchFlipClose.wav-815788d98c1a1861ccc9d43a1cdb7002.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/Locks and Doors/Locks/SwitchFlipClose.wav"
+dest_files=["res://.godot/imported/SwitchFlipClose.wav-815788d98c1a1861ccc9d43a1cdb7002.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

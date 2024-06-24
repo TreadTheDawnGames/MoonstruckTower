@@ -6,11 +6,13 @@ public partial class Lock : Area2D
     public bool unlocked;
     protected Door door;
 	protected AnimatedSprite2D sprite;
+    protected AudioStreamPlayer2D audioPlayer;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		base._Ready();
 		sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        audioPlayer = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
 		AreaEntered += (node) => UnlockMe();
 	}
 

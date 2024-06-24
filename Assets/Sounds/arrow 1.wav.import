@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://bm42dgid41ed3"
-path="res://.godot/imported/Arrow1.wav-62eda14ae0200717c3175a467b0e6653.sample"
+uid="uid://cedm3q8sm5lsu"
+path="res://.godot/imported/arrow 1.wav-e9d7535433d0d3d393f530f21c53bb20.sample"
 
 [deps]
 
-source_file="res://Assets/Sounds/Arrow1.wav"
-dest_files=["res://.godot/imported/Arrow1.wav-62eda14ae0200717c3175a467b0e6653.sample"]
+source_file="res://Assets/Sounds/arrow 1.wav"
+dest_files=["res://.godot/imported/arrow 1.wav-e9d7535433d0d3d393f530f21c53bb20.sample"]
 
 [params]
 

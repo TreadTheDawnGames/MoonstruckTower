@@ -102,7 +102,6 @@ public partial class Bow : Node, ITool
 
         if (charged)
         {
-
             if (linkSprite.Animation == "BowHoldVert" || linkSprite.Animation == "BowWalkVert")
             {
                 linkSprite.Play("BowShootVert");
@@ -113,6 +112,7 @@ public partial class Bow : Node, ITool
                 linkSprite.Play("BowShoot");
                 ShootH();
             }
+            audioPlayer.Play();
 
         }
 
