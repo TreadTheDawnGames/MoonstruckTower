@@ -3,7 +3,8 @@ using System;
 
 public partial class Lock : Area2D
 {
-    public bool unlocked;
+    [Export]
+    public bool unlocked = false;
     protected Door door;
 	protected AnimatedSprite2D sprite;
 	// Called when the node enters the scene tree for the first time.
@@ -28,7 +29,7 @@ public partial class Lock : Area2D
             return ;
         }
         unlocked = true;
-        door.Open();
+        door.AttemptToOpen();
     }
     
     protected virtual void LockMe()
@@ -38,7 +39,7 @@ public partial class Lock : Area2D
             return ;
         }
         unlocked = false;
-        door.Close();
+        door.AttemptToClose();
     }
     
 }

@@ -12,7 +12,7 @@ public partial class LockEye : Lock
 			base.UnlockMe();
 
 			sprite.Play("Close");
-			door.Open();
+			door.AttemptToOpen();
 		}
 	}
 

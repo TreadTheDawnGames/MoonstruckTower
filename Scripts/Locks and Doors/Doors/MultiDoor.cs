@@ -17,9 +17,9 @@ public partial class MultiDoor : Door
         }
     }
 
-    public override bool Open()
+    public override bool AttemptToOpen()
     {
-        if (!base.Open())
+        if (!base.AttemptToOpen())
         {
             return false;
         }
@@ -27,22 +27,19 @@ public partial class MultiDoor : Door
         foreach (Door door in doors)
         {
             door.opened = true;
-            door.Open();
+            door.AttemptToOpen();
         }
         return true;
     }
 
-    public override bool Close()
+    public override bool AttemptToClose()
     {
-        if (base.Close())
-        {
-            return false;
-        }
+        
 
         foreach (var door in doors)
         {
             door.opened = false;
-            door.Close() ;
+            door.AttemptToClose();
         }
         return true;
     }

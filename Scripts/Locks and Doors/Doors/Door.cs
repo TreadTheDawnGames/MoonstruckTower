@@ -8,30 +8,27 @@ public partial class Door : Node2D
     public bool opened = false;
    
 
-    public virtual bool Open()
+    public virtual bool AttemptToOpen()
     {
+        GD.Print("Attempting to Open " + Name);
+
         foreach (Lock locke in lockList)
         {
             if (!locke.unlocked)
             {
+                GD.Print(locke.Name + " is LOCKED; Open failed.");
                 opened = false;
                 return false ;
             }
         }
+        GD.Print("Open succeeded " + Name);
         opened = true;
         return true ;
     }
     
-    public virtual bool Close()
+    public virtual bool AttemptToClose()
     {
-        foreach (Lock locke in lockList)
-        {
-            if (locke.unlocked)
-            {
-                opened = true;
-                return false;
-            }
-        }
+		
         opened = false;
         return true;
     }

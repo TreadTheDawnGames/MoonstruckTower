@@ -15,10 +15,9 @@ public partial class JumpThruDoor : Door
 
 	}
 
-    public override bool Open()
+    public override bool AttemptToOpen()
     {
-
-		if (!base.Open())
+		if (!base.AttemptToOpen())
 		{
 			return false;
 		}
@@ -31,9 +30,9 @@ public partial class JumpThruDoor : Door
 		return true;
     }
 
-    public override bool Close()
+    public override bool AttemptToClose()
     {
-		if (!base.Close())
+		if (!base.AttemptToClose())
 		{
 			return false;
 		}
