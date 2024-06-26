@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhxc5ok0aroan"
-path="res://.godot/imported/OoSPlatformerTilesSprites.png-29d718f4059110a798f5e5d45ea35507.ctex"
+uid="uid://dmpt2f51qbv0s"
+path="res://.godot/imported/LinkBow.png-9986f9e85f1e82ea59379409b3c3b3c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/OoSPlatformerTilesSprites.png"
-dest_files=["res://.godot/imported/OoSPlatformerTilesSprites.png-29d718f4059110a798f5e5d45ea35507.ctex"]
+source_file="res://Assets/LinkAnimations/LinkBow.png"
+dest_files=["res://.godot/imported/LinkBow.png-9986f9e85f1e82ea59379409b3c3b3c1.ctex"]
 
 [params]
 

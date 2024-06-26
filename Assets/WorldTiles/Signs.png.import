@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpn64rh3ri7v6"
-path="res://.godot/imported/AirAttackDiagonal.png-9eb55d0c24eb1efc80ef198c5d7c2979.ctex"
+uid="uid://dr2tm1iuukxfa"
+path="res://.godot/imported/Signs.png-9225cc21e6de98ed8de962d7bd359ee4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/AirAttackDiagonal.png"
-dest_files=["res://.godot/imported/AirAttackDiagonal.png-9eb55d0c24eb1efc80ef198c5d7c2979.ctex"]
+source_file="res://Assets/WorldTiles/Signs.png"
+dest_files=["res://.godot/imported/Signs.png-9225cc21e6de98ed8de962d7bd359ee4.ctex"]
 
 [params]
 

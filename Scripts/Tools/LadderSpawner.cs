@@ -10,8 +10,11 @@ public partial class LadderSpawner : Node2D, ITool
 
     public bool animating { get; private set; } = false;
 
+    [Export]
+    public Texture2D displayTexture { get; private set; }
+
     AnimatedSprite2D linkSprite;
-    player link;
+    Player link;
     Area2D ladderGrabber;
     PackedScene ladderScene;
     Marker2D ladderSpawnpoint;
@@ -58,7 +61,7 @@ public partial class LadderSpawner : Node2D, ITool
     }
 
 
-    public void SetupTool(AnimatedSprite2D character, player playerLink)
+    public void SetupTool(AnimatedSprite2D character, Player playerLink)
     {
         if(link == null)
         {
@@ -105,7 +108,6 @@ public partial class LadderSpawner : Node2D, ITool
     {
         GD.Print("Placed Ladder");
 
-        ladderSpawnpoint.Set("position", linkSprite.FlipH ? new Vector2(7,8) : new Vector2(-7,8)) ;
 
         Ladder ladder = ladderScene.Instantiate<Ladder>();
 

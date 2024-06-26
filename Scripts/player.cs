@@ -7,12 +7,13 @@ using static Godot.TextServer;
 
 
 [GlobalClass]
-public partial class player : CharacterBody2D
+public partial class Player : CharacterBody2D
 {
     [Export] public float Speed = 150.0f;
     [Export] public float climbSpeed = 75.0f;
     [Export] public float JumpVelocity = -270.0f;
     [Export] private float damageWaitTime = 0.5f;
+
 
     AnimatedSprite2D animator;
     Timer coyoteTimer;
@@ -33,6 +34,7 @@ public partial class player : CharacterBody2D
     int selectedToolIndex = 0;
     Node2D toolBag;
     public bool usingTool = false;
+    TextureRect toolBoxDisplay;
 
     int coyoteFrames = 6;
     bool coyote = false;
@@ -61,15 +63,17 @@ public partial class player : CharacterBody2D
         attackHitboxAir = (HitBox2D)GetNode(new NodePath("Flippables/HitBoxAir"));
         linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
         damageTimer = GetNode<Timer>("DamageTimer");
+        toolBoxDisplay = (TextureRect)GetTree().GetFirstNodeInGroup("ToolBoxDisplay");
 
         damageTimer.Timeout += () => takingDamage = false;
         coyoteTimer.Timeout += () => CoyoteDone();
         animator.AnimationFinished += () => AnimationDone();
         damageTimer.Stop();
-        
+            UpdateToolbag();
+
     }
 
-   
+
 
 
     private void CoyoteDone()
@@ -215,7 +219,6 @@ public partial class player : CharacterBody2D
             if (usingTool)
                 usingTool = false;
 
-            UpdateToolbag();
             if (toolBagList.Length != 0)
             {
 
@@ -225,6 +228,7 @@ public partial class player : CharacterBody2D
                 }
 
                 selectedTool = toolBagList[selectedToolIndex - 1];
+                toolBoxDisplay.Texture = selectedTool.displayTexture;
                // GD.Print("Selected " + selectedTool.name);
             }
         }

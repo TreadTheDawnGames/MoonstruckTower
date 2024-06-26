@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class EnemyChaseState : EnemyState
 {
-    player link;
+    Player link;
     Area2D rangeArea;
     Timer repathTimer;
     private Vector2 lastLocation;

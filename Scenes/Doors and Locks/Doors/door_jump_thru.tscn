@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d3pfjso4vlks5"]
 
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Doors/JumpThruDoor.cs" id="1_1p53o"]
-[ext_resource type="Texture2D" uid="uid://bgwoqgve6ih03" path="res://Assets/JumpThruDoor.png" id="2_d4l0r"]
+[ext_resource type="Texture2D" uid="uid://bgwoqgve6ih03" path="res://Assets/Locks and Doors/JumpThruDoor.png" id="2_d4l0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_87edb"]
 size = Vector2(16, 7)

@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://detdm2r8imhmx"]
+[gd_scene load_steps=4 format=3 uid="uid://detdm2r8imhmx"]
 
 [ext_resource type="Script" path="res://Scripts/Tools/LadderSpawner.cs" id="1_4abiq"]
+[ext_resource type="Texture2D" uid="uid://cui216mcafe57" path="res://Assets/UI/Tool Icons/ToolIcon-Ladder.png" id="2_bl1gr"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n086x"]
 radius = 4.0
@@ -8,8 +9,10 @@ height = 15.0
 
 [node name="LadderSpawner" type="Node2D"]
 script = ExtResource("1_4abiq")
+displayTexture = ExtResource("2_bl1gr")
 
 [node name="LadderSpawnpoint" type="Marker2D" parent="."]
+position = Vector2(-7, 8)
 
 [node name="LadderGrabber" type="Area2D" parent="."]
 collision_layer = 4

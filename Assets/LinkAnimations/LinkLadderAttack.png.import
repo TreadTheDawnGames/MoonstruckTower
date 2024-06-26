@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://di3gvno88vsd4"
-path="res://.godot/imported/LinkDuck.png-0e79b95156fc39526288713a91b539ba.ctex"
+uid="uid://bec27bp31wk3c"
+path="res://.godot/imported/LinkLadderAttack.png-2bb41fb4da39f49300bc817086236cef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/LinkDuck.png"
-dest_files=["res://.godot/imported/LinkDuck.png-0e79b95156fc39526288713a91b539ba.ctex"]
+source_file="res://Assets/LinkAnimations/LinkLadderAttack.png"
+dest_files=["res://.godot/imported/LinkLadderAttack.png-2bb41fb4da39f49300bc817086236cef.ctex"]
 
 [params]
 

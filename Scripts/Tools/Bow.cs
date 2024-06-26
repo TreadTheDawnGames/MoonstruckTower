@@ -8,13 +8,15 @@ public partial class Bow : Node, ITool
     public bool charged { get; private set; } = false;
     public string name { get; } = "Bow";
 
+    [Export]
+    public Texture2D displayTexture { get; private set; }
 
     int arrowCount = 99999;
 	PackedScene projectile;
 	Marker2D arrowSpawnPoint;
     Area2D spawnArea;
 	AnimatedSprite2D linkSprite;
-    player link;
+    Player link;
     AudioStreamPlayer2D audioPlayer;
     public bool animating {  get; private set; } 
     // Called when the node enters the scene tree for the first time.
@@ -169,7 +171,7 @@ public partial class Bow : Node, ITool
 
     }
 
-    public void SetupTool(AnimatedSprite2D character, player playerLink)
+    public void SetupTool(AnimatedSprite2D character, Player playerLink)
     {
         if (link == null)
         {

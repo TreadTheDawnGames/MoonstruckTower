@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bec27bp31wk3c"
-path="res://.godot/imported/LinkLadderAttack.png-d281a95d1d9a7fa9914979d1ccbd6873.ctex"
+uid="uid://boncxsm37ulxy"
+path="res://.godot/imported/EyeLockLR.png-73a606291f08df0cbe4cd5f8b6cad089.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/LinkLadderAttack.png"
-dest_files=["res://.godot/imported/LinkLadderAttack.png-d281a95d1d9a7fa9914979d1ccbd6873.ctex"]
+source_file="res://Assets/Locks and Doors/EyeLockLR.png"
+dest_files=["res://.godot/imported/EyeLockLR.png-73a606291f08df0cbe4cd5f8b6cad089.ctex"]
 
 [params]
 

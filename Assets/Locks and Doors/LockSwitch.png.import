@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgpt33cbs3yrc"
-path="res://.godot/imported/LinkBowVert.png-d2c150d867793635b0102da1a7e8fef1.ctex"
+uid="uid://c21igfq0amnaq"
+path="res://.godot/imported/LockSwitch.png-a5e12600b0350de8a9b3907320b79971.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/LinkBowVert.png"
-dest_files=["res://.godot/imported/LinkBowVert.png-d2c150d867793635b0102da1a7e8fef1.ctex"]
+source_file="res://Assets/Locks and Doors/LockSwitch.png"
+dest_files=["res://.godot/imported/LockSwitch.png-a5e12600b0350de8a9b3907320b79971.ctex"]
 
 [params]
 

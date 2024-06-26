@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://di1pn02xfxovi"
-path="res://.godot/imported/LinkBowWalk.png-444c47f35b17e1e2eee8a899928bfe41.ctex"
+uid="uid://refdgbwfsixs"
+path="res://.godot/imported/LinkAttackWalk.png-0ed870882efdae280967b7d775103b34.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/LinkBowWalk.png"
-dest_files=["res://.godot/imported/LinkBowWalk.png-444c47f35b17e1e2eee8a899928bfe41.ctex"]
+source_file="res://Assets/LinkAnimations/LinkAttackWalk.png"
+dest_files=["res://.godot/imported/LinkAttackWalk.png-0ed870882efdae280967b7d775103b34.ctex"]
 
 [params]
 

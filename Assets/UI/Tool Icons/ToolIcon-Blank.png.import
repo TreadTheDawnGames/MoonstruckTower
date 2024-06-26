@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://clhbteeochj88"
-path="res://.godot/imported/OoSLinkJumpSword.png-285afff1e04778d01e13a5407f0ba6a0.ctex"
+uid="uid://pk875inj8gdh"
+path="res://.godot/imported/ToolIcon-Blank.png-fbe7c0e36ae5ad44d3bb75c3c014a6e8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/OoSLinkJumpSword.png"
-dest_files=["res://.godot/imported/OoSLinkJumpSword.png-285afff1e04778d01e13a5407f0ba6a0.ctex"]
+source_file="res://Assets/UI/Tool Icons/ToolIcon-Blank.png"
+dest_files=["res://.godot/imported/ToolIcon-Blank.png-fbe7c0e36ae5ad44d3bb75c3c014a6e8.ctex"]
 
 [params]
 

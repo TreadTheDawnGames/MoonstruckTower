@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://boncxsm37ulxy"
-path="res://.godot/imported/EyeLockLR.png-b4f20115bd6eada42f5ddb179625cc05.ctex"
+uid="uid://clhbteeochj88"
+path="res://.godot/imported/OoSLinkJumpSword.png-60788804f9588b4e88aaf7843dff398a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/EyeLockLR.png"
-dest_files=["res://.godot/imported/EyeLockLR.png-b4f20115bd6eada42f5ddb179625cc05.ctex"]
+source_file="res://Assets/LinkAnimations/OoSLinkJumpSword.png"
+dest_files=["res://.godot/imported/OoSLinkJumpSword.png-60788804f9588b4e88aaf7843dff398a.ctex"]
 
 [params]
 

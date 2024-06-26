@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgwoqgve6ih03"
-path="res://.godot/imported/JumpThruDoor.png-0e6330f6155572b74a303199d3646642.ctex"
+uid="uid://bgv1pfa45mf74"
+path="res://.godot/imported/LinkPlaceLadder.png-e72e6fedbe3cb9586decb7beab003899.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/JumpThruDoor.png"
-dest_files=["res://.godot/imported/JumpThruDoor.png-0e6330f6155572b74a303199d3646642.ctex"]
+source_file="res://Assets/LinkAnimations/LinkPlaceLadder.png"
+dest_files=["res://.godot/imported/LinkPlaceLadder.png-e72e6fedbe3cb9586decb7beab003899.ctex"]
 
 [params]
 

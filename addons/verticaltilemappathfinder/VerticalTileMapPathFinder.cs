@@ -11,15 +11,12 @@ public partial class VerticalTileMapPathFinder : EditorPlugin
         // Add the new type with a name, a parent type, a script and an icon.
         var script = GD.Load<Script>("res://addons/VerticalTileMapPathFinder/TileMapPathFind.cs");
         var playerScript = GD.Load<Script>("res://addons/VerticalTileMapPathFinder/PlayerPathfinder.cs");
-        var enemyScript = GD.Load<Script>("res://addons/VerticalTileMapPathFinder/EnemyPathfinder.cs");
 
         var pathFinderImage = GD.Load<Texture2D>("res://addons/VerticalTileMapPathFinder/PathFinderImage.png");
         var playerPathFinderImage = GD.Load<Texture2D>("res://addons/VerticalTileMapPathFinder/PlayerPathFinderImage.png");
-        var enemyPathFinderImage = GD.Load<Texture2D>("res://addons/VerticalTileMapPathFinder/EnemyPathFinderImage.png");
 
         AddCustomType("TileMapPathFind", "TileMap", script, pathFinderImage);
         AddCustomType("PlayerPathfinder", "CharacterBody2D", playerScript, playerPathFinderImage);
-        AddCustomType("EnemyPathfinder", "CharacterBody2D", enemyScript, enemyPathFinderImage);
     }
 
     public override void _ExitTree()
@@ -28,7 +25,6 @@ public partial class VerticalTileMapPathFinder : EditorPlugin
         // Always remember to remove it from the engine when deactivated.
         RemoveCustomType("TileMapPathFind");
         RemoveCustomType("PlayerPathfinder");
-        RemoveCustomType("EnemyPathfinder");
     }
 }
 #endif

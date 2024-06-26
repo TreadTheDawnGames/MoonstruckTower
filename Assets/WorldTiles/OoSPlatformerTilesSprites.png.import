@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgv1pfa45mf74"
-path="res://.godot/imported/LinkPlaceLadder.png-b318c39150b7acc7172bb0bfcce7d7c1.ctex"
+uid="uid://bhxc5ok0aroan"
+path="res://.godot/imported/OoSPlatformerTilesSprites.png-da29c5c85ca3c675f9b7b9316ba49578.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/LinkPlaceLadder.png"
-dest_files=["res://.godot/imported/LinkPlaceLadder.png-b318c39150b7acc7172bb0bfcce7d7c1.ctex"]
+source_file="res://Assets/WorldTiles/OoSPlatformerTilesSprites.png"
+dest_files=["res://.godot/imported/OoSPlatformerTilesSprites.png-da29c5c85ca3c675f9b7b9316ba49578.ctex"]
 
 [params]
 

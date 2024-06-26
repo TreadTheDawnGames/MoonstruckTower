@@ -19,12 +19,12 @@ public partial class Ladder : Node2D
 
     void SetClimbing(Node node, bool isClimbing)
 	{
-		if (node is player)
+		if (node is Player)
 		{
 
 			
 
-            player link = (player) node;
+            Player link = (Player) node;
 			link.ladderCount += isClimbing ? 1 : -1;
             node.Call("SetClimb", isClimbing);
 			

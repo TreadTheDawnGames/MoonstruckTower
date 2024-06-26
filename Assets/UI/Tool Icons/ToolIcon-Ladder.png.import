@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmpt2f51qbv0s"
-path="res://.godot/imported/LinkBow.png-468ffd04553d65294001e1c4a0bfb46f.ctex"
+uid="uid://cui216mcafe57"
+path="res://.godot/imported/ToolIcon-Ladder.png-7c356b84a5de8ca1b84d8860a3f66ca6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/LinkBow.png"
-dest_files=["res://.godot/imported/LinkBow.png-468ffd04553d65294001e1c4a0bfb46f.ctex"]
+source_file="res://Assets/UI/Tool Icons/ToolIcon-Ladder.png"
+dest_files=["res://.godot/imported/ToolIcon-Ladder.png-7c356b84a5de8ca1b84d8860a3f66ca6.ctex"]
 
 [params]
 

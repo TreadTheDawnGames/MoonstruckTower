@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dril5bi3h5s0p"]
 
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Locks/LockSwitch.cs" id="1_g3oqo"]
-[ext_resource type="Texture2D" uid="uid://c21igfq0amnaq" path="res://Assets/LockSwitch.png" id="2_j7yab"]
+[ext_resource type="Texture2D" uid="uid://c21igfq0amnaq" path="res://Assets/Locks and Doors/LockSwitch.png" id="2_j7yab"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ii6di"]
 atlas = ExtResource("2_j7yab")

@@ -44,6 +44,7 @@ public partial class EnemyWanderState : EnemyState
         float wanderX = GD.RandRange(-160, 160);
         float wanderY = GD.RandRange(-160, 0);
 
+        
 
         return (logic.pathfinder.GlobalPosition + new Vector2(wanderX, wanderY)).Clamp(new Vector2(-240+16, wanderY), new Vector2(176-16, wanderY));
 

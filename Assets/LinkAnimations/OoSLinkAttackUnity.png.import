@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c21igfq0amnaq"
-path="res://.godot/imported/LockSwitch.png-53ccd049e6dde41da0dbc0d707218895.ctex"
+uid="uid://cfo4k34bya0rv"
+path="res://.godot/imported/OoSLinkAttackUnity.png-ae720f0e3eb899c7e4c26d7862b8e5ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/LockSwitch.png"
-dest_files=["res://.godot/imported/LockSwitch.png-53ccd049e6dde41da0dbc0d707218895.ctex"]
+source_file="res://Assets/LinkAnimations/OoSLinkAttackUnity.png"
+dest_files=["res://.godot/imported/OoSLinkAttackUnity.png-ae720f0e3eb899c7e4c26d7862b8e5ba.ctex"]
 
 [params]
 

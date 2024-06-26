@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://b572ef6jxv3tx"]
 
-[ext_resource type="Texture2D" uid="uid://boncxsm37ulxy" path="res://Assets/EyeLockLR.png" id="1_wji6r"]
+[ext_resource type="Texture2D" uid="uid://boncxsm37ulxy" path="res://Assets/Locks and Doors/EyeLockLR.png" id="1_wji6r"]
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Locks/LockEye.cs" id="2_uj4du"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e8ctn"]
