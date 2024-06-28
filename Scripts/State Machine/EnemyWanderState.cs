@@ -1,76 +1,82 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Security;
 
 public partial class EnemyWanderState : EnemyState
 {
 
+    
+    Timer timer;
 
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
-        logic.pathfinder.PathfindEnd += ()=> EndWander();
-    
-    }
 
-    
+
+        timer = GetNode<Timer>("Timer");
+    }
 
     // Called when the node enters the scene tree for the first time.
     public override void OnStart(Dictionary<string, object> message)
     {
-            base.OnStart(message);
+        timer.Timeout += EndWander;
+        base.OnStart(message);
+        animator.Play("Walk");
 
-
-
-       Vector2 goTo = GetRandomLocation();
-        
-        while (!logic.pathfinder.CreateAndGoToValidPath(goTo))
+        if (!logic.edgeDetectR.IsColliding())
         {
-            goTo = GetRandomLocation();
-            //nothing
-        } 
-            logic.pathfinder.mapPather.AddVisualPoint(logic.pathfinder.mapPather.ConvertPointPositionToMapPosition(goTo), new Color(0.5f,0.5f,1,1), scale: 1.5f);
-            GD.Print(Owner.Name + " started wandering to " + goTo);
-        
-       
-            animator.Play("Walk");
-        
+            if (logic.animator.FlipH)
+            {
+                logic.walkDirection = -1;
+            }
+            else
+            {
+                logic.walkDirection = 1;
+
+            }
+        }
+        else
+        {
+
+
+            do
+            {
+                logic.walkDirection = Mathf.Sign(GD.RandRange(-1, 1));
+
+            }
+            while (logic.walkDirection == 0);
+        }
+
+        timer.WaitTime = GD.RandRange(0.5f, 2f);
+        GD.Print(logic.Name + " is Wandering for " + timer.WaitTime + " seconds");
+        timer.Start();
     }
 
-    
-
-    Vector2 GetRandomLocation()
+    public  void StopWandering()
     {
-        float wanderX = GD.RandRange(-160, 160);
-        float wanderY = GD.RandRange(-160, 0);
-
-        
-
-        return (logic.pathfinder.GlobalPosition + new Vector2(wanderX, wanderY)).Clamp(new Vector2(-240+16, wanderY), new Vector2(176-16, wanderY));
-
+        if (isCurrentState)
+        {
+            logic.walkDirection = 0;
+            machine.ChangeState("EnemyIdleState", null);
+        }
     }
 
     void EndWander()
     {
-        if (isCurrentState)
-        {
-            GD.Print("End wander");
-            machine.ChangeState("EnemyIdleState", null);
-        }
+        GD.Print("End wander");
+        machine.ChangeState("EnemyIdleState", null);
     }
+
     
-
-    public override void UpdateState(float delta)
-    {
-        //moveDirection = wanderDirection;
-        base.UpdateState(delta);
-
-
-    }
 
     public override void OnExit(string nextState)
     {
         base.OnExit(nextState);
+        timer.Stop();
+        logic.walkDirection = 0;
+        timer.Timeout -= EndWander;
+
     }
 
 }

@@ -8,7 +8,7 @@ public partial class EnemyState : State
 	public EnemyStateMachine machine;
 	public AnimatedSprite2D animator;
 	public AnimatedSprite2D statusAnimator;
-	public EnemyV2 logic;
+	public EnemyV3 logic;
     public int moveDirection = 0;
     public float speedMultiplier = 1;
     public bool jumping = false;
@@ -19,7 +19,7 @@ public partial class EnemyState : State
         machine = (EnemyStateMachine)message["Machine"];
         animator = (AnimatedSprite2D)message["Animator"];
         statusAnimator = (AnimatedSprite2D)message["StatusAnimator"];
-        logic = (EnemyV2)message["Body"];
+        logic = (EnemyV3)message["Body"];
     }
     public override void OnStart(Dictionary<string, object> message)
     {

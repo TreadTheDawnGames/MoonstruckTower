@@ -27,8 +27,7 @@ public partial class EnemyDamageState : EnemyState
         
         logic.hitPoints -= damage;
         logic.isBusy = true;
-        logic.pathfinder.takingDamage = true;
-        logic.pathfinder.HaltPathing();
+        logic.takingDamage = true;
         //body.takingDamage = true;
         if (logic.hitPoints <= 0)
         {
@@ -41,7 +40,7 @@ public partial class EnemyDamageState : EnemyState
 
         }
         else
-        {var direction = Mathf.Sign(logic.pathfinder.GlobalPosition.X - caller.GlobalPosition.X);
+        {var direction = Mathf.Sign(logic.GlobalPosition.X - caller.GlobalPosition.X);
 
             animator.Play("Damage");
 
@@ -50,9 +49,7 @@ public partial class EnemyDamageState : EnemyState
 
 
 
-            logic.pathfinder.Velocity = new Vector2(hitVelX, hitVelY);
-            logic.damageTimer.WaitTime = damageWaitTime;
-            logic.damageTimer.Start();
+            logic.Velocity = new Vector2(hitVelX, hitVelY);
 
 
         }
@@ -62,10 +59,10 @@ public partial class EnemyDamageState : EnemyState
     {
 
         logic.isBusy = false;
-        logic.pathfinder.takingDamage = false;
+        logic.takingDamage = false;
             if (animator.Animation == "Death")
             {
-                logic.pathfinder.Destroy ();
+                logic.Destroy ();
             }
             else if (animator.Animation == "Damage")
             {

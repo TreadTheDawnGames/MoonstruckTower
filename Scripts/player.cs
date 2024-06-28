@@ -454,7 +454,7 @@ public partial class Player : CharacterBody2D
 
         if ((usingTool || direction.Y > 0) && damageTimer.TimeLeft <= 0)
         {
-            velocity.X /= 2.0f;
+            velocity.X *=0.5f;
         }
 
 

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class EnemyAlertedState : EnemyState
+public partial class EnemyAlertState : EnemyState
 {
     Timer timer;
     bool alertTimeout = false;
@@ -23,18 +23,20 @@ public partial class EnemyAlertedState : EnemyState
 
     void SetAlertTimeout()
     {
-        logic.pathfinder.HaltPathing();
         alertTimeout = true;
-			machine.ChangeState("EnemyChaseState",null);
+			machine.ChangeState("EnemyPanicState", new Dictionary<string, object> { { "repeat", 0} });
     }
 
     public override void UpdateState(float delta)
     {
         base.UpdateState(delta);
-        bool onFloor = logic.pathfinder.IsOnFloor();
-        //if (/*onFloor &&*/ /*alertTimeout &&*/!logic.isBusy)
-		{
-		}
+        if (logic.IsOnFloor())
+        {
+            float jumpInPixels = -Mathf.Sqrt(2 * logic.gravity * logic.jumpHeightPix);
+
+            logic.velocity.Y = jumpInPixels;
+
+        }
     }
 
     public override void OnExit(string nextState)

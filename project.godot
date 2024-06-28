@@ -25,7 +25,7 @@ project/assembly_name="Tower"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/VerticalTileMapPathFinder/plugin.cfg", "res://addons/hithurtboxes2d/plugin.cfg")
+enabled=PackedStringArray("res://addons/hithurtboxes2d/plugin.cfg")
 
 [input]
 

@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="12_d3htc"]
 [ext_resource type="Script" path="res://Scripts/State Machine/MoblinAttackState.cs" id="12_rqrp4"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="13_iivw5"]
-[ext_resource type="Script" path="res://Scripts/State Machine/EnemyAlertedState.cs" id="13_rmrax"]
+[ext_resource type="Script" path="res://Scripts/State Machine/EnemyAlertState.cs" id="13_rmrax"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a7ir0"]
 atlas = ExtResource("3_w4h5p")
