@@ -440,13 +440,12 @@ animations = [{
 radius = 4.0
 height = 15.0
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a6o1a"]
-radius = 10.6066
-height = 31.1127
+[sub_resource type="CircleShape2D" id="CircleShape2D_teyai"]
+radius = 13.4536
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fvajs"]
 radius = 11.0
-height = 38.0
+height = 44.0
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_8fi5b"]
 a = Vector2(40, 0)
@@ -468,7 +467,9 @@ JumpVelocity = -275.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_cmkua")
-animation = &"BowDrawWalk"
+animation = &"AttackWalk"
+autoplay = "Idle"
+frame = 1
 
 [node name="LinkCollider" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)
@@ -488,9 +489,9 @@ script = ExtResource("4_16p3j")
 layers = 288
 
 [node name="HitShape" type="CollisionShape2D" parent="Flippables/HitBox"]
-position = Vector2(-8, -4)
+position = Vector2(-9, -6)
 rotation = 0.785398
-shape = SubResource("CapsuleShape2D_a6o1a")
+shape = SubResource("CircleShape2D_teyai")
 disabled = true
 
 [node name="HitBoxAir" type="Area2D" parent="Flippables"]
@@ -500,7 +501,7 @@ script = ExtResource("4_16p3j")
 layers = 288
 
 [node name="Right" type="CollisionShape2D" parent="Flippables/HitBoxAir"]
-position = Vector2(-7, -1)
+position = Vector2(-11, 0)
 shape = SubResource("CapsuleShape2D_fvajs")
 disabled = true
 

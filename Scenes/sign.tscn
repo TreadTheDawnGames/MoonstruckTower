@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cvm7cr6i0tmsg"]
 
 [ext_resource type="Texture2D" uid="uid://dr2tm1iuukxfa" path="res://Assets/WorldTiles/Signs.png" id="1_7w7uf"]
-[ext_resource type="Script" path="res://Sign.cs" id="1_tlkv4"]
+[ext_resource type="Script" path="res://Scripts/Sign.cs" id="1_tlkv4"]
 [ext_resource type="FontFile" uid="uid://c3jo3wds6rhfw" path="res://Assets/Fonts/tiny.ttf" id="3_qpihg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_accg2"]

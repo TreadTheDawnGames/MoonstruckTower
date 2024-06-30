@@ -6,6 +6,7 @@ public partial class Projectile : CharacterBody2D
 {
 	[Export] public float speed = 300;
 	[Export] public Vector2 shootDirection;
+	[Export] bool destroyOnContact = false;
 	Area2D collisionBox;
     HitBox2D hitBox;
 
@@ -22,29 +23,29 @@ public partial class Projectile : CharacterBody2D
    
 
 
-    void HitWorld(Node2D node)
+    protected virtual void HitWorld(Node2D node)
 	{
 
-		var noyd = node.GetType();
-        
+		GD.Print(node.GetType());
+		GD.Print();
 
-        if (node.GetType() == typeof(EnemyPathfinder))
+        /*if (node.GetType() == typeof(HurtBox2D))
 		{
-			HitHurtBox(node);
+			HitHurtBox();
 			
 			return;
-        }
-		CallDeferred("reparent", node);
+        }*/
+		//CallDeferred("reparent", node);
         collisionBox.GetChild<CollisionShape2D>(0).SetDeferred("disabled", true);
 		hitBox.SetEnabled(false);
 
         Velocity = Vector2.Zero;
 		speed = 0;
 		
-		//QueueFree();
+		
 	}
 
-    void HitHurtBox(Node2D area)
+    public virtual void HitHurtBox()
 	{
 		
 		GD.Print("Called HitHurtBox()");

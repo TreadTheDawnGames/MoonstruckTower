@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d31oi04o25f3m"
-path="res://.godot/imported/OoSEffects.png-122d96c76061ba5f8ee6182c08f15af0.ctex"
+uid="uid://bpfof4wcgoqfm"
+path="res://.godot/imported/SpawnerIndicator.png-690967b83023b7bb7ace50099c605a88.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/OoSEffects.png"
-dest_files=["res://.godot/imported/OoSEffects.png-122d96c76061ba5f8ee6182c08f15af0.ctex"]
+source_file="res://Assets/Enemy Sprites/SpawnerIndicator.png"
+dest_files=["res://.godot/imported/SpawnerIndicator.png-690967b83023b7bb7ace50099c605a88.ctex"]
 
 [params]
 

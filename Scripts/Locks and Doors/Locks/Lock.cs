@@ -12,7 +12,7 @@ public partial class Lock : Area2D
 	{
 		base._Ready();
 		sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		AreaEntered += (node) => UnlockMe();
+		AreaEntered += (node) => UnlockMe(node);
 	}
 
     public override void _EnterTree()
@@ -22,8 +22,11 @@ public partial class Lock : Area2D
         door.lockList.Add(this);
     }
 
-    protected virtual void UnlockMe()
+    protected virtual void UnlockMe(Node2D node)
     {
+
+            
+        
         if(unlocked == true)
         {
             return ;
@@ -34,7 +37,8 @@ public partial class Lock : Area2D
     
     protected virtual void LockMe()
     {
-        if(unlocked == false)
+        
+        if (unlocked == false)
         {
             return ;
         }

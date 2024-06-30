@@ -1,8 +1,8 @@
 [gd_scene load_steps=37 format=3 uid="uid://pm8mmgho0rnq"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/Enemy.cs" id="1_q6c1w"]
-[ext_resource type="Texture2D" uid="uid://d31oi04o25f3m" path="res://Assets/OoSEffects.png" id="2_axcv2"]
-[ext_resource type="Texture2D" uid="uid://canqmirqvjivq" path="res://Assets/Moblin.png" id="2_h1pm8"]
+[ext_resource type="Texture2D" uid="uid://d31oi04o25f3m" path="res://Assets/Enemy Sprites/OoSEffects.png" id="2_axcv2"]
+[ext_resource type="Texture2D" uid="uid://canqmirqvjivq" path="res://Assets/Enemy Sprites/Moblin.png" id="2_h1pm8"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="3_wde42"]
 [ext_resource type="Texture2D" uid="uid://ee0d6l88ewa1" path="res://Assets/StatusSprites.png" id="4_d578o"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyStateMachine.cs" id="4_uakgy"]

@@ -5,11 +5,11 @@ public partial class LockEye : Lock
 {
 	
 
-    protected override void UnlockMe()
+    protected override void UnlockMe(Node2D node)
 	{
 		if (!unlocked)
 		{
-			base.UnlockMe();
+			base.UnlockMe(node);
 
 			sprite.Play("Close");
 			door.AttemptToOpen();

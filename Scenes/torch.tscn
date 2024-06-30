@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cd408xyy5a1fc"]
 
 [ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/WorldTiles/OoSPlatformerTilesSprites.png" id="1_3doit"]
-[ext_resource type="Script" path="res://TorchLighting.cs" id="2_t851n"]
+[ext_resource type="Script" path="res://Scripts/TorchLighting.cs" id="2_t851n"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7iec"]
 atlas = ExtResource("1_3doit")

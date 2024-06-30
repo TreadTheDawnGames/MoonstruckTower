@@ -1,8 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://b0tvtkbou8srx"]
+[gd_scene load_steps=40 format=3 uid="uid://b0tvtkbou8srx"]
 
-[ext_resource type="Script" path="res://EnemyV3.cs" id="1_cul6a"]
-[ext_resource type="Texture2D" uid="uid://canqmirqvjivq" path="res://Assets/Moblin.png" id="2_bmukl"]
-[ext_resource type="Texture2D" uid="uid://d31oi04o25f3m" path="res://Assets/OoSEffects.png" id="3_a82q5"]
+[ext_resource type="Script" path="res://Scripts/EnemyScripts/MoblinV3.cs" id="1_cul6a"]
+[ext_resource type="Texture2D" uid="uid://canqmirqvjivq" path="res://Assets/Enemy Sprites/Moblin.png" id="2_bmukl"]
+[ext_resource type="Texture2D" uid="uid://d31oi04o25f3m" path="res://Assets/Enemy Sprites/OoSEffects.png" id="3_a82q5"]
 [ext_resource type="Texture2D" uid="uid://ee0d6l88ewa1" path="res://Assets/StatusSprites.png" id="4_ow2d4"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyStateMachine.cs" id="5_fxxr3"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyIdleState.cs" id="6_5y4i6"]
@@ -10,9 +10,8 @@
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyDamageState.cs" id="9_e370f"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyAlertState.cs" id="10_cf7s6"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="10_fke7u"]
-[ext_resource type="Script" path="res://Scripts/State Machine/MoblinAttackState.cs" id="11_igcy6"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="11_qu146"]
-[ext_resource type="Script" path="res://EnemyPanicState.cs" id="12_ahh46"]
+[ext_resource type="Script" path="res://Scripts/State Machine/EnemyPanicState.cs" id="12_ahh46"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyConfusedState.cs" id="12_kic82"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lfgw3"]
@@ -46,6 +45,26 @@ region = Rect2(48, 48, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvwb4"]
 atlas = ExtResource("2_bmukl")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpe80"]
+atlas = ExtResource("2_bmukl")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wm20q"]
+atlas = ExtResource("2_bmukl")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oghbj"]
+atlas = ExtResource("3_a82q5")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wtkl1"]
+atlas = ExtResource("3_a82q5")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1yk51"]
+atlas = ExtResource("3_a82q5")
+region = Rect2(16, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_31c24"]
 atlas = ExtResource("2_bmukl")
@@ -115,6 +134,31 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_kpe80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wm20q")
+}],
+"loop": true,
+"name": &"PanicAttack",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oghbj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtkl1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1yk51")
+}],
+"loop": false,
+"name": &"Spawn",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_31c24")
 }, {
 "duration": 1.0,
@@ -178,16 +222,15 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a4yto"]
-radius = 8.0
-height = 22.0
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_0y1fa"]
 radius = 7.5
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5nk1g"]
-radius = 8.0
-height = 22.0
+radius = 5.0
+height = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wldy1"]
+radius = 7.5
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mb820"]
 radius = 5.0
@@ -197,15 +240,20 @@ height = 15.0
 collision_layer = 0
 collision_mask = 65
 script = ExtResource("1_cul6a")
+sightRange = null
+maxHP = null
+baseWalkSpeed = null
+jumpHeightPix = 16.0
 
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_d3nvu")
 animation = &"Walk"
+autoplay = "Spawn"
 
 [node name="StatusAnimator" type="AnimatedSprite2D" parent="Animator"]
 position = Vector2(0, -15)
 sprite_frames = SubResource("SpriteFrames_d5djj")
-animation = &"None"
+animation = &"!"
 autoplay = "None"
 
 [node name="StateMachine" type="Node" parent="."]
@@ -234,20 +282,16 @@ script = ExtResource("10_cf7s6")
 [node name="Timer" type="Timer" parent="StateMachine/States/Alert"]
 one_shot = true
 
-[node name="Attack" type="Node" parent="StateMachine/States"]
-script = ExtResource("11_igcy6")
-
-[node name="Confused" type="Node" parent="StateMachine/States"]
-script = ExtResource("12_kic82")
-
-[node name="Timer" type="Timer" parent="StateMachine/States/Confused"]
-one_shot = true
-
 [node name="Panic" type="Node" parent="StateMachine/States"]
 script = ExtResource("12_ahh46")
 
 [node name="Timer" type="Timer" parent="StateMachine/States/Panic"]
 one_shot = true
+
+[node name="Confused" type="Node" parent="StateMachine/States"]
+script = ExtResource("12_kic82")
+
+[node name="Timer" type="Timer" parent="StateMachine/States/Confused"]
 
 [node name="VisionCast" type="RayCast2D" parent="."]
 position = Vector2(-2, -4)
@@ -266,15 +310,6 @@ collision_mask = 65
 
 [node name="Flippables" type="Node2D" parent="."]
 
-[node name="InRange" type="Area2D" parent="Flippables"]
-collision_layer = 0
-collision_mask = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Flippables/InRange"]
-position = Vector2(-13, 0)
-rotation = 1.5708
-shape = SubResource("CapsuleShape2D_a4yto")
-
 [node name="HurtBox2D" type="Area2D" parent="Flippables"]
 collision_layer = 32
 collision_mask = 32
@@ -289,13 +324,31 @@ shape = SubResource("CircleShape2D_0y1fa")
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("11_qu146")
-damage = 2
+layers = 2
 
 [node name="HitBoxShape" type="CollisionShape2D" parent="Flippables/HitBox2D"]
-position = Vector2(-13, 0)
+position = Vector2(-12, 2)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_5nk1g")
 disabled = true
+
+[node name="PassiveHitBox2D" type="Area2D" parent="Flippables"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Flippables/PassiveHitBox2D"]
+position = Vector2(-1, 0.5)
+shape = SubResource("CircleShape2D_wldy1")
+
+[node name="PassiveHitBox2DDamager" type="Area2D" parent="Flippables/PassiveHitBox2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("11_qu146")
+layers = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Flippables/PassiveHitBox2D/PassiveHitBox2DDamager"]
+position = Vector2(-1, 0.5)
+shape = SubResource("CircleShape2D_wldy1")
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)

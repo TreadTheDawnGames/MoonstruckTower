@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public partial class EnemyAlertState : EnemyState
 {
     Timer timer;
-    bool alertTimeout = false;
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
@@ -23,8 +22,7 @@ public partial class EnemyAlertState : EnemyState
 
     void SetAlertTimeout()
     {
-        alertTimeout = true;
-			machine.ChangeState("EnemyPanicState", new Dictionary<string, object> { { "repeat", 0} });
+			machine.ChangeState("EnemyPanicState", null);
     }
 
     public override void UpdateState(float delta)
@@ -42,7 +40,8 @@ public partial class EnemyAlertState : EnemyState
     public override void OnExit(string nextState)
     {
         base.OnExit(nextState);
+        timer.Stop();
         timer.Timeout -= SetAlertTimeout;
-        alertTimeout = false;
+        logic.isAlerted = false;
     }
 }

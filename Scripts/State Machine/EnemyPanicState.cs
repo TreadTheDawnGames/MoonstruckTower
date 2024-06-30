@@ -23,34 +23,48 @@ public partial class EnemyPanicState : EnemyState
     // Called when the node enters the scene tree for the first time.
     public override void OnStart(Dictionary<string, object> message)
     {
-        panicTimes = (int)message["repeat"];
-
+        logic.isBusy = true;
         base.OnStart(message);
+        panicTimes = 0;
 
         panicRepeats = (int)GD.RandRange(5, 9);
+        statusAnimator.Play("!");
+        animator.Play("PanicAttack", 1.5f);
+        timer.Timeout += StopPanicking;
 
-        animator.Play("Walk", 1.5f);
-        timer.Timeout += StopWandering;
-
-        StartTravel();
-
+        StartPanic(/*Mathf.Sign(  logic.link.GlobalPosition.X-logic.GlobalPosition.X)*/);
+        logic.hitBox.SetEnabled(true);
+        logic.isBusy = true;
     }
 
-    void StartTravel()
+    bool StartPanic()
     {
 
+        panicTimes++;
+
+        if (panicTimes >= panicRepeats)
+        {
+            return false;
+        }
+
+
+        /* if (logic.animator.FlipH)
+         {
+             logic.walkDirection = -1;
+         }
+         else
+         {
+             logic.walkDirection = 1;
+         }*/
         
+                do
+                {
+                    logic.walkDirection = Mathf.Sign(GD.RandRange(-1, 1));
+                }
+                while (logic.walkDirection == 0);
         
 
-            if (logic.animator.FlipH)
-            {
-                logic.walkDirection = -1;
-            }
-            else
-            {
-                logic.walkDirection = 1;
-            }
-            if (!logic.IsOnFloor())
+        if (!logic.IsOnFloor())
             {
                 logic.walkDirection = 0;
                 queueStartTravel = true;
@@ -59,49 +73,45 @@ public partial class EnemyPanicState : EnemyState
             logic.walkSpeed = 1.5f * logic.baseWalkSpeed;
 
             timer.WaitTime = GD.RandRange(0.5f, 0.75f);
-            GD.Print(logic.Name + " is Wandering for " + timer.WaitTime + " seconds");
 
             timer.Start();
 
-        
 
+        return true;
     }
 
     public override void UpdateState(float delta)
     {
         base.UpdateState(delta);
-        
-            //FlipDirection();
+
+        //FlipDirection();
 
 
-        if (queueStartTravel&&logic.IsOnFloor())
+        if (queueStartTravel && logic.IsOnFloor())
         {
             queueStartTravel = false;
-            StartTravel();
+            StartPanic();
         }
     }
 
-    public void StopWandering()
+    public void StopPanicking()
     {
         if (logic.IsOnFloor())
         {
-            
-                panicTimes++;
-            
 
-            if (panicTimes <= panicRepeats)
-            {
-//                machine.ChangeState("EnemyPanicState", new Dictionary<string, object> { { "repeat", panicTimes } });
-                StartTravel();
-            }
-            else
+            
+            
+            //machine.ChangeState("EnemyPanicState", new Dictionary<string, object> { { "repeat", panicTimes } });
+            if (!StartPanic())
             {
                 logic.isAlerted = false;
                 logic.walkDirection = 0;
 
-                GD.Print("End wander");
                 machine.ChangeState("EnemyIdleState", null);
+
             }
+
+
 
         }
 
@@ -118,8 +128,10 @@ public partial class EnemyPanicState : EnemyState
         logic.walkDirection = 0;
         logic.walkSpeed = logic.baseWalkSpeed;
         panicTimes = 0;
-        timer.Timeout -= StopWandering;
-
+        timer.Timeout -= StopPanicking;
+        logic.isBusy = false;
+        logic.hitBox.SetEnabled(false);
+        logic.isBusy = false;
     }
 
 }

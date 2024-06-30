@@ -46,6 +46,7 @@ public partial class Player : CharacterBody2D
     public bool onLadder = false;
     bool takingDamage = false;
     int damageDirection = 0;
+    public bool flippedSwitchThisAnimation = false;
 
     
     // Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -86,7 +87,7 @@ public partial class Player : CharacterBody2D
         if (animator.Animation == new StringName("Attack") || animator.Animation == new StringName("AttackAir") || animator.Animation == new StringName("AttackLadder") || animator.Animation == new StringName("AttackWalk"))
         {
             attacking = false;
-            
+            flippedSwitchThisAnimation = false;
 
                 attackHitbox.SetEnabled(false);
                 attackHitboxAir.SetEnabled(false);
@@ -340,18 +341,20 @@ public partial class Player : CharacterBody2D
             touchingLadder = false;
     }
 
-    public void TakeDamage(int amount, HitBox2D caller)
+    public void TakeDamage(int amount, HitBox2D box)
     {
-        var direction = Mathf.Sign(GlobalPosition.X-caller.GlobalPosition.X);
+        
+        
+        var direction = Mathf.Sign(GlobalPosition.X-box.GlobalPosition.X);
         GD.Print("PLAYER TOOK DAMAGE");
-
+        
 
         var hitVelX = Velocity.X;
         var hitVelY = Velocity.Y;
 
 
 
-        if (floorCheck.GetOverlappingBodies().Count == 0)
+        if (floorCheck.GetOverlappingBodies().Count == 0 && IsOnFloor())
         {
             hitVelX = direction * Speed*2;
             GlobalPosition += new Vector2(0, 2);
@@ -359,15 +362,29 @@ public partial class Player : CharacterBody2D
         else
         {
             hitVelX = direction * Speed*2;
-            hitVelY = -GD.RandRange(200, 300);
+            hitVelY = GD.RandRange(6,12);
+            float jumpInPixels = -Mathf.Sqrt(2 * gravity * hitVelY);
+
+            hitVelY = jumpInPixels;
+
 
         }
         takingDamage = true;
 
-        Velocity = new Vector2(hitVelX, hitVelY);
+        Velocity = new Vector2(hitVelX*1.25f, hitVelY);
         
         damageTimer.WaitTime = damageWaitTime;
         damageTimer.Start();
+
+        if (box.Owner is Projectile)
+        {
+            //get arrow owner script /detect if box was on projectile and if it was, delete it
+            // direction = -direction;
+            Projectile arrow = box.Owner.GetNode<Projectile>(box.Owner.GetPath());
+
+            arrow.HitHurtBox();
+
+        }
     }
 
 
@@ -411,6 +428,10 @@ public partial class Player : CharacterBody2D
         //HandleLadder
         if (onLadder && direction.Y != 0f)
         {
+            if (IsOnWall())
+            {
+                direction *= 1.01f;
+            }
             GlobalPosition += direction;//new Vector2(direction.X, direction.Y * climbSpeed);
         }
         // Handle Jump.
@@ -443,10 +464,18 @@ public partial class Player : CharacterBody2D
         }
         else if (damageTimer.TimeLeft > 0 || (takingDamage && !IsOnFloor()))
         {
+            if (IsOnFloor())
+            {
+                velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.20);
 
-            velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.15);
+            }
+            else
+            {
+                velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.15);
+            }
 
         }
+        
         else
         {
             velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
@@ -469,6 +498,8 @@ public partial class Player : CharacterBody2D
         MoveAndSlide();
 
         HandleCoyoteTime();
+
+        
     }
 
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbbo4i17ahk2d"
-path="res://.godot/imported/OoSOctorokUnity.png-9cda81f237815dc15a072999ac9163b8.ctex"
+uid="uid://tlw81eomfwmr"
+path="res://.godot/imported/OctorokPellet.png-1ae67c17e08c40c24ad13ff1d129cc30.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/OoSOctorokUnity.png"
-dest_files=["res://.godot/imported/OoSOctorokUnity.png-9cda81f237815dc15a072999ac9163b8.ctex"]
+source_file="res://Assets/Enemy Sprites/OctorokPellet.png"
+dest_files=["res://.godot/imported/OctorokPellet.png-1ae67c17e08c40c24ad13ff1d129cc30.ctex"]
 
 [params]
 

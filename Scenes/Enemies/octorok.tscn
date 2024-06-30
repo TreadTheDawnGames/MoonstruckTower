@@ -1,10 +1,10 @@
 [gd_scene load_steps=25 format=3 uid="uid://ci2g16f7srbtt"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/Enemy.cs" id="1_8487s"]
-[ext_resource type="Texture2D" uid="uid://1tjrr1yer7ev" path="res://Assets/OctorokDamagedUnity.png" id="2_bja4t"]
-[ext_resource type="Texture2D" uid="uid://cbbo4i17ahk2d" path="res://Assets/OoSOctorokUnity.png" id="2_ppk7d"]
+[ext_resource type="Texture2D" uid="uid://1tjrr1yer7ev" path="res://Assets/Enemy Sprites/OctorokDamagedUnity.png" id="2_bja4t"]
+[ext_resource type="Texture2D" uid="uid://cbbo4i17ahk2d" path="res://Assets/Enemy Sprites/OoSOctorokUnity.png" id="2_ppk7d"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="3_h2tco"]
-[ext_resource type="Texture2D" uid="uid://d31oi04o25f3m" path="res://Assets/OoSEffects.png" id="3_o2j8r"]
+[ext_resource type="Texture2D" uid="uid://d31oi04o25f3m" path="res://Assets/Enemy Sprites/OoSEffects.png" id="3_o2j8r"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyStateMachine.cs" id="6_pvvu5"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyIdleState.cs" id="7_t0aw7"]
 [ext_resource type="Script" path="res://Scripts/State Machine/EnemyChaseState.cs" id="8_andw5"]

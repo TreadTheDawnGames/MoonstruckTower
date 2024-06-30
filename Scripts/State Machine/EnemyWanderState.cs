@@ -23,22 +23,8 @@ public partial class EnemyWanderState : EnemyState
         timer.Timeout += EndWander;
         base.OnStart(message);
         animator.Play("Walk");
-
-        if (!logic.edgeDetectR.IsColliding())
-        {
-            if (logic.animator.FlipH)
-            {
-                logic.walkDirection = -1;
-            }
-            else
-            {
-                logic.walkDirection = 1;
-
-            }
-        }
-        else
-        {
-
+        statusAnimator.Play("None");
+        
 
             do
             {
@@ -46,7 +32,7 @@ public partial class EnemyWanderState : EnemyState
 
             }
             while (logic.walkDirection == 0);
-        }
+        
 
         timer.WaitTime = GD.RandRange(0.5f, 2f);
         GD.Print(logic.Name + " is Wandering for " + timer.WaitTime + " seconds");

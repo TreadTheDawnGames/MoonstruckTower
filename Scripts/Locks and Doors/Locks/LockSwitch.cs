@@ -17,10 +17,26 @@ public partial class LockSwitch : Lock
         visualUnlocked = false;
     }
 
-    protected override void UnlockMe()
+    protected override void UnlockMe(Node2D node)
     {
+        
 
-            unlocked = !unlocked;
+        if (node.Owner is Player)
+        {
+            //get arrow owner script /detect if box was on projectile and if it was, delete it
+            Player link = node.Owner.GetNode<Player>(node.Owner.GetPath());
+
+            if (link != null && link.flippedSwitchThisAnimation)
+            {
+                return;
+            }
+
+            link.flippedSwitchThisAnimation = true;
+
+        }
+
+
+        unlocked = !unlocked;
         visualUnlocked = !visualUnlocked;
             sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
 

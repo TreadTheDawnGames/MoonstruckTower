@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://b1j7yhdcvd5eu"]
+
+[ext_resource type="Script" path="res://Scripts/EnemyScripts/EnemySpawner.cs" id="1_qf2wa"]
+[ext_resource type="Texture2D" uid="uid://bpfof4wcgoqfm" path="res://Assets/Enemy Sprites/SpawnerIndicator.png" id="2_lv123"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5dyoa"]
+atlas = ExtResource("2_lv123")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rlwo0"]
+atlas = ExtResource("2_lv123")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gaxgy"]
+atlas = ExtResource("2_lv123")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_spoeh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5dyoa")
+}],
+"loop": true,
+"name": &"Off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rlwo0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gaxgy")
+}],
+"loop": true,
+"name": &"Spawning",
+"speed": 8.0
+}]
+
+[node name="EnemySpawner" type="Node2D"]
+script = ExtResource("1_qf2wa")
+respawnTime = 150.0
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 300.0
+one_shot = true
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_spoeh")
+animation = &"Spawning"
+offset = Vector2(-0.5, 0.5)

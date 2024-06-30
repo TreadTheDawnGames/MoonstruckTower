@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://canqmirqvjivq"
-path="res://.godot/imported/Moblin.png-4cf028e77b44000d8cabb078f597958d.ctex"
+uid="uid://cbbo4i17ahk2d"
+path="res://.godot/imported/OoSOctorokUnity.png-bee129ca64fa6d118fe1113a1a0f40bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Moblin.png"
-dest_files=["res://.godot/imported/Moblin.png-4cf028e77b44000d8cabb078f597958d.ctex"]
+source_file="res://Assets/Enemy Sprites/OoSOctorokUnity.png"
+dest_files=["res://.godot/imported/OoSOctorokUnity.png-bee129ca64fa6d118fe1113a1a0f40bd.ctex"]
 
 [params]
 
