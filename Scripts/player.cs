@@ -28,11 +28,16 @@ public partial class Player : CharacterBody2D
 
     Node2D flippables;
 
+    int cameraPanDownCounter = 0;
+    Marker2D cameraLookLocation;
+    Camera2D camera;
+    bool cameraPan = false;
+
     ITool selectedTool;
     ITool[] toolBagList;
     int toolBagItemCount;
     int selectedToolIndex = 0;
-    Node2D toolBag;
+    public Node2D toolBag;
     public bool usingTool = false;
     TextureRect toolBoxDisplay;
 
@@ -65,6 +70,8 @@ public partial class Player : CharacterBody2D
         linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
         damageTimer = GetNode<Timer>("DamageTimer");
         toolBoxDisplay = (TextureRect)GetTree().GetFirstNodeInGroup("ToolBoxDisplay");
+        cameraLookLocation = GetNode<Marker2D>("CameraTrolley");
+        camera = GetNode<Camera2D>("CameraTrolley/Camera2D");
 
         damageTimer.Timeout += () => takingDamage = false;
         coyoteTimer.Timeout += () => CoyoteDone();
@@ -102,7 +109,7 @@ public partial class Player : CharacterBody2D
     bool jumpReleased = false;
 
 
-    void UpdateToolbag()
+    public void UpdateToolbag()
     {
         List<ITool> toolList = new List<ITool>();
         foreach (Node tool in toolBag.GetChildren())
@@ -120,6 +127,7 @@ public partial class Player : CharacterBody2D
         }
         toolBagList = toolList.ToArray();
         toolBagItemCount = toolList.Count;
+        HandleToolSwap();
         //GD.Print($"{toolBagItemCount} items in toolbag");
     }
 
@@ -215,8 +223,7 @@ public partial class Player : CharacterBody2D
     
     void HandleToolSwap()
     {
-        if (Input.IsActionJustPressed("SwapTool"))
-        {
+        
             if (usingTool)
                 usingTool = false;
 
@@ -232,7 +239,7 @@ public partial class Player : CharacterBody2D
                 toolBoxDisplay.Texture = selectedTool.displayTexture;
                // GD.Print("Selected " + selectedTool.name);
             }
-        }
+        
     }
     void HandleDropthrough(float direction)
     {
@@ -243,7 +250,43 @@ public partial class Player : CharacterBody2D
         }
     }
 
+    void HandleCamera(float direction)
+    {
+        //Use count UP not Timer
+        //if(direction.Y > 0)
+        //counter++
+        //else
+        //counter=0
 
+        //if(counter>=cameraWaitTime)
+        //cameraLookLocation = lower
+        //else 
+        //cameraLookLocation = normal
+
+        if (direction > 0 )
+        {
+            cameraPanDownCounter++;
+        }
+        else
+        {
+            cameraPan = false;
+            cameraPanDownCounter = 0;
+        }
+
+        if ( cameraPanDownCounter > 20)
+        {
+            cameraLookLocation.Position = new Vector2(0, 0);
+            camera.PositionSmoothingSpeed = 2.5f;
+        }
+        else
+        {
+            cameraLookLocation.Position = new Vector2(0, -32);
+            camera.PositionSmoothingSpeed = 5;
+
+        }
+
+
+    }
     
     void HandleCoyoteTime()
     {
@@ -404,7 +447,10 @@ public partial class Player : CharacterBody2D
 
         HandleTool(direction);
 
-        HandleToolSwap();
+        if (Input.IsActionJustPressed("SwapTool"))
+        {
+            HandleToolSwap();
+        }
 
         HandleDropthrough(direction.Y);
 
@@ -489,6 +535,7 @@ public partial class Player : CharacterBody2D
 
         HandleAnimation(direction);
 
+        HandleCamera(direction.Y);
 
         velocity.X = velocity.X * (float)delta * 70;
 

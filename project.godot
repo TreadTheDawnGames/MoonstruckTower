@@ -120,6 +120,7 @@ Debug-TimeSlowToggle={
 2d_physics/layer_7="DropThroughTile"
 2d_physics/layer_8="Arrow"
 2d_physics/layer_9="Switch"
+2d_physics/layer_10="BossDeathZone"
 
 [rendering]
 

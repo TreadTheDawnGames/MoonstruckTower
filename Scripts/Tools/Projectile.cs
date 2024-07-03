@@ -48,7 +48,6 @@ public partial class Projectile : CharacterBody2D
     public virtual void HitHurtBox()
 	{
 		
-		GD.Print("Called HitHurtBox()");
         //CallDeferred("reparent", node);
         //collisionBox.GetChild<CollisionShape2D>(0).Set("disabled", true);
 

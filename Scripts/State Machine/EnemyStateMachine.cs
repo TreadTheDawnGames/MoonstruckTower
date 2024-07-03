@@ -26,7 +26,6 @@ public partial class EnemyStateMachine : StateMachine
 		ChangeState("EnemyIdleState", null);
         
 
-        GD.Print(Owner.Name + " is " + state.Name);
 
     }
 }

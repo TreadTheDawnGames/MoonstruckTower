@@ -88,14 +88,7 @@ public partial class EnemyBase : CharacterBody2D
             {
                 if (IsOnFloor())
                 {
-                    if (IsOnWall())
-                    {
-                        GD.Print("Flipping because on wall");
-                    }
-                    if (!edgeDetectL.IsColliding())
-                    {
-                        GD.Print("Flipping because on ledge");
-                    }
+                    
                     walkDirection = -walkDirection;
                 }
             }

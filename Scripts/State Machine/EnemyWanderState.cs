@@ -35,7 +35,6 @@ public partial class EnemyWanderState : EnemyState
         
 
         timer.WaitTime = GD.RandRange(0.5f, 2f);
-        GD.Print(logic.Name + " is Wandering for " + timer.WaitTime + " seconds");
         timer.Start();
     }
 
@@ -50,7 +49,6 @@ public partial class EnemyWanderState : EnemyState
 
     void EndWander()
     {
-        GD.Print("End wander");
         machine.ChangeState("EnemyIdleState", null);
     }
 

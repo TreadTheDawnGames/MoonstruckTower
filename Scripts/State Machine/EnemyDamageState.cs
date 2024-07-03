@@ -21,7 +21,6 @@ public partial class EnemyDamageState : EnemyState
     public override void OnStart(Dictionary<string, object> message)
     {
         base.OnStart(message);
-        GD.Print(Owner.Name + " is being damaged");
         int damage = (int)message["damage"];
         HitBox2D caller = (HitBox2D)message["hitBox"];
         

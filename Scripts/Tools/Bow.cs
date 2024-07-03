@@ -83,7 +83,6 @@ public partial class Bow : Node, ITool
             GetTree().Root.AddChild(arrow);
 
         
-            GD.Print("Used Bow");
             link.usingTool = false;
             charged = false;
     }

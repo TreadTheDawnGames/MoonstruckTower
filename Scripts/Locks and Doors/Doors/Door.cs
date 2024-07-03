@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Door : StaticBody2D
+public partial class Door : Node2D
 {
     public List<Lock> lockList = new();
     public bool opened = false;

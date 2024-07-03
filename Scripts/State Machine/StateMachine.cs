@@ -19,11 +19,7 @@ public partial class StateMachine : Node
     public override void _Ready()
     {
 		States = GetNode<Node>("States").GetChildren().OfType<State>().ToList();
-		foreach (var st in States)
-		{
-		GD.Print(st.Name);
-
-		}
+		
 		
 		
     }
@@ -44,7 +40,6 @@ public partial class StateMachine : Node
 		CurrentState = _state.GetType().ToString();
 
 		state = _state;
-        GD.Print("Setting state to " + state.Name);
 		EmitSignal(nameof(PreStart));
 		state.OnStart(message);
 		EmitSignal(nameof(PostStart));
