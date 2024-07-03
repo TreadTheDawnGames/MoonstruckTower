@@ -486,7 +486,6 @@ one_shot = true
 collision_layer = 0
 collision_mask = 288
 script = ExtResource("4_16p3j")
-layers = 288
 
 [node name="HitShape" type="CollisionShape2D" parent="Flippables/HitBox"]
 position = Vector2(-9, -6)
@@ -498,7 +497,6 @@ disabled = true
 collision_layer = 0
 collision_mask = 288
 script = ExtResource("4_16p3j")
-layers = 288
 
 [node name="Right" type="CollisionShape2D" parent="Flippables/HitBoxAir"]
 position = Vector2(-11, 0)
@@ -523,7 +521,6 @@ shape = SubResource("SegmentShape2D_8fi5b")
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("14_uuvc3")
-layers = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox2D"]
 position = Vector2(0, 0.5)
