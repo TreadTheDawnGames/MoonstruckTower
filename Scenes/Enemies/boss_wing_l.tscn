@@ -173,7 +173,7 @@ script = ExtResource("1_6s2q1")
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 position = Vector2(-16, 0)
 sprite_frames = SubResource("SpriteFrames_a4i60")
-animation = &"HitTargetable"
+animation = &"FullHealthy"
 autoplay = "FullHealthy"
 
 [node name="BossEye" parent="Animator" instance=ExtResource("2_0emjf")]
