@@ -25,12 +25,14 @@ public partial class BossLogic : CharacterBody2D
 	int originalWingCount;
 
 	[Export] int bossFloorHeight = -207;
-	
+
 
 	bool queueTimer = false;
 	int driftDirection;
 
 	bool wakeUpTimerPlaying = false;
+
+	bool queueDeath = false;
 
 	[Export] float speed = 6;
 	[Export] float driftSpeed = 10;
@@ -41,17 +43,19 @@ public partial class BossLogic : CharacterBody2D
 	int bodyHits = 0;
 	int activeWings;
 
-    bool downed;
+	bool downed;
 	bool flappable = true;
-	enum BodyState { Healthy, Targetable}
+	enum BodyState { Healthy, Targetable }
 	BodyState state = BodyState.Healthy;
-    public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+
+	PackedScene deathPuppet = GD.Load<PackedScene>("res://Scenes/Enemies/boss_death_puppet.tscn");
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		animator = GetNode<AnimatedSprite2D>("Body");
-		wings = GetChildren().OfType<BossWing>().ToArray(); 
+		wings = GetChildren().OfType<BossWing>().ToArray();
 		flapTimer = GetNode<Timer>("FlapTimer");
 		wakeUpTimer = GetNode<Timer>("WakeUpTimer");
 		hitBox = GetNode<HitBox2D>("HitBox2D");
@@ -65,7 +69,7 @@ public partial class BossLogic : CharacterBody2D
 		hurtBox.SetEnabled(false);
 		finalHurtBox.SetEnabled(false);
 
-        /*foreach (BossWing wing in wings)
+		/*foreach (BossWing wing in wings)
         {
             if (activeWings < 1)
             {
@@ -73,7 +77,7 @@ public partial class BossLogic : CharacterBody2D
                 activeWings++;
             }
         }*/
-        wings[0].state = BossWing.WingState.Targetable;
+		wings[0].state = BossWing.WingState.Targetable;
 		wings[1].state = BossWing.WingState.Healthy;
 
 		wingCount = wings.Length;
@@ -82,14 +86,14 @@ public partial class BossLogic : CharacterBody2D
 		driftDirection = Mathf.Sign(GD.RandRange(-1, 1));
 
 		Flap();
-		
+
 	}
 
 	void Flap()
 	{
-		
 
-        flapTimer.WaitTime = GD.RandRange(2f, 7f);
+
+		flapTimer.WaitTime = GD.RandRange(2f, 7f);
 		flapTimer.Start();
 		if (downed)
 			return;
@@ -105,7 +109,7 @@ public partial class BossLogic : CharacterBody2D
 		{
 			if (downed)
 			{
-				animator.Play("Downed"+state.ToString());
+				animator.Play("Downed" + state.ToString());
 			}
 		}
 		else if (animator.Animation == "Damage")
@@ -119,89 +123,87 @@ public partial class BossLogic : CharacterBody2D
 				animator.Play("Downed" + state.ToString());
 				LoseWing();
 				finalHurtBox.SetEnabled(false);
-				
+
 			}
+			
 		}
 		else if (animator.Animation == "WakeUp" + state.ToString())
 		{
-				hitBox.SetEnabled(true);
-			
+			hitBox.SetEnabled(true);
 
-			
+			CheckForDeath();
+
 			downed = false;
 
 			//need to pick a wing
 
-            if (deathZoneDetector.HasOverlappingAreas())
-            {
-                if (finalPhase)
-                {
-					QueueFree();
-                }
-                foreach (BossWing wing in wings)
-                {
-                    string wingName = wing.Name;
-                    if (wing.state == BossWing.WingState.Dead && !wing.permaDead)
-                    {
-                        wing.PermaKill();
+			if (deathZoneDetector.HasOverlappingAreas())
+			{
+
+				foreach (BossWing wing in wings)
+				{
+					string wingName = wing.Name;
+					if (wing.state == BossWing.WingState.Dead && !wing.permaDead)
+					{
+						wing.PermaKill();
 						wingCount--;
-                    }
+					}
 
 
-                }
-            }
-            else
-            {
-                foreach (BossWing wing in wings)
-                {
-					if(!wing.permaDead)
-	                    wing.AttemptToClose();
-                }
-            }
-            ;
+				}
+			}
+			else
+			{
+				foreach (BossWing wing in wings)
+				{
+					if (!wing.permaDead)
+						wing.AttemptToClose();
+				}
+			}
+			;
 
 
-            if (PickActiveWing())
-            {
-                state = BodyState.Healthy;
-            }
-            else
-            {
-                EnterFinalPhase();
-            }
-
-			
-
-            animator.Play("Hit" + state.ToString(), -1, true);
-            foreach (BossWing wing in wings)
-            {
-                string name = wing.Name;
-                wing.AnimateTakedown(true);
+			if (PickActiveWing())
+			{
+				state = BodyState.Healthy;
+			}
+			else
+			{
+				EnterFinalPhase();
+			}
 
 
 
-            }
-        }
-		else if (animator.Animation == "Hit"+state.ToString()&&!downed) 
+			animator.Play("Hit" + state.ToString(), -1, true);
+			foreach (BossWing wing in wings)
+			{
+				string name = wing.Name;
+				wing.AnimateTakedown(true);
+
+
+
+			}
+		}
+		else if (animator.Animation == "Hit" + state.ToString() && !downed)
 		{
-			animator.Play(state.ToString()) ;
-			foreach(BossWing wing in wings)
+			animator.Play(state.ToString());
+			foreach (BossWing wing in wings)
 			{
 				wing.Flap();
-				
-            }
+
+			}
 			if (finalPhase)
 			{
-				bodyHits -=  bodyHits/2;
+				bodyHits = (int)(hitsToFinalTakeDown * 0.5f);
 			}
 			flappable = true;
-        }
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-			Vector2 velocity = Velocity;
+		Vector2 velocity = Velocity;
 		if (!flappable)
 		{
 
@@ -222,9 +224,14 @@ public partial class BossLogic : CharacterBody2D
 						queueTimer = false;
 					}
 				}
-					
+
+				if (queueDeath)
+				{
+					FinalDeath();
+				}
+
 			}
-            else
+			else
 			{
 				velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.15);
 			}
@@ -232,14 +239,14 @@ public partial class BossLogic : CharacterBody2D
 		}
 		else
 		{
-			velocity.Y = -speed*originalWingCount-wingCount;
+			velocity.Y = -speed * originalWingCount - wingCount;
 
-			if (GlobalPosition.Y > bossFloorHeight-64)
+			if (GlobalPosition.Y > bossFloorHeight - 64)
 			{
-				
-					Flap();
-				
-				velocity.Y *= gravity*2*(float)delta;
+
+				Flap();
+
+				velocity.Y *= gravity * 2 * (float)delta;
 			}
 			else
 			{
@@ -254,22 +261,27 @@ public partial class BossLogic : CharacterBody2D
 					driftDirection = -1;
 				}
 
+				if (GlobalPosition.X < -32 || GlobalPosition.X > 32)
+				{
+					driftDirection *= 4;
+				}
+
 				velocity.X = driftSpeed * driftDirection;
 			}
 		}
-			Velocity = velocity;
+		Velocity = velocity;
 
-			MoveAndSlide();
+		MoveAndSlide();
 	}
 
 	public void LoseWing(BossWing lostWing = null)
 	{
-		foreach(BossWing wing in wings)
+		foreach (BossWing wing in wings)
 		{
 			wing.AnimateTakedown();
-		    wing.ShowBossEyes(false);
-        }
-		if(lostWing!=null)	
+			wing.ShowBossEyes(false);
+		}
+		if (lostWing != null)
 			lostWing.state = BossWing.WingState.Dead;
 
 		GD.Print(state.ToString());
@@ -284,40 +296,45 @@ public partial class BossLogic : CharacterBody2D
 
 	void HandleKnockback(HitBox2D caller)
 	{
-        var direction = Mathf.Sign(GlobalPosition.X - caller.GlobalPosition.X);
+		var direction = Mathf.Sign(GlobalPosition.X - caller.GlobalPosition.X);
 
-        animator.Play("HorizontalDamage");
-        var hitVelX = direction * 75 * 2;
-        var hitVelY = GD.RandRange(6, 12);
-        float jumpInPixels = -Mathf.Sqrt(2 * gravity * hitVelY);
+		animator.Play("HorizontalDamage");
+		var hitVelX = direction * 75 * 2;
+		var hitVelY = GD.RandRange(6, 12);
+		float jumpInPixels = -Mathf.Sqrt(2 * gravity * hitVelY);
 
-        //logic.velocity.Y = jumpInPixels;
+		//logic.velocity.Y = jumpInPixels;
 
 
 
-        Velocity = new Vector2(hitVelX, jumpInPixels);
-    }
+		Velocity = new Vector2(hitVelX, jumpInPixels);
+	}
 
-	void TakeDamage(int damage, HitBox2D caller )
+	void TakeDamage(int damage, HitBox2D caller)
 	{
+		if (caller.Owner is Arrow)
+		{
+			Arrow arrow = (Arrow)caller.Owner;
+			arrow.HitHurtBox();
+		}
 		if (!finalPhase && downed)
 		{
-			
 
-            HandleKnockback(caller);
+
+			HandleKnockback(caller);
 		}
 		else
 		{
 			bodyHits++;
-			if (bodyHits > hitsToFinalTakeDown+1)
+			if (bodyHits > hitsToFinalTakeDown + 1)
 			{
-                HandleKnockback(caller);
+				HandleKnockback(caller);
 				downed = true;
 				return;
 			}
 			animator.Play("Damage");
-        }
-
+		}
+	} 
 		/*if (wakeUpTimer.TimeLeft == 0)
 		{
 			
@@ -329,13 +346,30 @@ public partial class BossLogic : CharacterBody2D
 			
 		}*/
 			
+	void FinalDeath()
+	{
+        BossDeathPuppet puppet = deathPuppet.Instantiate<BossDeathPuppet>();
+        puppet.GlobalPosition = GlobalPosition;
+        GetTree().Root.AddChild(puppet);
+        QueueFree();
+    }
+
+    void CheckForDeath()
+	{
+        if (deathZoneDetector.HasOverlappingAreas())
+        {
+            if (finalPhase)
+            {
+				queueDeath = true; ;
+            }
+        }
     }
 
 	void WakeUp()
 	{
+		CheckForDeath();
 
-
-		driftDirection = -MathF.Sign(GlobalPosition.X);
+            driftDirection = -MathF.Sign(GlobalPosition.X);
 		hurtBox.SetEnabled(false);
 		animator.Play("WakeUp" + state.ToString());
 
