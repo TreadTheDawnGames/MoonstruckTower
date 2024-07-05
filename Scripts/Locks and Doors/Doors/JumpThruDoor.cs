@@ -4,15 +4,15 @@ using System;
 public partial class JumpThruDoor : Door
 {
 	Sprite2D sprite;
-	CollisionShape2D collisionShape;
-	StaticBody2D characterBody;
+    CollisionShape2D collisionShape;
+    StaticBody2D characterBody;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		base._Ready();
 		sprite = GetNode<Sprite2D>("Sprite2D");
-		collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
-		characterBody = GetNode<StaticBody2D>(GetPath());
+		collisionShape = GetNode<CollisionShape2D>("StaticBody2D/CollisionShape2D");
+		characterBody = GetNode<StaticBody2D>("StaticBody2D");
         if (!characterBody.GetCollisionLayerValue(1))
         {
             characterBody.SetCollisionLayerValue(1, true);
