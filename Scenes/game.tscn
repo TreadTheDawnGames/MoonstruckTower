@@ -1071,9 +1071,10 @@ position = Vector2(127, -103.5)
 shape = SubResource("RectangleShape2D_lu55v")
 
 [node name="Door_FallThrough" parent="." instance=ExtResource("9_8nvx8")]
-position = Vector2(-20, -276)
+position = Vector2(17, -245)
 
 [node name="ButtonSwitch" parent="Door_FallThrough" instance=ExtResource("9_7ip7x")]
-position = Vector2(-16, 60)
+position = Vector2(-74, 28)
 rotation = 3.14159
 collision_mask = 12
+inverted = true

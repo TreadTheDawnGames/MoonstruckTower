@@ -22,26 +22,23 @@ public partial class Door : Node2D
         }
         catch(Exception ex) 
         {
+            GD.PrintErr(Name + " is not assigned to a locklist");
             GD.Print(ex.Message);
             GD.Print(ex.StackTrace);
-            GD.PrintErr(Name + " is not assigned to a locklist");
         }
     }
 
     public virtual bool AttemptToOpen()
     {
-        GD.Print("Attempting to Open " + Name);
 
         foreach (Lock locke in lockList)
         {
             if (!locke.unlocked)
             {
-                GD.Print(locke.Name + " is LOCKED; Open failed.");
                 opened = false;
                 return false ;
             }
         }
-        GD.Print("Open succeeded " + Name);
         opened = true;
         return true ;
     }

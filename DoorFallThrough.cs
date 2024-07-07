@@ -17,6 +17,7 @@ public partial class DoorFallThrough : Door
         {
             characterBody.SetCollisionLayerValue(1, true);
         }
+        AttemptToOpen();
     }
 
     public override bool AttemptToOpen()

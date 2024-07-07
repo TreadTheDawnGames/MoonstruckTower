@@ -7,22 +7,51 @@ public partial class ButtonLock : Lock
     Sprite2D sprite;
     Timer unpressTimer;
     bool queued = false;
+    [Export] bool inverted = false;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         sprite = GetNode<Sprite2D>("Sprite2D");
         unpressTimer = GetNode<Timer>("Timer");
-        BodyEntered += UnlockMe;
-        BodyExited += (node) => LockMe();
+        unlocked = inverted;
+
+        if (!inverted)
+        {
+            BodyEntered += UnlockMe;
+            BodyExited += (node) => LockMe();
+
+        }
+        else
+        {
+            BodyEntered += (node) => LockMe();
+            BodyExited += UnlockMe;
+
+        }
+
+
     }
     protected override void UnlockMe(Node2D node)
     {
-        
-            base.UnlockMe(node);
-            sprite.Frame = 1;
+        if (HasOverlappingBodies() && inverted)
+            return;
+        base.UnlockMe(node);
+        GD.Print("Unlocked");
 
-        
-        
+        if (!inverted)
+        {
+            GD.Print("Sprite 1");
+            sprite.Frame = 1;
+        }
+        else
+        {
+            GD.Print("Sprite 0");
+            sprite.Frame = 0;
+        }
+
+
+
+
     }
 
     public override void _PhysicsProcess(double delta)
@@ -30,7 +59,8 @@ public partial class ButtonLock : Lock
         base._PhysicsProcess(delta);
         if (queued)
         {
-            Lock();
+                GD.Print("Locked");
+                Lock();
             queued = false;
         }
     }
@@ -47,11 +77,19 @@ public partial class ButtonLock : Lock
 
     void Lock()
     {
-        GD.Print(HasOverlappingBodies());
-        if (HasOverlappingBodies())
+        if (HasOverlappingBodies()&&!inverted)
             return;
         base.LockMe();
-        sprite.Frame = 0;
+        if (!inverted)
+        {
+            GD.Print("Sprite 0");
+            sprite.Frame = 0;
+        }
+        else
+        {
+            GD.Print("Sprite 1");
+            sprite.Frame = 1;
+        }
     }
 
 }
