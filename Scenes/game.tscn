@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dx2jlctrirqip"]
+[gd_scene load_steps=15 format=3 uid="uid://dx2jlctrirqip"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_11jo3"]
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
@@ -7,9 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://dr2tm1iuukxfa" path="res://Assets/WorldTiles/Signs.png" id="4_c01vl"]
 [ext_resource type="PackedScene" uid="uid://djh07rnu37o72" path="res://Scenes/Enemies/Boss.tscn" id="7_68w62"]
 [ext_resource type="PackedScene" uid="uid://cri412adhg20a" path="res://Scenes/tool_box.tscn" id="8_3ja6y"]
-[ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="8_jd4w7"]
+[ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://button_switch.tscn" id="9_7ip7x"]
 [ext_resource type="PackedScene" uid="uid://dhe3uos236bk6" path="res://door_fall_through.tscn" id="9_8nvx8"]
-[ext_resource type="PackedScene" uid="uid://d3pfjso4vlks5" path="res://Scenes/Doors and Locks/Doors/door_jump_thru.tscn" id="10_jhmvm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lpg4n"]
 texture = ExtResource("2_lbv7k")
@@ -1071,14 +1070,10 @@ shape = SubResource("RectangleShape2D_lu55v")
 position = Vector2(127, -103.5)
 shape = SubResource("RectangleShape2D_lu55v")
 
-[node name="JumpThruDoor" parent="." instance=ExtResource("10_jhmvm")]
-position = Vector2(-69, -218)
-
-[node name="LockSwitch" parent="JumpThruDoor" instance=ExtResource("8_jd4w7")]
-position = Vector2(21, 2)
-
 [node name="Door_FallThrough" parent="." instance=ExtResource("9_8nvx8")]
-position = Vector2(3, -240)
+position = Vector2(-20, -276)
 
-[node name="LockSwitch" parent="Door_FallThrough" instance=ExtResource("8_jd4w7")]
-position = Vector2(31, 24)
+[node name="ButtonSwitch" parent="Door_FallThrough" instance=ExtResource("9_7ip7x")]
+position = Vector2(-16, 60)
+rotation = 3.14159
+collision_mask = 12

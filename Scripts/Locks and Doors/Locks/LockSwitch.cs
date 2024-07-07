@@ -6,9 +6,10 @@ public partial class LockSwitch : Lock
 {
     [Export] bool inverted = false;
     bool visualUnlocked = false;
-
+    AnimatedSprite2D sprite;
     public override void _Ready()
     {
+        sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         base._Ready();
         if (inverted)
         {

@@ -86,7 +86,7 @@ public partial class LadderSpawner : Node2D, ITool
             {
                 if (area.Owner.Name == "ToolLadder")
                 {
-                    PickupLadder(area);
+                    PickupLadder((Ladder)area.Owner);
                     return;
                 }
             }
@@ -97,10 +97,10 @@ public partial class LadderSpawner : Node2D, ITool
 
         }
     }
-    private void PickupLadder(Area2D ladder)
+    private void PickupLadder(Ladder ladder)
     {
         GD.Print("Picked up Ladder");
-        ladder.Owner.QueueFree();
+        ladder.Despawn();
         ladderPlaced = false;
     }
 
@@ -114,7 +114,7 @@ public partial class LadderSpawner : Node2D, ITool
         ladder.GlobalPosition = ladderSpawnpoint.GlobalPosition;
         ladderPlaced = true;
 
-        GetTree().Root.AddChild(ladder);
+        GetTree().Root.GetNode("Game").AddChild(ladder);
 
     }
 }
