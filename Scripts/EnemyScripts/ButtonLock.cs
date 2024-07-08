@@ -4,7 +4,7 @@ using System;
 public partial class ButtonLock : Lock
 {
 
-    Sprite2D sprite;
+    protected Sprite2D sprite;
     Timer unpressTimer;
     bool queued = false;
     [Export] bool inverted = false;

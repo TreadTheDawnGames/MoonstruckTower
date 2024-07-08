@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Net.NetworkInformation;
 
 public partial class BossWing : Door
@@ -22,6 +23,10 @@ public partial class BossWing : Door
 		animator.AnimationFinished += AnimationFinished;
 		logic = (BossLogic)Owner;
 		animator.Play("Full"+state.ToString());
+		foreach(BossOrb eye in GetChildren().OfType<BossOrb>())
+		{
+			eye.door = this;
+		}
 	}
 
 	void AnimationFinished()

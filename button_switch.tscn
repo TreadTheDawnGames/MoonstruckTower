@@ -22,9 +22,6 @@ hframes = 2
 position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_ru3e4")
 
-[node name="Timer" type="Timer" parent="."]
-one_shot = true
-
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
