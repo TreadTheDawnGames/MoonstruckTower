@@ -1,9 +1,9 @@
 [gd_scene load_steps=25 format=3 uid="uid://djh07rnu37o72"]
 
-[ext_resource type="Script" path="res://Scenes/Enemies/BossLogic.cs" id="1_ou4oa"]
+[ext_resource type="Script" path="res://Scripts/EnemyScripts/BossLogic.cs" id="1_ou4oa"]
 [ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="1_uab8f"]
-[ext_resource type="PackedScene" uid="uid://dbju76t2vsmkj" path="res://Scenes/Enemies/boss_wing_l.tscn" id="2_w5073"]
-[ext_resource type="PackedScene" uid="uid://das7lejpkay7d" path="res://Scenes/Enemies/boss_wing_r.tscn" id="3_bb700"]
+[ext_resource type="PackedScene" uid="uid://dbju76t2vsmkj" path="res://Scenes/Enemies/Boss/boss_wing_l.tscn" id="2_w5073"]
+[ext_resource type="PackedScene" uid="uid://das7lejpkay7d" path="res://Scenes/Enemies/Boss/boss_wing_r.tscn" id="3_bb700"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="5_vly7l"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="6_ymn45"]
 

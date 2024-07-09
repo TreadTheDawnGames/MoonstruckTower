@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://by83b6vfre6xe"]
 
-[ext_resource type="Script" path="res://SignalLock.cs" id="1_mtoqw"]
+[ext_resource type="Script" path="res://Scripts/SignalLock.cs" id="1_mtoqw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h8q3p"]
 

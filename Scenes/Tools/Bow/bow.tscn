@@ -15,6 +15,7 @@ displayTexture = ExtResource("2_q3vot")
 position = Vector2(-5, 1)
 
 [node name="Area2D" type="Area2D" parent="BowSpawner"]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BowSpawner/Area2D"]
 position = Vector2(-5, 0)

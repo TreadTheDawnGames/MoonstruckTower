@@ -1,9 +1,9 @@
 [gd_scene load_steps=21 format=3 uid="uid://dbju76t2vsmkj"]
 
-[ext_resource type="Script" path="res://BossWing.cs" id="1_6s2q1"]
+[ext_resource type="Script" path="res://Scripts/BossWing.cs" id="1_3kvdo"]
 [ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="1_h4gia"]
-[ext_resource type="PackedScene" uid="uid://df51jpjla8u7e" path="res://Scenes/Enemies/boss_eye.tscn" id="2_0emjf"]
-[ext_resource type="PackedScene" uid="uid://coh86i6gt3bkd" path="res://Scenes/Enemies/boss_eye_mini.tscn" id="3_kikwv"]
+[ext_resource type="PackedScene" uid="uid://df51jpjla8u7e" path="res://Scenes/Enemies/Boss/boss_eye.tscn" id="2_0emjf"]
+[ext_resource type="PackedScene" uid="uid://coh86i6gt3bkd" path="res://Scenes/Enemies/Boss/boss_eye_mini.tscn" id="3_kikwv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mqnu0"]
 atlas = ExtResource("1_h4gia")
@@ -168,7 +168,7 @@ animations = [{
 }]
 
 [node name="BossWingL" type="Node2D"]
-script = ExtResource("1_6s2q1")
+script = ExtResource("1_3kvdo")
 
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 position = Vector2(-16, 0)

@@ -10,12 +10,15 @@ public partial class LadderSpawner : Node2D, ITool
 
     public bool animating { get; private set; } = false;
 
+
+
     [Export]
     public Texture2D displayTexture { get; private set; }
 
     AnimatedSprite2D linkSprite;
     Player link;
     Area2D ladderGrabber;
+    Area2D ladderSpawnCheck;
     PackedScene ladderScene;
     Marker2D ladderSpawnpoint;
 
@@ -27,6 +30,8 @@ public partial class LadderSpawner : Node2D, ITool
         ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
         ladderGrabber = GetNode<Area2D>("LadderGrabber");
         ladderSpawnpoint = GetNode<Marker2D>("LadderSpawnpoint");
+        ladderSpawnCheck = GetNode<Area2D>("SpawnCheck");
+        
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -51,11 +56,15 @@ public partial class LadderSpawner : Node2D, ITool
 
     public void Use(Vector2 direction)
     {
-        
+
+
 
             animating = true;
             linkSprite.Play("LadderPlace");
+        
             HandleLadder();
+
+            
         
             link.usingTool = false;
     }
@@ -93,7 +102,8 @@ public partial class LadderSpawner : Node2D, ITool
         }
         else
         {
-            PlaceLadder();
+            if (!ladderSpawnCheck.HasOverlappingBodies())
+                PlaceLadder();
 
         }
     }

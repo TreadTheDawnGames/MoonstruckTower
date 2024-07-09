@@ -301,9 +301,6 @@ public partial class Player : CharacterBody2D
             }
             else { fallTimeCounter=0; }
 
-            GD.Print(fallTimeCounter);
-
-            GD.Print(camera.lerpSpeedY);
 
             if (camera.lerpSpeedY < 1f)
             {
