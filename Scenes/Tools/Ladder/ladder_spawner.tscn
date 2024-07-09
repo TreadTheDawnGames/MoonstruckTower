@@ -8,16 +8,18 @@ radius = 4.0
 height = 15.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uowra"]
-size = Vector2(12, 46)
+size = Vector2(12, 48)
 
 [node name="LadderSpawner" type="Node2D"]
 script = ExtResource("1_4abiq")
 displayTexture = ExtResource("2_bl1gr")
 
 [node name="LadderSpawnpoint" type="Marker2D" parent="."]
+visible = false
 position = Vector2(-7, 8)
 
 [node name="LadderGrabber" type="Area2D" parent="."]
+visible = false
 collision_layer = 4
 collision_mask = 4
 
@@ -26,9 +28,9 @@ position = Vector2(0, 0.5)
 shape = SubResource("CapsuleShape2D_n086x")
 
 [node name="SpawnCheck" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
-collision_mask = 65
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnCheck"]
-position = Vector2(-7, -17)
+position = Vector2(-7, -16)
 shape = SubResource("RectangleShape2D_uowra")

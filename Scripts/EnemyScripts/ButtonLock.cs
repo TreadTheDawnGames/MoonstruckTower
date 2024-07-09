@@ -13,7 +13,7 @@ public partial class ButtonLock : Lock
     public override void _Ready()
     {
         sprite = GetNode<Sprite2D>("Sprite2D");
-        unpressTimer = GetNode<Timer>("Timer");
+        //unpressTimer = GetNode<Timer>("Timer");
         unlocked = inverted;
 
         if (!inverted)

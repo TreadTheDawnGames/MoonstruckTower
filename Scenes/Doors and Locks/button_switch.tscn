@@ -11,7 +11,7 @@ size = Vector2(48, 6)
 
 [node name="ButtonSwitch" type="Area2D"]
 collision_layer = 0
-collision_mask = 8
+collision_mask = 12
 script = ExtResource("1_yihw2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -23,6 +23,7 @@ position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_ru3e4")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(0, -5)

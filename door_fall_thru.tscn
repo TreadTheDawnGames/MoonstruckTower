@@ -1,20 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://bh88sisih878a"]
+[gd_scene load_steps=4 format=3 uid="uid://b6ku5ta6gbmki"]
 
-[ext_resource type="Script" path="res://Scripts/DoorFallThrough.cs" id="1_ohum6"]
-[ext_resource type="Texture2D" uid="uid://cjk6glumia656" path="res://Assets/Locks and Doors/FallAwayFloorOrange.png" id="2_8ojrc"]
+[ext_resource type="Script" path="res://Scripts/DoorFallThrough.cs" id="1_y6c7l"]
+[ext_resource type="Texture2D" uid="uid://cjk6glumia656" path="res://Assets/Locks and Doors/FallAwayFloorOrange.png" id="2_4j3hc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_628td"]
 size = Vector2(48, 7)
 
-[node name="BossroomFallDoor" type="Node2D"]
-script = ExtResource("1_ohum6")
+[node name="Door-FallThru" type="Node2D"]
+script = ExtResource("1_y6c7l")
 layer = 7
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_8ojrc")
+texture = ExtResource("2_4j3hc")
 hframes = 2
 region_enabled = true
-region_rect = Rect2(0, 0, 320, 16)
+region_rect = Rect2(112, 0, 96, 16)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 1024

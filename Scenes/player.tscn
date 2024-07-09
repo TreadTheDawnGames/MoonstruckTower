@@ -472,6 +472,7 @@ autoplay = "Idle"
 frame = 1
 
 [node name="LinkCollider" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 0.5)
 shape = SubResource("CapsuleShape2D_tqxlb")
 debug_color = Color(0, 1, 0, 0.419608)
@@ -481,6 +482,7 @@ process_callback = 0
 one_shot = true
 
 [node name="Flippables" type="Node2D" parent="."]
+visible = false
 
 [node name="HitBox" type="Area2D" parent="Flippables"]
 collision_layer = 0
@@ -512,6 +514,7 @@ disabled = true
 [node name="Bow" parent="Flippables/Toolbag" instance=ExtResource("12_07ueq")]
 
 [node name="FloorCheck" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 
 [node name="FloorCheckShape" type="CollisionShape2D" parent="FloorCheck"]
@@ -520,6 +523,7 @@ scale = Vector2(0.1, 0.1)
 shape = SubResource("SegmentShape2D_8fi5b")
 
 [node name="HurtBox2D" type="Area2D" parent="."]
+visible = false
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("14_uuvc3")

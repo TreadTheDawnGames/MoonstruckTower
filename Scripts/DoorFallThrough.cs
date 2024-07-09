@@ -8,6 +8,8 @@ public partial class DoorFallThrough : Door
     CollisionShape2D collisionShape;
     StaticBody2D characterBody;
     [Export] int layer;
+    [Export] bool inverted = false;
+   
 
     public override void _Ready()
     {
@@ -20,11 +22,25 @@ public partial class DoorFallThrough : Door
             characterBody.SetCollisionLayerValue(layer, true);
         }
 
-        //AttemptToOpen();
+        if (inverted)
+        {
+            foreach(Lock locke in lockList)
+            {
+                locke.unlocked = true;
+            }
+            AttemptToClose();
+            foreach(Lock locke in lockList)
+            {
+                locke.unlocked = false;
+            }
+        }
+        
     }
 
     public override bool AttemptToOpen()
     {
+
+
         if (!base.AttemptToOpen())
         {
             return false;
@@ -32,12 +48,7 @@ public partial class DoorFallThrough : Door
         if (opened)
         {
 
-            if (characterBody.GetCollisionLayerValue(layer))
-            {
-                characterBody.SetCollisionLayerValue(layer, false);
-            }
-
-            sprite.Frame = 1;
+            ToggleCollision();
             //collisionShape.SetDeferred("one_way_collision", true);
         }
         return true;
@@ -45,20 +56,38 @@ public partial class DoorFallThrough : Door
 
     public override bool AttemptToClose()
     {
+       
+
         if (!base.AttemptToClose())
         {
             return false;
         }
 
-        if (!opened)
-        {
-            if (!characterBody.GetCollisionLayerValue(layer))
-            {
-                characterBody.SetCollisionLayerValue(layer, true);
-            }
-            sprite.Frame = 0;
+        ToggleCollision();
+            
+
+            
             //collisionShape.SetDeferred("one_way_collision", false);
-        }
+        
         return true;
     }
+
+    void ToggleCollision()
+    {
+        
+        if (inverted)
+        {
+            characterBody.SetCollisionLayerValue(layer, opened);
+        sprite.Frame = opened ? 0 : 1;
+        }
+        else
+        {
+            characterBody.SetCollisionLayerValue(layer, !opened);
+        sprite.Frame = opened ? 1 : 0;
+        }
+
+        
+    }
+    
+
 }

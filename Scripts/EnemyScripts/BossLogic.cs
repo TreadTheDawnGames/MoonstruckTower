@@ -56,7 +56,7 @@ public partial class BossLogic : CharacterBody2D
 	BodyState state = BodyState.Healthy;
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
-	PackedScene deathPuppet = GD.Load<PackedScene>("res://Scenes/Enemies/boss_death_puppet.tscn");
+	PackedScene deathPuppet = GD.Load<PackedScene>("res://Scenes/Enemies/Boss/boss_death_puppet.tscn");
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

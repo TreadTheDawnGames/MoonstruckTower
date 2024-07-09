@@ -4,10 +4,16 @@ using System;
 public partial class LockEye : Lock
 {
 	AnimatedSprite2D sprite;
+	[Export] bool inverted = false;
     public override void _Ready()
     {
-        base._Ready();
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        shape = GetNode<CollisionShape2D>("CollisionShape2D");
+
+		if(!inverted )
+		{
+	        AreaEntered += (node) => UnlockMe(node);
+		}
 
     }
     protected override void UnlockMe(Node2D node)
