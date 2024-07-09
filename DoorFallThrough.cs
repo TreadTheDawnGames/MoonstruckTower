@@ -1,11 +1,13 @@
 using Godot;
 using System;
+using Godot.Collections;
 
 public partial class DoorFallThrough : Door
 {
     Sprite2D sprite;
     CollisionShape2D collisionShape;
     StaticBody2D characterBody;
+    [Export] int layer;
 
     public override void _Ready()
     {
@@ -13,10 +15,11 @@ public partial class DoorFallThrough : Door
         sprite = GetNode<Sprite2D>("Sprite2D");
         collisionShape = GetNode<CollisionShape2D>("StaticBody2D/CollisionShape2D");
         characterBody = GetNode<StaticBody2D>("StaticBody2D");
-        if (!characterBody.GetCollisionLayerValue(1))
+        if (!characterBody.GetCollisionLayerValue(layer))
         {
-            characterBody.SetCollisionLayerValue(1, true);
+            characterBody.SetCollisionLayerValue(layer, true);
         }
+
         //AttemptToOpen();
     }
 
@@ -29,9 +32,9 @@ public partial class DoorFallThrough : Door
         if (opened)
         {
 
-            if (characterBody.GetCollisionLayerValue(1))
+            if (characterBody.GetCollisionLayerValue(layer))
             {
-                characterBody.SetCollisionLayerValue(1, false);
+                characterBody.SetCollisionLayerValue(layer, false);
             }
 
             sprite.Frame = 1;
@@ -49,9 +52,9 @@ public partial class DoorFallThrough : Door
 
         if (!opened)
         {
-            if (!characterBody.GetCollisionLayerValue(1))
+            if (!characterBody.GetCollisionLayerValue(layer))
             {
-                characterBody.SetCollisionLayerValue(1, true);
+                characterBody.SetCollisionLayerValue(layer, true);
             }
             sprite.Frame = 0;
             //collisionShape.SetDeferred("one_way_collision", false);

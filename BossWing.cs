@@ -53,7 +53,7 @@ public partial class BossWing : Door
 		if (base.AttemptToOpen())
 		{
 			state = WingState.Dead;
-			logic.LoseWing(this);
+			logic.LoseWing(lostWing: this);
 			ShowBossEyes(false);
 			
 		}

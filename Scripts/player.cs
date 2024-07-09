@@ -28,9 +28,15 @@ public partial class Player : CharacterBody2D
 
     Node2D flippables;
 
+    [Export] float fallTimeMax = 20;
+    float fallTimeCounter = 0;
+
     int cameraPanDownCounter = 0;
-    Marker2D cameraLookLocation;
-    Camera2D camera;
+    Marker2D cameraTrolley;
+    Vector2 cameraDefaultPosition;
+    Vector2 cameraDownPosition;
+
+    CameraSmoother camera;
     bool cameraPan = false;
 
     ITool selectedTool;
@@ -53,6 +59,7 @@ public partial class Player : CharacterBody2D
     int damageDirection = 0;
     public bool flippedSwitchThisAnimation = false;
 
+    [Export] float camSmoothY = 0.07f;
     
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -70,8 +77,13 @@ public partial class Player : CharacterBody2D
         linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
         damageTimer = GetNode<Timer>("DamageTimer");
         toolBoxDisplay = (TextureRect)GetTree().GetFirstNodeInGroup("ToolBoxDisplay");
-        cameraLookLocation = GetNode<Marker2D>("CameraTrolley");
-        camera = GetNode<Camera2D>("CameraTrolley/Camera2D");
+        cameraTrolley = GetNode<Marker2D>("CameraTrolley");
+        camera = Owner.GetNode<CameraSmoother>("Camera2D");
+
+        cameraDefaultPosition = cameraTrolley.Position;
+        cameraDownPosition = cameraTrolley.Position;
+        cameraDownPosition.Y += 32 ;
+
 
         damageTimer.Timeout += () => takingDamage = false;
         coyoteTimer.Timeout += () => CoyoteDone();
@@ -275,13 +287,35 @@ public partial class Player : CharacterBody2D
 
         if ( cameraPanDownCounter > 20)
         {
-            cameraLookLocation.Position = new Vector2(0, 0);
+            cameraTrolley.Position = cameraDownPosition;
             camera.PositionSmoothingSpeed = 2.5f;
         }
         else
         {
-            cameraLookLocation.Position = new Vector2(0, -32);
-            camera.PositionSmoothingSpeed = 5;
+                cameraTrolley.Position = cameraDefaultPosition;
+            
+            if(Velocity.Y > 0)
+            {
+                fallTimeCounter++;
+
+            }
+            else { fallTimeCounter=0; }
+
+            GD.Print(fallTimeCounter);
+
+            GD.Print(camera.lerpSpeedY);
+
+            if (camera.lerpSpeedY < 1f)
+            {
+                camera.lerpSpeedY = Mathf.Lerp(camSmoothY, camSmoothY * 3f, fallTimeCounter / fallTimeMax);
+            }
+           
+
+                /*else
+                {
+                    camera.lerpSpeedY = camSmooth;
+                }*/
+            
 
         }
 
@@ -414,7 +448,7 @@ public partial class Player : CharacterBody2D
         }
         takingDamage = true;
 
-        Velocity = new Vector2(hitVelX*1.25f, hitVelY);
+        Velocity = new Vector2(hitVelX*1.25f, hitVelY)*amount;
         
         damageTimer.WaitTime = damageWaitTime;
         damageTimer.Start();
@@ -481,11 +515,12 @@ public partial class Player : CharacterBody2D
             GlobalPosition += direction;//new Vector2(direction.X, direction.Y * climbSpeed);
         }
         // Handle Jump.
-        if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || coyote) && !jumping)
+        if (Input.IsActionJustPressed("Jump") && (IsOnFloor() /*|| onLadder*/ || coyote) && !jumping)
         {
             velocity.Y = JumpVelocity;
             onLadder = false;
         }
+
 
         if (Input.IsActionJustReleased("Jump"))
         {

@@ -178,15 +178,12 @@ autoplay = "FullHealthy"
 
 [node name="BossEye" parent="." instance=ExtResource("2_0emjf")]
 position = Vector2(-24, -8)
-maxHitPoints = 1
 active = true
 
 [node name="BossEyeMini" parent="." instance=ExtResource("3_kikwv")]
 position = Vector2(-23, 1)
-maxHitPoints = 1
 active = true
 
 [node name="BossEyeMini2" parent="." instance=ExtResource("3_kikwv")]
 position = Vector2(-21, 7)
-maxHitPoints = 1
 active = true

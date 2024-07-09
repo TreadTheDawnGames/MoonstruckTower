@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://gcxic2k216bn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wstc3"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_n2e2r"]
+
+[node name="PushBlock" type="RigidBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wstc3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(20, 20)
+texture = SubResource("PlaceholderTexture2D_n2e2r")

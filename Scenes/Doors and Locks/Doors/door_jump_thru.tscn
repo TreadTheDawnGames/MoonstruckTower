@@ -12,6 +12,8 @@ script = ExtResource("1_1p53o")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_d4l0r")
 hframes = 2
+region_enabled = true
+region_rect = Rect2(176, 0, 32, 16)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 

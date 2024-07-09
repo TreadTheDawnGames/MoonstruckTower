@@ -20,6 +20,12 @@ public partial class BossButtonSwitch : ButtonLock
         GD.Print("Unlocked");
         base.UnlockMe(node);
         timer.Start();
+        GD.Print(node.Name);
+        if(node is BossLogic)
+        {
+            BossLogic boss = (BossLogic)node;
+            boss.HeadBonk();
+        }
     }
 
     public override void LockMe()

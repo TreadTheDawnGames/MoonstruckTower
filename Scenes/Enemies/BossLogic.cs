@@ -24,7 +24,14 @@ public partial class BossLogic : CharacterBody2D
 	int wingCount;
 	int originalWingCount;
 
+	[Export] NodePath signalLockPath;
+	SignalLock signalLock;
+
+	[Export] float wakeUpTime = 1f;
+
 	[Export] int bossFloorHeight = -207;
+
+	[Export] int wakeUpHeight = 112;
 
 
 	bool queueTimer = false;
@@ -45,7 +52,7 @@ public partial class BossLogic : CharacterBody2D
 
 	bool downed;
 	bool flappable = true;
-	enum BodyState { Healthy, Targetable }
+	public enum BodyState { Healthy, Targetable }
 	BodyState state = BodyState.Healthy;
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
@@ -69,16 +76,10 @@ public partial class BossLogic : CharacterBody2D
 		hurtBox.SetEnabled(false);
 		finalHurtBox.SetEnabled(false);
 
-		/*foreach (BossWing wing in wings)
-        {
-            if (activeWings < 1)
-            {
-                wing.AttemptToClose();
-                activeWings++;
-            }
-        }*/
 		wings[0].state = BossWing.WingState.Targetable;
 		wings[1].state = BossWing.WingState.Healthy;
+
+		signalLock = GetNode<SignalLock>(signalLockPath);
 
 		wingCount = wings.Length;
 		originalWingCount = wingCount;
@@ -121,7 +122,7 @@ public partial class BossLogic : CharacterBody2D
 			if (bodyHits > hitsToFinalTakeDown)
 			{
 				animator.Play("Downed" + state.ToString());
-				LoseWing();
+				LoseWing(BodyState.Targetable);
 				finalHurtBox.SetEnabled(false);
 
 			}
@@ -163,14 +164,7 @@ public partial class BossLogic : CharacterBody2D
 			;
 
 
-			if (PickActiveWing())
-			{
-				state = BodyState.Healthy;
-			}
-			else
-			{
-				EnterFinalPhase();
-			}
+			
 
 
 
@@ -183,10 +177,20 @@ public partial class BossLogic : CharacterBody2D
 
 
 			}
-		}
-		else if (animator.Animation == "Hit" + state.ToString() && !downed)
+            wakeUpTimer.WaitTime = wakeUpTime;
+
+        }
+        else if (animator.Animation == "Hit" + state.ToString() && !downed)
 		{
-			animator.Play(state.ToString());
+            if (PickActiveWing())
+            {
+                state = BodyState.Healthy;
+            }
+            else
+            {
+                EnterFinalPhase();
+            }
+            animator.Play(state.ToString());
 			foreach (BossWing wing in wings)
 			{
 				wing.Flap();
@@ -241,7 +245,7 @@ public partial class BossLogic : CharacterBody2D
 		{
 			velocity.Y = -speed * originalWingCount - wingCount;
 
-			if (GlobalPosition.Y > bossFloorHeight - 64)
+			if (Position.Y > bossFloorHeight - wakeUpHeight)
 			{
 
 				Flap();
@@ -252,16 +256,16 @@ public partial class BossLogic : CharacterBody2D
 			{
 
 
-				if (GlobalPosition.X < -31)
+				if (Position.X < -31)
 				{
 					driftDirection = 1;
 				}
-				else if (GlobalPosition.X > 31)
+				else if (Position.X > 31)
 				{
 					driftDirection = -1;
 				}
 
-				if (GlobalPosition.X < -32 || GlobalPosition.X > 32)
+				if (Position.X < -32 || Position.X > 32)
 				{
 					driftDirection *= 4;
 				}
@@ -274,7 +278,7 @@ public partial class BossLogic : CharacterBody2D
 		MoveAndSlide();
 	}
 
-	public void LoseWing(BossWing lostWing = null)
+	public void LoseWing(BodyState stateToShow = BodyState.Targetable, BossWing lostWing = null)
 	{
 		foreach (BossWing wing in wings)
 		{
@@ -285,7 +289,7 @@ public partial class BossLogic : CharacterBody2D
 			lostWing.state = BossWing.WingState.Dead;
 
 		GD.Print(state.ToString());
-		state = BodyState.Targetable;
+		state = stateToShow;
 		animator.Play("Hit" + state.ToString());// Targetable");
 		queueTimer = true;
 		hitBox.SetEnabled(false);
@@ -296,7 +300,7 @@ public partial class BossLogic : CharacterBody2D
 
 	void HandleKnockback(HitBox2D caller)
 	{
-		var direction = Mathf.Sign(GlobalPosition.X - caller.GlobalPosition.X);
+		var direction = Mathf.Sign(Position.X - caller.Position.X);
 
 		animator.Play("HorizontalDamage");
 		var hitVelX = direction * 75 * 2;
@@ -335,22 +339,20 @@ public partial class BossLogic : CharacterBody2D
 			animator.Play("Damage");
 		}
 	} 
-		/*if (wakeUpTimer.TimeLeft == 0)
-		{
-			
-			
-				wakeUpTimer.Start();
-				wakeUpTimerPlaying = true;
-				queueTimer = false;
-			
-			
-		}*/
+	public void HeadBonk()
+	{
+		GD.Print("BONK!");
+		wakeUpTimer.WaitTime = 0.001f;
+		state = BodyState.Healthy;
+		LoseWing(BodyState.Healthy);
+	}
 			
 	void FinalDeath()
 	{
         BossDeathPuppet puppet = deathPuppet.Instantiate<BossDeathPuppet>();
-        puppet.GlobalPosition = GlobalPosition;
+        puppet.Position = Position;
         GetTree().Root.AddChild(puppet);
+		signalLock.Unlock();
         QueueFree();
     }
 
@@ -369,8 +371,9 @@ public partial class BossLogic : CharacterBody2D
 	{
 		CheckForDeath();
 
-            driftDirection = -MathF.Sign(GlobalPosition.X);
+            driftDirection = -MathF.Sign(Position.X);
 		hurtBox.SetEnabled(false);
+		
 		animator.Play("WakeUp" + state.ToString());
 
 		bool detected = deathZoneDetector.HasOverlappingAreas();
@@ -380,8 +383,6 @@ public partial class BossLogic : CharacterBody2D
 
         
         
-        //if not in kill zone
-        //wing.attemptToClose
     }
 
 	bool PickActiveWing()

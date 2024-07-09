@@ -42,7 +42,7 @@ public partial class BossOrb : Lock
             {
                 animator.Play("Cracked+");
             }
-            else if (currentHitPoints <= 2 * (maxHitPoints / 3))
+            else if (currentHitPoints <= 2 * (maxHitPoints / 3) || currentHitPoints <= maxHitPoints / 2)
             {
                 animator.Play("Cracked");
             }
@@ -55,6 +55,7 @@ public partial class BossOrb : Lock
 
     protected override void UnlockMe(Node2D node)
     {
+        GD.Print("Attempting to unlock " + Name + " with " + node.Name);
         if (unlocked || animator.Animation == "Hidden")
         {
             return;

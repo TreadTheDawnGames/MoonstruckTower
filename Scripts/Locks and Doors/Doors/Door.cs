@@ -13,7 +13,6 @@ public partial class Door : Node2D
         base._Ready();
         try
         {
-                GD.Print("Assigned door");
             foreach(Lock locke in GetChildren().OfType<Lock>())
             {
                 locke.door = this;
