@@ -43,6 +43,8 @@ public partial class EnemyBase : CharacterBody2D
     public EnemySpawner spawner { protected get; set; }
     protected bool active = false;
 
+    [Export] public SignalLock sLock;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -52,7 +54,7 @@ public partial class EnemyBase : CharacterBody2D
         statusAnimator = GetNode<AnimatedSprite2D>("Animator/StatusAnimator");
         machine = GetNode<EnemyStateMachine>("StateMachine");
         flippables = GetNode<Node2D>("Flippables");
-        hurtBox = GetNode<CollisionShape2D>(flippables.GetPath() + "/HurtBox2D/HurtShape");
+        hurtBox = GetNode<CollisionShape2D>(flippables.GetPath() + "/HurtBox2D/CollisionShape2D");
         visionCast = GetNode<RayCast2D>("VisionCast");
         edgeDetectR = GetNode<RayCast2D>("EdgeDetectionR");
         edgeDetectL = GetNode<RayCast2D>("EdgeDetectionL");
@@ -97,6 +99,7 @@ public partial class EnemyBase : CharacterBody2D
     }
     public void Destroy()
     {
+        sLock?.Unlock();
         spawner.StartRespawnTimer();
         QueueFree();
     }
