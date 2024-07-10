@@ -34,8 +34,11 @@ public partial class Door : Node2D
         {
             if (!locke.unlocked)
             {
+
                 opened = false;
-                return false ;
+
+                    return false ;
+                
             }
         }
         opened = true;
