@@ -31,10 +31,7 @@ lerpSpeedX = 0.06
 lerpSpeedY = 0.07
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
-position = Vector2(101, -88)
-damageWaitTime = 0.5
-fallTimeMax = 20.0
-camSmoothY = 0.07
+position = Vector2(-115, -109)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 position = Vector2(0, -28)
@@ -123,5 +120,5 @@ position = Vector2(-111, -80)
 position = Vector2(88, 39)
 
 [node name="LadderFrog2" parent="." instance=ExtResource("15_fs0go")]
-position = Vector2(-167, -120)
-rotation = 1.5708
+position = Vector2(-9, -169)
+rotation = -1.5708

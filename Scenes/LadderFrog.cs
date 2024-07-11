@@ -7,6 +7,7 @@ public partial class LadderFrog : Node2D
     AnimatedSprite2D animator;
     bool deactivated = true;
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+    int direction = 0;
 
     PackedScene ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
     public override void _Ready()
@@ -36,7 +37,13 @@ public partial class LadderFrog : Node2D
             //var ladder = (Ladder)ladderPhysics.GetScript();
             ladder.GlobalPosition = GlobalPosition;
             ladder.Rotation = Rotation;
-            ladder.LinearVelocity = new Vector2(0, jumpInPixels);
+
+            float hPower = 0;
+            if(Rotation == Mathf.DegToRad(0))
+            {
+                hPower = 32 * direction;
+            }
+            ladder.LinearVelocity = new Vector2(hPower, jumpInPixels);
             
 
             GetTree().Root.GetNode("Game").AddChild(ladder);
@@ -55,7 +62,7 @@ public partial class LadderFrog : Node2D
 	{
         if(deactivated)
         {
-            
+            direction = Mathf.Sign(GlobalPosition.X - box.GlobalPosition.X);
             foreach (Ladder existingLadder in GetTree().GetNodesInGroup("Ladders").OfType<Ladder>())
             {
                 existingLadder.Despawn(true);
