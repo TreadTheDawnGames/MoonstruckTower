@@ -22,7 +22,7 @@ public partial class LadderSpawner : Node2D, ITool
     PackedScene ladderScene;
     Marker2D ladderSpawnpoint;
 
-    bool ladderPlaced = false;
+    public bool ladderPlaced = false;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -34,10 +34,9 @@ public partial class LadderSpawner : Node2D, ITool
         
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
+    
+
+    
 
     void AnimationFinished()
     {
@@ -93,7 +92,7 @@ public partial class LadderSpawner : Node2D, ITool
 
             foreach (Area2D area in ladderGrabber.GetOverlappingAreas())
             {
-                if (area.Owner.Name == "ToolLadder")
+                if (area.Owner is Ladder)
                 {
                     PickupLadder((Ladder)area.Owner);
                     return;
@@ -110,7 +109,7 @@ public partial class LadderSpawner : Node2D, ITool
     private void PickupLadder(Ladder ladder)
     {
         GD.Print("Picked up Ladder");
-        ladder.Despawn();
+        ladder.Despawn(false);
         ladderPlaced = false;
     }
 
@@ -123,6 +122,8 @@ public partial class LadderSpawner : Node2D, ITool
 
         ladder.GlobalPosition = ladderSpawnpoint.GlobalPosition;
         ladderPlaced = true;
+
+        ladder.AddToGroup("Ladders");
 
         GetTree().Root.GetNode("Game").AddChild(ladder);
 

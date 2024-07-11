@@ -103,13 +103,11 @@ public partial class Door : Node2D, IDoor
 
         if (opened)
         {
-            GD.Print("Opening");
             return true;
         }
 
         //attempt to close()
         Close();
-            GD.Print("NOT Opening");
         return false;
     }
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dx2jlctrirqip"]
+[gd_scene load_steps=16 format=3 uid="uid://dx2jlctrirqip"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_11jo3"]
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://Scripts/CameraSmoother.cs" id="13_3xxo8"]
 [ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/button_switch.tscn" id="13_5e6d6"]
 [ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="13_uwtnf"]
+[ext_resource type="PackedScene" uid="uid://bepdipajb15sk" path="res://Scenes/ladder_frog.tscn" id="15_fs0go"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_bm7da")
@@ -30,7 +31,7 @@ lerpSpeedX = 0.06
 lerpSpeedY = 0.07
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
-position = Vector2(8, -800)
+position = Vector2(157, -42)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 position = Vector2(0, -28)
@@ -114,3 +115,6 @@ scale = Vector2(1, 1)
 
 [node name="LockSwitch" parent="Door-Wall2" instance=ExtResource("13_uwtnf")]
 position = Vector2(-111, -80)
+
+[node name="LadderFrog" parent="." instance=ExtResource("15_fs0go")]
+position = Vector2(88, 39)

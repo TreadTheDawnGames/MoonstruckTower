@@ -1,10 +1,30 @@
-[gd_scene load_steps=17 format=3 uid="uid://bepdipajb15sk"]
+[gd_scene load_steps=20 format=3 uid="uid://bepdipajb15sk"]
 
 [ext_resource type="Script" path="res://Scenes/LadderFrog.cs" id="1_2hspi"]
 [ext_resource type="Texture2D" uid="uid://cb8fndvera73b" path="res://Assets/LadderFrog.png" id="1_455ia"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="3_0xst8"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e4vfi"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_a2yy8"]
+atlas = ExtResource("1_455ia")
+region = Rect2(0, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxs14"]
+atlas = ExtResource("1_455ia")
+region = Rect2(16, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_47i2u"]
+atlas = ExtResource("1_455ia")
+region = Rect2(48, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y86nd"]
+atlas = ExtResource("1_455ia")
+region = Rect2(32, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_afltg"]
+atlas = ExtResource("1_455ia")
+region = Rect2(16, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ias2d"]
 atlas = ExtResource("1_455ia")
 region = Rect2(16, 0, 16, 64)
 
@@ -40,20 +60,42 @@ region = Rect2(128, 0, 16, 64)
 atlas = ExtResource("1_455ia")
 region = Rect2(144, 0, 16, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gdlap"]
-atlas = ExtResource("1_455ia")
-region = Rect2(48, 0, 16, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s3hci"]
-atlas = ExtResource("1_455ia")
-region = Rect2(32, 0, 16, 64)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_8rr32"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e4vfi")
+"texture": SubResource("AtlasTexture_a2yy8")
 }, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mxs14")
+}],
+"loop": false,
+"name": &"Activate",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_47i2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y86nd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_afltg")
+}],
+"loop": false,
+"name": &"Deactivate",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ias2d")
+}],
+"loop": false,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_70n1p")
 }, {
@@ -77,18 +119,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_h8vj8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gdlap")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s3hci")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_e4vfi")
 }],
 "loop": false,
-"name": &"SpawnLadder",
+"name": &"SpitLadder",
 "speed": 8.0
 }]
 
@@ -101,13 +134,14 @@ script = ExtResource("1_2hspi")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_8rr32")
-animation = &"SpawnLadder"
-frame = 11
-frame_progress = 1.0
+animation = &"Deactivate"
+autoplay = "Idle"
 
 [node name="HurtBox2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 32
 script = ExtResource("3_0xst8")
-layers = 6
+layers = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox2D"]
 position = Vector2(0, 1.5)

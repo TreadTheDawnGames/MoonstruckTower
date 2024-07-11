@@ -35,12 +35,13 @@ public partial class Player : CharacterBody2D
     Marker2D cameraTrolley;
     Vector2 cameraDefaultPosition;
     Vector2 cameraDownPosition;
+   // Vector2 cameraUpPosition;
 
     CameraSmoother camera;
     bool cameraPan = false;
 
     ITool selectedTool;
-    ITool[] toolBagList;
+    public ITool[] toolBagList { get; private set; }
     int toolBagItemCount;
     int selectedToolIndex = 0;
     public Node2D toolBag;
@@ -83,6 +84,7 @@ public partial class Player : CharacterBody2D
         cameraDefaultPosition = cameraTrolley.Position;
         cameraDownPosition = cameraTrolley.Position;
         cameraDownPosition.Y += 32 ;
+//        cameraUpPosition.Y -= 72 ;
 
 
         damageTimer.Timeout += () => takingDamage = false;
@@ -262,7 +264,7 @@ public partial class Player : CharacterBody2D
         }
     }
 
-    void HandleCamera(float direction)
+    void HandleCamera(Vector2 direction)
     {
         //Use count UP not Timer
         //if(direction.Y > 0)
@@ -275,10 +277,14 @@ public partial class Player : CharacterBody2D
         //else 
         //cameraLookLocation = normal
 
-        if (direction > 0 )
+        if (direction.Y > 0 )
         {
             cameraPanDownCounter++;
         }
+        /*else if(direction.Y < 0 && !onLadder)
+        {
+            cameraPanDownCounter--;
+        }*/
         else
         {
             cameraPan = false;
@@ -290,6 +296,12 @@ public partial class Player : CharacterBody2D
             cameraTrolley.Position = cameraDownPosition;
             camera.PositionSmoothingSpeed = 2.5f;
         }
+        /*else if (cameraPanDownCounter < -50 && !onLadder )
+        {
+            cameraTrolley.Position = cameraUpPosition;
+            camera.PositionSmoothingSpeed = 2.5f;
+
+        }*/
         else
         {
                 cameraTrolley.Position = cameraDefaultPosition;
@@ -567,7 +579,7 @@ public partial class Player : CharacterBody2D
 
         HandleAnimation(direction);
 
-        HandleCamera(direction.Y);
+        HandleCamera(direction);
 
         velocity.X = velocity.X * (float)delta * 70;
 
