@@ -18,9 +18,9 @@ public partial class LockSwitch : Lock
         visualUnlocked = false;
     }
 
-    protected override void UnlockMe(Node2D node)
+    public override void UnlockMe(Node2D node)
     {
-        
+
 
         if (node.Owner is Player)
         {
@@ -39,21 +39,16 @@ public partial class LockSwitch : Lock
 
         unlocked = !unlocked;
         visualUnlocked = !visualUnlocked;
-            sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
+        sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
 
 
+        //this is bugging the WallDoor
+
+       
+            door.AttemptToOpen();
         
-                door.AttemptToClose();
-
-            if (unlocked)
-            {
-                door.AttemptToOpen();
-            }
-            
         
-
-
-
+        
 
     }
 }

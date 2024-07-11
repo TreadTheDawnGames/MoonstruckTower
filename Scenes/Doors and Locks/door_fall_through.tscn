@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dhe3uos236bk6"]
 
-[ext_resource type="Script" path="res://Scripts/DoorFallThrough.cs" id="1_ih6cb"]
+[ext_resource type="Script" path="res://Scripts/FallThroughDoor.cs" id="1_ih6cb"]
 [ext_resource type="Texture2D" uid="uid://b6vk6b5gvvscv" path="res://Assets/Locks and Doors/FallAwayFloor.png" id="2_mcdm8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p7qd8"]

@@ -1,13 +1,12 @@
 using Godot;
 using System;
 
-public partial class Lock : Area2D
+public partial class Lock : Area2D, ILock
 {
     [Export]
-    public bool unlocked = false;
-    public Door door;
-	//protected AnimatedSprite2D sprite;
-    protected CollisionShape2D shape;
+    public bool unlocked { get; set; } = false;
+    public IDoor door { get; set; }
+    public CollisionShape2D shape { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -20,7 +19,7 @@ public partial class Lock : Area2D
     
     
 
-    protected virtual void UnlockMe(Node2D node)
+    public virtual void UnlockMe(Node2D node)
     {
 
             
@@ -41,7 +40,7 @@ public partial class Lock : Area2D
             return ;
         }
         unlocked = false;
-        door.AttemptToClose();
+        door.AttemptToOpen();
     }
     
     public void SetActive(bool active)

@@ -15,6 +15,7 @@ public partial class MultiDoor : Door
         {
             doors.Add(door);
         }
+        base._Ready();
     }
 
     public override bool AttemptToOpen()
@@ -32,14 +33,14 @@ public partial class MultiDoor : Door
         return true;
     }
 
-    public override bool AttemptToClose()
+    public override bool Close()
     {
         
 
         foreach (var door in doors)
         {
             door.opened = false;
-            door.AttemptToClose();
+            door.AttemptToOpen();
         }
         return true;
     }

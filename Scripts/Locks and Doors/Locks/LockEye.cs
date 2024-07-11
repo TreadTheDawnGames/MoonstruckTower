@@ -16,7 +16,7 @@ public partial class LockEye : Lock
 		}
 
     }
-    protected override void UnlockMe(Node2D node)
+    public override void UnlockMe(Node2D node)
 	{
 		if (!unlocked)
 		{

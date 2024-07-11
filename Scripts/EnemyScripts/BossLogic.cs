@@ -158,7 +158,7 @@ public partial class BossLogic : CharacterBody2D
 				foreach (BossWing wing in wings)
 				{
 					if (!wing.permaDead)
-						wing.AttemptToClose();
+						wing.Close();
 				}
 			}
 			;

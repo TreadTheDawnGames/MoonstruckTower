@@ -111,6 +111,7 @@ position = Vector2(0, -203)
 
 [node name="BossButtonSwitch" parent="MultiDoor" instance=ExtResource("6_pfd13")]
 position = Vector2(0, -648)
+scale = Vector2(1, 1)
 
 [node name="MultiDoor2" parent="." instance=ExtResource("3_xk5pv")]
 

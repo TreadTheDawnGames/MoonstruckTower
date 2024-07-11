@@ -31,7 +31,7 @@ public partial class ButtonLock : Lock
 
 
     }
-    protected override void UnlockMe(Node2D node)
+    public override void UnlockMe(Node2D node)
     {
         if (HasOverlappingBodies() && inverted)
             return;

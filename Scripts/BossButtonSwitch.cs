@@ -15,7 +15,7 @@ public partial class BossButtonSwitch : ButtonLock
         //        BodyExited -= (node) => LockMe();
     }
 
-    protected override void UnlockMe(Node2D node)
+    public override void UnlockMe(Node2D node)
     {
         GD.Print("Unlocked");
         base.UnlockMe(node);

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using Godot.Collections;
 
-public partial class DoorFallThrough : Door
+public partial class FallThroughDoor : Door
 {
     Sprite2D sprite;
     CollisionShape2D collisionShape;
@@ -13,7 +13,6 @@ public partial class DoorFallThrough : Door
 
     public override void _Ready()
     {
-        base._Ready();
         sprite = GetNode<Sprite2D>("Sprite2D");
         collisionShape = GetNode<CollisionShape2D>("StaticBody2D/CollisionShape2D");
         characterBody = GetNode<StaticBody2D>("StaticBody2D");
@@ -28,13 +27,14 @@ public partial class DoorFallThrough : Door
             {
                 locke.unlocked = true;
             }
-            AttemptToClose();
+            Close();
             foreach(Lock locke in lockList)
             {
                 locke.unlocked = false;
             }
         }
-        
+        base._Ready();
+
     }
 
     public override bool AttemptToOpen()
@@ -54,11 +54,11 @@ public partial class DoorFallThrough : Door
         return true;
     }
 
-    public override bool AttemptToClose()
+    public override bool Close()
     {
        
 
-        if (!base.AttemptToClose())
+        if (!base.Close())
         {
             return false;
         }

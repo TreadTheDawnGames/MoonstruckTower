@@ -61,9 +61,9 @@ public partial class BossWing : Door
 
     }
 
-    public override bool AttemptToClose()
+    public override bool Close()
     {
-        if( base.AttemptToClose())
+        if( base.Close())
 		{
 			//state = WingState.Healthy;
 			foreach(BossOrb orb in lockList)

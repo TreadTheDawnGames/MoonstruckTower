@@ -53,7 +53,7 @@ public partial class BossOrb : Lock
         }
     }
 
-    protected override void UnlockMe(Node2D node)
+    public override void UnlockMe(Node2D node)
     {
         GD.Print("Attempting to unlock " + Name + " with " + node.Name);
         if (unlocked || animator.Animation == "Hidden")

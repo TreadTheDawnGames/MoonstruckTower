@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://bh88sisih878a"]
 
-[ext_resource type="Script" path="res://Scripts/DoorFallThrough.cs" id="1_ohum6"]
+[ext_resource type="Script" path="res://Scripts/FallThroughDoor.cs" id="1_ohum6"]
 [ext_resource type="Texture2D" uid="uid://cjk6glumia656" path="res://Assets/Locks and Doors/FallAwayFloorOrange.png" id="2_8ojrc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_628td"]
-size = Vector2(48, 7)
+size = Vector2(160, 7)
 
 [node name="BossroomFallDoor" type="Node2D"]
 script = ExtResource("1_ohum6")

@@ -5,10 +5,13 @@ public partial class WallDoor : Door
 {
     AnimationPlayer animator;
 
+    bool animationClosed = true;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
+        base._Ready();
 	}
 
     public override bool AttemptToOpen()
@@ -18,31 +21,31 @@ public partial class WallDoor : Door
             return false;
         }
 
-        if(opened)
+        if(opened && animationClosed)
         {
             animator.Play("Open");
+            animationClosed = false;
+
         }
 
         return true;
     }
 
-    public override bool AttemptToClose()
+    public override bool Close()
     {
-        if (!base.AttemptToClose())
+        if (!base.Close())
         {
             return false;
         }
 
-        if (!opened)
+        if (!opened && !animationClosed)
         {
             animator.Play("Open", customSpeed: -1, fromEnd: true);
+            animationClosed = true;
         }
 
         return true;
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-	{
-	}
+    
 }
