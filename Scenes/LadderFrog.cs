@@ -33,9 +33,11 @@ public partial class LadderFrog : Node2D
             var ladder = ladderScene.Instantiate<RigidBody2D>();
             float jumpInPixels = -Mathf.Sqrt(2 * gravity * 16);
 
-            ladder.LinearVelocity = new Vector2(0, jumpInPixels);
             //var ladder = (Ladder)ladderPhysics.GetScript();
             ladder.GlobalPosition = GlobalPosition;
+            ladder.Rotation = Rotation;
+            ladder.LinearVelocity = new Vector2(0, jumpInPixels);
+            
 
             GetTree().Root.GetNode("Game").AddChild(ladder);
             ladder.AddToGroup("Ladders");
@@ -53,7 +55,7 @@ public partial class LadderFrog : Node2D
 	{
         if(deactivated)
         {
-
+            
             foreach (Ladder existingLadder in GetTree().GetNodesInGroup("Ladders").OfType<Ladder>())
             {
                 existingLadder.Despawn(true);
