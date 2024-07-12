@@ -1,6 +1,10 @@
 using Godot;
 using System;
+using System.IO;
 using System.Linq;
+using static Godot.WebSocketPeer;
+using System.Reflection.Emit;
+using System.Threading.Channels;
 
 public partial class Projectile : CharacterBody2D
 {
@@ -67,16 +71,17 @@ public partial class Projectile : CharacterBody2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{
-		Velocity = shootDirection*speed;
-
+		var velo = shootDirection * speed;
 		if (fallDown)
 		{
-            Velocity = new Vector2(0, 50);
+			Rotation = Mathf.DegToRad(-90);
+            velo.Y += 100;
 		}
 
+		Velocity = velo;
         MoveAndSlide();
-		
 
-	}
 
+    }
+	
 }

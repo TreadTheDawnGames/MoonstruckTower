@@ -8,7 +8,7 @@
 size = Vector2(5, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4jqvi"]
-size = Vector2(3, 4)
+size = Vector2(3, 1.90735e-06)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvwly"]
 size = Vector2(4, 3)
@@ -17,7 +17,6 @@ size = Vector2(4, 3)
 z_index = -1
 z_as_relative = false
 collision_layer = 128
-collision_mask = 0
 script = ExtResource("1_m65hw")
 speed = 250.0
 
@@ -41,10 +40,9 @@ autostart = true
 texture = ExtResource("1_jds70")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-5, -0.5)
+position = Vector2(-3, -0.500007)
 rotation = -1.5708
 shape = SubResource("RectangleShape2D_4jqvi")
-disabled = true
 one_way_collision_margin = 10.2
 
 [node name="CollisionBox" type="Area2D" parent="."]

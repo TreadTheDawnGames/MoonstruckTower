@@ -38,6 +38,7 @@ animations = [{
 }]
 
 [node name="EnemySpawner" type="Node2D"]
+z_index = -1
 script = ExtResource("1_qf2wa")
 respawnTime = 150.0
 
