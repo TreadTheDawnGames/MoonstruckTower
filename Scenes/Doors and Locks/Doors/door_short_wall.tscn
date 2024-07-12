@@ -4,11 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://baeppdb6m2hw7" path="res://Assets/Locks and Doors/WallDoor.png" id="1_ath2v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vf3b0"]
+resource_local_to_scene = true
 size = Vector2(16, 16)
 
 [sub_resource type="Animation" id="Animation_tncte"]
 resource_name = "Open"
-length = 0.3
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true

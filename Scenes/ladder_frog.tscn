@@ -135,7 +135,6 @@ script = ExtResource("1_2hspi")
 position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_8rr32")
 animation = &"Idle"
-autoplay = "Idle"
 
 [node name="HurtBox2D" type="Area2D" parent="."]
 collision_layer = 32

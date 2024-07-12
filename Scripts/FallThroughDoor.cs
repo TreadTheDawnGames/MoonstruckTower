@@ -9,7 +9,7 @@ public partial class FallThroughDoor : Door
     CollisionShape2D collisionShape;
     StaticBody2D characterBody;
     [Export] int layer;
-    [Export] bool inverted = false;
+    [Export] bool inverted = true;
    
 
     public override void _Ready()

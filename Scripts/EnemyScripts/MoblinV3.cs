@@ -119,11 +119,11 @@ public partial class MoblinV3 : EnemyBase
     {
         
 
-            if (!canSee)
+            if (!canSee && !isBusy)
             {
                 machine.ChangeState("EnemyConfusedState", null);
             }
-            else
+            else if (canSee && !isBusy) 
             {
                 machine.ChangeState("EnemyAlertState", null);
 

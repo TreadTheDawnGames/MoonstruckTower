@@ -8,7 +8,7 @@ public partial class JumpThruDoor : Door
 	Sprite2D sprite;
     CollisionShape2D collisionShape;
     StaticBody2D staticBody;
-	[Export] bool inverted;
+	[Export] bool inverted = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -65,17 +65,17 @@ public partial class JumpThruDoor : Door
 
         if (inverted)
         {
+                staticBody.SetCollisionLayerValue(1, opened);
+            collisionShape.SetDeferred("one_way_collision", !opened);
+            sprite.Frame = opened ? 0 : 1;
             
+        }
+        else
+        {
                 staticBody.SetCollisionLayerValue(1, !opened);
             
             collisionShape.SetDeferred("one_way_collision", opened);
             sprite.Frame = opened ? 1 : 0;
-        }
-        else
-        {
-                staticBody.SetCollisionLayerValue(1, opened);
-            collisionShape.SetDeferred("one_way_collision", !opened);
-            sprite.Frame = opened ? 0 : 1;
         }
 
 

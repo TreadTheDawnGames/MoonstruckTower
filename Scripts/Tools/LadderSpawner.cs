@@ -18,9 +18,13 @@ public partial class LadderSpawner : Node2D, ITool
     AnimatedSprite2D linkSprite;
     Player link;
     Area2D ladderGrabber;
-    Area2D ladderSpawnCheck;
+    Area2D roofSpawnCheck;
+    Area2D wallSpawnCheck;
     PackedScene ladderScene;
     Marker2D ladderSpawnpoint;
+    Marker2D ladderSpawnpoint2;
+
+    public bool canUse = true;
 
     public bool ladderPlaced = false;
 
@@ -30,11 +34,13 @@ public partial class LadderSpawner : Node2D, ITool
         ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
         ladderGrabber = GetNode<Area2D>("LadderGrabber");
         ladderSpawnpoint = GetNode<Marker2D>("LadderSpawnpoint");
-        ladderSpawnCheck = GetNode<Area2D>("SpawnCheck");
+        ladderSpawnpoint2 = GetNode<Marker2D>("LadderSpawnpoint2");
+        roofSpawnCheck = GetNode<Area2D>("RoofCheck");
+        wallSpawnCheck = GetNode<Area2D>("WallCheck");
         
 	}
 
-    
+
 
     
 
@@ -55,17 +61,18 @@ public partial class LadderSpawner : Node2D, ITool
 
     public void Use(Vector2 direction)
     {
-
-
+       
 
             animating = true;
             linkSprite.Play("LadderPlace");
         
+        if(canUse) 
             HandleLadder();
 
             
         
             link.usingTool = false;
+        
     }
 
 
@@ -101,7 +108,7 @@ public partial class LadderSpawner : Node2D, ITool
         }
         else
         {
-            if (!ladderSpawnCheck.HasOverlappingBodies())
+            if(!roofSpawnCheck.HasOverlappingBodies())
                 PlaceLadder();
 
         }
@@ -120,7 +127,18 @@ public partial class LadderSpawner : Node2D, ITool
 
         Ladder ladder = ladderScene.Instantiate<Ladder>();
 
-        ladder.GlobalPosition = ladderSpawnpoint.GlobalPosition;
+        if (!wallSpawnCheck.HasOverlappingBodies())
+        {
+            ladder.GlobalPosition = ladderSpawnpoint.GlobalPosition;
+        }
+        else
+        {
+            ladder.GlobalPosition = ladderSpawnpoint2.GlobalPosition;
+
+        }
+
+        //maybe add: if roof hit try placing rotated 90. if not, don't spawn.
+
         ladderPlaced = true;
 
         ladder.AddToGroup("Ladders");

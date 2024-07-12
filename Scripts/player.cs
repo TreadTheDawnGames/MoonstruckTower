@@ -83,7 +83,7 @@ public partial class Player : CharacterBody2D
 
         cameraDefaultPosition = cameraTrolley.Position;
         cameraDownPosition = cameraTrolley.Position;
-        cameraDownPosition.Y += 32 ;
+        cameraDownPosition.Y += 48 ;
 //        cameraUpPosition.Y -= 72 ;
 
 
@@ -250,6 +250,7 @@ public partial class Player : CharacterBody2D
                 }
 
                 selectedTool = toolBagList[selectedToolIndex - 1];
+            if(toolBoxDisplay!=null)
                 toolBoxDisplay.Texture = selectedTool.displayTexture;
                // GD.Print("Selected " + selectedTool.name);
             }
@@ -477,7 +478,7 @@ public partial class Player : CharacterBody2D
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
-
+       
         // Add the gravity.
         if (!IsOnFloor())
             velocity.Y += gravity * (float)delta;

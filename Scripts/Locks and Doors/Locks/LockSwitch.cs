@@ -12,18 +12,24 @@ public partial class LockSwitch : Lock
     {
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         base._Ready();
-        if (inverted)
-        {
-            unlocked = true;
-        }
-        sprite.Play(unlocked ? "Unlocked" : "Locked");
+         
+        unlocked = inverted;
+        
 
         visualUnlocked = false;
+        sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+        GD.Print(Name + " | " + unlocked);
     }
 
     public override void UnlockMe(Node2D node)
     {
 
+       
 
         if (node.Owner is Player || node.Owner is Projectile)
         {
@@ -52,8 +58,7 @@ public partial class LockSwitch : Lock
 
         }
 
-
-        unlocked = !unlocked;
+ unlocked = !unlocked;
         visualUnlocked = !visualUnlocked;
         sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
 

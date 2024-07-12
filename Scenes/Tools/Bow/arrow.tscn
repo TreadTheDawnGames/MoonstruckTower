@@ -5,13 +5,13 @@
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="2_uvvdu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rp3fk"]
-size = Vector2(5, 3)
+size = Vector2(5, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4jqvi"]
-size = Vector2(3, 1.90735e-06)
+size = Vector2(1, 9.53674e-07)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvwly"]
-size = Vector2(4, 3)
+size = Vector2(4, 1)
 
 [node name="Arrow" type="CharacterBody2D"]
 z_index = -1
@@ -40,7 +40,7 @@ autostart = true
 texture = ExtResource("1_jds70")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-3, -0.500007)
+position = Vector2(-3, -0.5)
 rotation = -1.5708
 shape = SubResource("RectangleShape2D_4jqvi")
 one_way_collision_margin = 10.2

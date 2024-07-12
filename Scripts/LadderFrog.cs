@@ -9,6 +9,8 @@ public partial class LadderFrog : Node2D
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
     int direction = 0;
 
+    Player link;
+
     PackedScene ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
     public override void _Ready()
     {
@@ -60,6 +62,9 @@ public partial class LadderFrog : Node2D
         {
             animator.Play("Idle");
             deactivated = true;
+            link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = true;
+            link.toolBag.GetNode<LadderSpawner>("LadderSpawner").ladderPlaced = true;
+
         }
     }
 
@@ -82,10 +87,10 @@ public partial class LadderFrog : Node2D
                 arrow.HitHurtBox();
 
             }
-            Player link = (Player)GetTree().GetFirstNodeInGroup("Player");  // (Player)hitBox.Owner;
+            link = (Player)GetTree().GetFirstNodeInGroup("Player");  // (Player)hitBox.Owner;
 
-                link.toolBag.GetNode<LadderSpawner>("LadderSpawner").ladderPlaced = true;
-            
+                link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = false;
+
 
             animator.Play("Activate");
             deactivated = false;

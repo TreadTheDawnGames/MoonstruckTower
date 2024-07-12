@@ -9,7 +9,7 @@ size = Vector2(16, 48)
 
 [sub_resource type="Animation" id="Animation_8nwwf"]
 resource_name = "Open"
-length = 0.7
+length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
