@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://cu3dkujga8gcn"]
+[gd_scene load_steps=68 format=3 uid="uid://cu3dkujga8gcn"]
 
 [ext_resource type="Texture2D" uid="uid://btgy5agxy3d2h" path="res://Assets/LinkAnimations/Link.png" id="1_s8cc8"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_x0gvu"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://di1pn02xfxovi" path="res://Assets/LinkAnimations/LinkBowWalk.png" id="6_mm0si"]
 [ext_resource type="Texture2D" uid="uid://cgpt33cbs3yrc" path="res://Assets/LinkAnimations/LinkBowVert.png" id="7_c37ub"]
 [ext_resource type="Texture2D" uid="uid://bgv1pfa45mf74" path="res://Assets/LinkAnimations/LinkPlaceLadder.png" id="10_ki7hp"]
+[ext_resource type="PackedScene" uid="uid://bkkw6362t6vol" path="res://Scenes/Tools/Bow/bow.tscn" id="13_jmc0i"]
 [ext_resource type="PackedScene" uid="uid://detdm2r8imhmx" path="res://Scenes/Tools/Ladder/ladder_spawner.tscn" id="13_oy46o"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="14_uuvc3"]
 
@@ -509,6 +510,8 @@ disabled = true
 [node name="Toolbag" type="Node2D" parent="Flippables"]
 
 [node name="LadderSpawner" parent="Flippables/Toolbag" instance=ExtResource("13_oy46o")]
+
+[node name="Bow" parent="Flippables/Toolbag" instance=ExtResource("13_jmc0i")]
 
 [node name="FloorCheck" type="Area2D" parent="."]
 visible = false

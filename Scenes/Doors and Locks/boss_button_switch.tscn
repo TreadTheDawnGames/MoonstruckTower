@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://oppjvs06ffas"]
 
-[ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/button_switch.tscn" id="1_hfa7p"]
+[ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/Locks/lock_button.tscn" id="1_hfa7p"]
 [ext_resource type="Script" path="res://Scripts/BossButtonSwitch.cs" id="2_h875e"]
 
 [node name="BossButtonSwitch" instance=ExtResource("1_hfa7p")]

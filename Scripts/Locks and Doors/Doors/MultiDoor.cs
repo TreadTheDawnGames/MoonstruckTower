@@ -1,8 +1,10 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 
+[Icon("res://Assets/Locks and Doors/Icons/MultiDoorIcon.png")]
 public partial class MultiDoor : Door
 {
 
@@ -20,30 +22,30 @@ public partial class MultiDoor : Door
 
     public override bool AttemptToOpen()
     {
-        if (!base.AttemptToOpen())
-        {
-            return false;
-        }
-
         foreach (Door door in doors)
         {
-            door.opened = true;
-            door.AttemptToOpen();
+            if (!base.AttemptToOpen())
+            {
+               door.AttemptToOpen();
+            }
+            else
+            {
+                door.Close();
+            }
         }
         return true;
     }
 
-    public override bool Close()
+    /*public override bool Close()
     {
         
 
         foreach (var door in doors)
         {
-            door.opened = false;
             door.AttemptToOpen();
         }
         return true;
-    }
+    }*/
 
    
 }

@@ -37,8 +37,8 @@ public partial class OctorokV2 : EnemyBase
     }
     public override void _PhysicsProcess(double delta)
     {
-        base._PhysicsProcess(delta);
         if (!active) return;
+        base._PhysicsProcess(delta);
 
         //velocity = Velocity;
         if (!IsOnFloor())
@@ -132,11 +132,7 @@ public partial class OctorokV2 : EnemyBase
 
         MoveAndSlide();
 
-        if (GlobalPosition.Y > startingPosition.Y + 48)
-        {
-            hitPoints = 0;
-            machine.ChangeState("EnemyDamageState", new Dictionary<string, object> { { "damage", 0 }, { "hitBox", null } });
-        }
+        
 
     }
 }

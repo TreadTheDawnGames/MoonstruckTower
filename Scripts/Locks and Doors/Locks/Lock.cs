@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+[Icon("res://Assets/Locks and Doors/Icons/LockIcon.png")]
 public partial class Lock : Area2D, ILock
 {
     [Export]

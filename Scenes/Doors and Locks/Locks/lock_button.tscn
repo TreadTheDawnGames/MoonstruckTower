@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bxlaf62hmy5nv"]
 
-[ext_resource type="Texture2D" uid="uid://ly26obbsacer" path="res://Assets/Locks and Doors/BigRedButton.png" id="1_ktp0a"]
-[ext_resource type="Script" path="res://Scripts/EnemyScripts/ButtonLock.cs" id="1_yihw2"]
+[ext_resource type="Script" path="res://Scripts/EnemyScripts/ButtonLock.cs" id="1_46a6v"]
+[ext_resource type="Texture2D" uid="uid://ly26obbsacer" path="res://Assets/Locks and Doors/BigRedButton.png" id="2_r8jew"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru3e4"]
 size = Vector2(39, 5)
@@ -13,10 +13,10 @@ size = Vector2(48, 6)
 scale = Vector2(-1, -1)
 collision_layer = 0
 collision_mask = 12
-script = ExtResource("1_yihw2")
+script = ExtResource("1_46a6v")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_ktp0a")
+texture = ExtResource("2_r8jew")
 hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

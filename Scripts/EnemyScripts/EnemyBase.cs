@@ -104,6 +104,16 @@ public partial class EnemyBase : CharacterBody2D
         QueueFree();
     }
 
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+        if (GlobalPosition.Y > startingPosition.Y + (16 * spawner.tilesToFallBeforeDeath))
+        {
+            hitPoints = 0;
+            machine.ChangeState("EnemyDamageState", new Dictionary<string, object> { { "damage", 0 }, { "hitBox", null } });
+        }
+    }
+
     public void TakeDamage(int damage, HitBox2D box)
     {
         //if (!isBusy)

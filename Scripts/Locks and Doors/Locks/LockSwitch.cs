@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 
+[Icon("res://Assets/Locks and Doors/Icons/SwitchIcon.png")]
 public partial class LockSwitch : Lock
 {
     [Export] bool inverted = false;
@@ -15,6 +16,8 @@ public partial class LockSwitch : Lock
         {
             unlocked = true;
         }
+        sprite.Play(unlocked ? "Unlocked" : "Locked");
+
         visualUnlocked = false;
     }
 
@@ -22,17 +25,30 @@ public partial class LockSwitch : Lock
     {
 
 
-        if (node.Owner is Player)
+        if (node.Owner is Player || node.Owner is Projectile)
         {
-            //get arrow owner script /detect if box was on projectile and if it was, delete it
-            Player link = node.Owner.GetNode<Player>(node.Owner.GetPath());
-
-            if (link != null && link.flippedSwitchThisAnimation)
+            if (node.Owner is Projectile)
             {
-                return;
-            }
+                //get arrow owner script /detect if box was on projectile and if it was, delete it
 
-            link.flippedSwitchThisAnimation = true;
+                Projectile arrow = node.Owner.GetNode<Projectile>(node.Owner.GetPath());
+
+                arrow.HitHurtBox();
+
+            }
+            else if (node.Owner is Player) 
+            {
+
+                //get arrow owner script /detect if box was on projectile and if it was, delete it
+                Player link = node.Owner.GetNode<Player>(node.Owner.GetPath());
+
+                if (link != null && link.flippedSwitchThisAnimation)
+                {
+                    return;
+                }
+
+                link.flippedSwitchThisAnimation = true;
+            }
 
         }
 
@@ -42,7 +58,6 @@ public partial class LockSwitch : Lock
         sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
 
 
-        //this is bugging the WallDoor
 
        
             door.AttemptToOpen();

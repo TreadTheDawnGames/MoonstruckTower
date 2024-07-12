@@ -43,6 +43,11 @@ public partial class LadderFrog : Node2D
             {
                 hPower = 32 * direction;
             }
+            else if(Rotation >= Mathf.DegToRad(91))
+            {
+                hPower = 0;
+                jumpInPixels = 0;
+            }
             ladder.LinearVelocity = new Vector2(hPower, jumpInPixels);
             
 

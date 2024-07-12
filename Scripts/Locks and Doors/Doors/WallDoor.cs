@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+[Icon("res://Assets/Locks and Doors/Icons/WallDoorIcon.png")]
 public partial class WallDoor : Door
 {
     AnimationPlayer animator;
@@ -40,6 +41,7 @@ public partial class WallDoor : Door
 
         if (!opened && !animationClosed)
         {
+
             animator.Play("Open", customSpeed: -1, fromEnd: true);
             animationClosed = true;
         }

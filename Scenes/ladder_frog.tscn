@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://bepdipajb15sk"]
 
-[ext_resource type="Script" path="res://Scenes/LadderFrog.cs" id="1_2hspi"]
+[ext_resource type="Script" path="res://Scripts/LadderFrog.cs" id="1_2hspi"]
 [ext_resource type="Texture2D" uid="uid://cb8fndvera73b" path="res://Assets/LadderFrog.png" id="1_455ia"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="3_0xst8"]
 
@@ -134,7 +134,7 @@ script = ExtResource("1_2hspi")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_8rr32")
-animation = &"Deactivate"
+animation = &"Idle"
 autoplay = "Idle"
 
 [node name="HurtBox2D" type="Area2D" parent="."]

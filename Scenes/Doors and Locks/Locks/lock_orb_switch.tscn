@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://kvc2vb023ndb"]
+
+[ext_resource type="Script" path="res://Scripts/Locks and Doors/Locks/LockSwitch.cs" id="1_sp67c"]
+[ext_resource type="Texture2D" uid="uid://ckriyohuffkpe" path="res://Assets/Locks and Doors/OrbToggle.png" id="2_xel60"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rnere"]
+atlas = ExtResource("2_xel60")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1h5s4"]
+atlas = ExtResource("2_xel60")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1le6d"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rnere")
+}],
+"loop": false,
+"name": &"Locked",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1h5s4")
+}],
+"loop": false,
+"name": &"Unlocked",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c8tqn"]
+radius = 7.0
+
+[node name="Lock-OrbSwitch" type="Area2D"]
+collision_layer = 0
+collision_mask = 384
+script = ExtResource("1_sp67c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1le6d")
+animation = &"Unlocked"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_c8tqn")

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using Godot.Collections;
 
+[Icon("res://Assets/Locks and Doors/Icons/FallAwayFloorIcon.png")]
 public partial class FallThroughDoor : Door
 {
     Sprite2D sprite;
@@ -78,12 +79,12 @@ public partial class FallThroughDoor : Door
         if (inverted)
         {
             characterBody.SetCollisionLayerValue(layer, opened);
-        sprite.Frame = opened ? 0 : 1;
+            sprite.Frame = opened ? 0 : 1;
         }
         else
         {
             characterBody.SetCollisionLayerValue(layer, !opened);
-        sprite.Frame = opened ? 1 : 0;
+            sprite.Frame = opened ? 1 : 0;
         }
 
         

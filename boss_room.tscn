@@ -3,11 +3,11 @@
 [ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="1_3gxb4"]
 [ext_resource type="PackedScene" uid="uid://djh07rnu37o72" path="res://Scenes/Enemies/Boss/Boss.tscn" id="2_o5koi"]
 [ext_resource type="PackedScene" uid="uid://c5j6pvr4kowjw" path="res://Scenes/Doors and Locks/Doors/multi_door.tscn" id="3_xk5pv"]
-[ext_resource type="PackedScene" uid="uid://dhe3uos236bk6" path="res://Scenes/Doors and Locks/door_fall_through.tscn" id="4_kqcjw"]
+[ext_resource type="PackedScene" uid="uid://dhe3uos236bk6" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_blue.tscn" id="4_kqcjw"]
 [ext_resource type="PackedScene" uid="uid://bh88sisih878a" path="res://Scenes/Doors and Locks/bossroom_fall_door.tscn" id="5_0wiv5"]
 [ext_resource type="PackedScene" uid="uid://oppjvs06ffas" path="res://Scenes/Doors and Locks/boss_button_switch.tscn" id="6_pfd13"]
 [ext_resource type="PackedScene" uid="uid://c7n174kp7rlhf" path="res://Scenes/Doors and Locks/Doors/door_jump_thru_long.tscn" id="7_tgrmb"]
-[ext_resource type="PackedScene" uid="uid://by83b6vfre6xe" path="res://Scenes/Doors and Locks/lock_signal.tscn" id="8_58hoc"]
+[ext_resource type="PackedScene" uid="uid://by83b6vfre6xe" path="res://Scenes/Doors and Locks/Locks/lock_signal.tscn" id="8_58hoc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1qrh6"]
 size = Vector2(95.625, 198.313)

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+	[Icon("res://Assets/Locks and Doors/Icons/SignalLockIcon.png")]
 public partial class SignalLock : Lock
 {
 	// Called when the node enters the scene tree for the first time.
@@ -18,8 +19,4 @@ public partial class SignalLock : Lock
 		LockMe();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
 }

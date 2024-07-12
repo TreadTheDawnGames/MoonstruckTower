@@ -3,7 +3,8 @@
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Doors/WallDoor.cs" id="1_bpfch"]
 [ext_resource type="Texture2D" uid="uid://baeppdb6m2hw7" path="res://Assets/Locks and Doors/WallDoor.png" id="1_yfevt"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2swc"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_usbm3"]
+resource_local_to_scene = true
 size = Vector2(16, 48)
 
 [sub_resource type="Animation" id="Animation_8nwwf"]
@@ -101,7 +102,7 @@ hframes = 7
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
-shape = SubResource("RectangleShape2D_g2swc")
+shape = SubResource("RectangleShape2D_usbm3")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

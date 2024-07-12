@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+[Icon("res://Assets/Locks and Doors/Icons/EyeIcon.png")]
 public partial class LockEye : Lock
 {
 	AnimatedSprite2D sprite;

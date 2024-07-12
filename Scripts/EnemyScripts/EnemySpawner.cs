@@ -6,6 +6,7 @@ public partial class EnemySpawner : Node2D
 	Timer respawnTimer;
 	PackedScene enemyScene;
 	[Export] float respawnTime = 300f;
+	[Export] public int tilesToFallBeforeDeath = 3;
 	AnimatedSprite2D sprite;
 	enum Enemy { Moblin, Octorok}
 	[Export] Enemy enemy;

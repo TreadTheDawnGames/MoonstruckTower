@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+[Icon("res://Assets/Locks and Doors/Icons/ButtonIcon.png")]
 public partial class ButtonLock : Lock
 {
 
