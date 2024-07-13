@@ -17,7 +17,9 @@ config/icon="res://icon.svg"
 
 [display]
 
+window/size/resizable=false
 window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 
 [dotnet]
 
@@ -127,3 +129,9 @@ Debug-TimeSlowToggle={
 
 textures/canvas_textures/default_texture_filter=0
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+2d/stretch/mode="disabled"
+2d/size/resizable=false
+2d/stretch/scale=1.0
+2d/stretch/aspect="keep"
+2d/size/viewport_height=648
+2d/size/viewport_width=1152

@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://vwtnef52s5lg"]
+
+[ext_resource type="FontFile" uid="uid://c3jo3wds6rhfw" path="res://Assets/Fonts/tiny.ttf" id="1_igvoa"]
+
+[resource]
+default_font = ExtResource("1_igvoa")
+default_font_size = 60
