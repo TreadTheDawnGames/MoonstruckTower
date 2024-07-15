@@ -53,7 +53,7 @@ public partial class LadderFrog : Node2D
             ladder.LinearVelocity = new Vector2(hPower, jumpInPixels);
             
 
-            GetTree().Root.GetNode("Game").AddChild(ladder);
+            GetTree().Root.GetChild<Node2D>(0).AddChild(ladder);
             ladder.AddToGroup("Ladders");
 
 

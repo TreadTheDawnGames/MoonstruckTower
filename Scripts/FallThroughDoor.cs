@@ -24,12 +24,12 @@ public partial class FallThroughDoor : Door
 
         if (inverted)
         {
-            foreach(Lock locke in lockList)
+            foreach(ILock locke in lockList)
             {
                 locke.unlocked = true;
             }
             Close();
-            foreach(Lock locke in lockList)
+            foreach(ILock locke in lockList)
             {
                 locke.unlocked = false;
             }
@@ -75,7 +75,12 @@ public partial class FallThroughDoor : Door
 
     void ToggleCollision()
     {
-        
+        if (characterBody == null)
+        {
+            GD.Print(Name);
+            return;
+        }
+
         if (inverted)
         {
             characterBody.SetCollisionLayerValue(layer, opened);

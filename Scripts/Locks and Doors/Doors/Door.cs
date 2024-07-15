@@ -35,24 +35,18 @@ public partial class Door : Node2D, IDoor
 
     public override void _Ready()
     {
-        GD.Print("--Start--");
-        GD.Print(type.ToString());
         base._Ready();
         AttemptToOpen();
         if(GetParentOrNull<Door>() != null)
         {
-            GD.Print("Not null");
             type = GateType.FORCED;
         }
-        GD.Print(type.ToString());
-        GD.Print("--End--");
     }
 
     //rename to update door state
 
     public virtual bool AttemptToOpen()
     {
-        GD.Print(type.ToString());
 
         opened = false;
         int locksUnlocked = 0;
@@ -63,7 +57,6 @@ public partial class Door : Node2D, IDoor
                 locksUnlocked++;
             }
         }
-        GD.Print(locksUnlocked);
 
         switch (type)
         {

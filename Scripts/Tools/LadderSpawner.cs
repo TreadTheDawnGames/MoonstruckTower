@@ -115,14 +115,12 @@ public partial class LadderSpawner : Node2D, ITool
     }
     private void PickupLadder(Ladder ladder)
     {
-        GD.Print("Picked up Ladder");
         ladder.Despawn(false);
         ladderPlaced = false;
     }
 
     private void PlaceLadder()
     {
-        GD.Print("Placed Ladder");
 
 
         Ladder ladder = ladderScene.Instantiate<Ladder>();
@@ -143,7 +141,7 @@ public partial class LadderSpawner : Node2D, ITool
 
         ladder.AddToGroup("Ladders");
 
-        GetTree().Root.GetNode("Game").AddChild(ladder);
+        GetTree().Root.GetChild<Node2D>(0).AddChild(ladder);
 
     }
 }

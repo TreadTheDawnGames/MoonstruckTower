@@ -14,6 +14,8 @@ public partial class Sign : Area2D
 
 		panel = GetNode<Panel>("Panel");
 		text = GetNode<RichTextLabel>("Panel/RichTextLabel");
+
+
 		text.Text = content;
 	
 		panel.Hide();
@@ -21,7 +23,6 @@ public partial class Sign : Area2D
 
 	void ShowText(Node2D node)
 	{
-		GD.Print("Shown");
             panel.Show();
 
     }

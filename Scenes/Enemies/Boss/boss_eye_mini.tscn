@@ -4,17 +4,19 @@
 [ext_resource type="Script" path="res://Scripts/BossOrb.cs" id="1_nxyo0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5gpo7"]
+resource_local_to_scene = true
 radius = 3.0
 
 [node name="BossEyeMini" type="Area2D"]
-collision_layer = 32
-collision_mask = 32
+collision_layer = 0
+collision_mask = 128
 script = ExtResource("1_nxyo0")
 maxHitPoints = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_5gr8e")
-animation = &"Hidden"
+animation = &"Healthy"
+autoplay = "Healthy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_5gpo7")

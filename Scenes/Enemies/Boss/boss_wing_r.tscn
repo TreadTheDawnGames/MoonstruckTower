@@ -9,16 +9,15 @@
 script = ExtResource("1_ec5dy")
 
 [node name="Animator" type="AnimatedSprite2D" parent="."]
-position = Vector2(16, 0)
 sprite_frames = ExtResource("1_gk6o6")
 animation = &"FullHealthy"
-autoplay = "FullHealthy"
-
-[node name="BossEyeMini" parent="." instance=ExtResource("2_rc4cy")]
-position = Vector2(23, 1)
-
-[node name="BossEyeMini2" parent="." instance=ExtResource("2_rc4cy")]
-position = Vector2(21, 7)
+autoplay = "HitTargetable"
 
 [node name="BossEye" parent="." instance=ExtResource("3_ndgr6")]
-position = Vector2(24, -8)
+position = Vector2(8, -8)
+
+[node name="BossEyeMini" parent="." instance=ExtResource("2_rc4cy")]
+position = Vector2(7, 1)
+
+[node name="BossEyeMini2" parent="." instance=ExtResource("2_rc4cy")]
+position = Vector2(5, 7)

@@ -1,7 +1,8 @@
 using Godot;
 using System;
 
-public partial class EnemySpawner : Node2D
+[Icon("res://Assets/Locks and Doors/Icons/SpawnerIcon.png")]
+public partial class EnemySpawner : Node2D, ILock
 {
 	Timer respawnTimer;
 	PackedScene enemyScene;
@@ -11,11 +12,16 @@ public partial class EnemySpawner : Node2D
 	enum Enemy { Moblin, Octorok}
 	[Export] Enemy enemy;
 
-	[Export] SignalLock sLock;
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+    public bool unlocked { get; set; }
+    public IDoor door { get; set; }
+    public CollisionShape2D shape { get; set; }
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
+		
+
 		string path = "";
 		switch (enemy)
 		{
@@ -51,13 +57,42 @@ public partial class EnemySpawner : Node2D
 	{
         sprite.Play("Off");
 
-		sLock?.Lock();
 
         EnemyBase enemy = enemyScene.Instantiate<EnemyBase>();
 		enemy.spawner = this;
-		enemy.sLock = sLock;
+		AddChild(enemy);
+
+		LockMe();
 		
 		//enemy.GlobalPosition = GlobalPosition;
-		AddChild(enemy);
 	}
+
+    public virtual void UnlockMe(Node2D node)
+    {
+
+
+
+        if (unlocked == true)
+        {
+            return;
+        }
+        unlocked = true;
+        door?.AttemptToOpen();
+    }
+
+    public virtual void LockMe()
+    {
+
+        if (unlocked == false)
+        {
+            return;
+        }
+        unlocked = false;
+        door?.AttemptToOpen();
+    }
+
+    public void SetActive(bool active)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://cu3dkujga8gcn"]
+[gd_scene load_steps=65 format=3 uid="uid://cu3dkujga8gcn"]
 
 [ext_resource type="Texture2D" uid="uid://btgy5agxy3d2h" path="res://Assets/LinkAnimations/Link.png" id="1_s8cc8"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_x0gvu"]
@@ -8,10 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://cpn64rh3ri7v6" path="res://Assets/LinkAnimations/AirAttackDiagonal.png" id="3_pv3mg"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="4_16p3j"]
 [ext_resource type="Texture2D" uid="uid://di3gvno88vsd4" path="res://Assets/LinkAnimations/LinkDuck.png" id="4_gjsdk"]
+[ext_resource type="Texture2D" uid="uid://refdgbwfsixs" path="res://Assets/LinkAnimations/LinkAttackWalk.png" id="5_hf0mp"]
 [ext_resource type="Texture2D" uid="uid://di1pn02xfxovi" path="res://Assets/LinkAnimations/LinkBowWalk.png" id="6_mm0si"]
 [ext_resource type="Texture2D" uid="uid://cgpt33cbs3yrc" path="res://Assets/LinkAnimations/LinkBowVert.png" id="7_c37ub"]
 [ext_resource type="Texture2D" uid="uid://bgv1pfa45mf74" path="res://Assets/LinkAnimations/LinkPlaceLadder.png" id="10_ki7hp"]
-[ext_resource type="PackedScene" uid="uid://detdm2r8imhmx" path="res://Scenes/Tools/Ladder/ladder_spawner.tscn" id="13_oy46o"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="14_uuvc3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ydce0"]
@@ -73,26 +73,23 @@ region = Rect2(144, 0, 48, 48)
 atlas = SubResource("CompressedTexture2D_2prdk")
 region = Rect2(192, 0, 48, 48)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jv706"]
-load_path = "res://.godot/imported/LinkAttackWalk.png-1798b21a8775b598dfa024430b1d3801.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l0or6"]
-atlas = SubResource("CompressedTexture2D_jv706")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ffsoe"]
+atlas = ExtResource("5_hf0mp")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_en4wa"]
-atlas = SubResource("CompressedTexture2D_jv706")
+[sub_resource type="AtlasTexture" id="AtlasTexture_5htqk"]
+atlas = ExtResource("5_hf0mp")
 region = Rect2(48, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_f0e0t"]
-atlas = SubResource("CompressedTexture2D_jv706")
+[sub_resource type="AtlasTexture" id="AtlasTexture_1c1hv"]
+atlas = ExtResource("5_hf0mp")
 region = Rect2(96, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0x8xb"]
-atlas = SubResource("CompressedTexture2D_jv706")
+[sub_resource type="AtlasTexture" id="AtlasTexture_tpjin"]
+atlas = ExtResource("5_hf0mp")
 region = Rect2(144, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nnuv1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_2h3fg"]
 atlas = ExtResource("1_s8cc8")
 region = Rect2(32, 0, 16, 16)
 
@@ -256,19 +253,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l0or6")
+"texture": SubResource("AtlasTexture_ffsoe")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_en4wa")
+"texture": SubResource("AtlasTexture_5htqk")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_f0e0t")
+"texture": SubResource("AtlasTexture_1c1hv")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0x8xb")
+"texture": SubResource("AtlasTexture_tpjin")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_nnuv1")
+"texture": SubResource("AtlasTexture_2h3fg")
 }],
 "loop": false,
 "name": &"AttackWalk",
@@ -463,8 +460,10 @@ JumpVelocity = -275.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_cmkua")
-animation = &"Idle"
+animation = &"AttackWalk"
 autoplay = "Idle"
+frame = 4
+frame_progress = 1.0
 
 [node name="LinkCollider" type="CollisionShape2D" parent="."]
 visible = false
@@ -503,8 +502,6 @@ shape = SubResource("CapsuleShape2D_fvajs")
 disabled = true
 
 [node name="Toolbag" type="Node2D" parent="Flippables"]
-
-[node name="LadderSpawner" parent="Flippables/Toolbag" instance=ExtResource("13_oy46o")]
 
 [node name="FloorCheck" type="Area2D" parent="."]
 visible = false

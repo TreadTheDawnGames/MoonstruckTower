@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 
 public partial class MoblinV3 : EnemyBase
 {
-
+    
 
     public override void _Ready()
     {
@@ -29,7 +29,7 @@ public partial class MoblinV3 : EnemyBase
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _PhysicsProcess(double delta)
     {
-        if(!active) return;
+        if (!active) return;
         base._PhysicsProcess(delta);
 
         //velocity = Velocity;
@@ -38,15 +38,43 @@ public partial class MoblinV3 : EnemyBase
             velocity.Y += gravity * (float)delta;
 
         }
+
+        if (!display)
+        {
+            var relitiveLinkPos = link.GlobalPosition - GlobalPosition;
+
+            if (GlobalPosition.DistanceTo(link.GlobalPosition) < sightRange)
+                visionCast.TargetPosition = relitiveLinkPos;
+            else
+                visionCast.TargetPosition = Vector2.Zero;
+
+            
+
+            if (visionCast.GetColliderRid() == link.GetRid())
+            {
+                if (((Mathf.Sign(relitiveLinkPos.X) >= 0 && animator.FlipH) || (Mathf.Sign(relitiveLinkPos.X) <= 0 && !animator.FlipH)))
+                {
+
+                    canSee = true;
+                }
+                else
+                {
+                    canSee = false;
+                }
+
+
+                if (machine.CurrentState != "EnemyAlertState" && machine.CurrentState != "EnemyPanicState" && !isAlerted && canSee && !isBusy)
+                {
+                    machine.ChangeState("EnemyAlertState", null);
+                }
+
+            }
+            else
+            {
+                canSee = false;
+            }
+        }
         
-
-        var relitiveLinkPos = link.GlobalPosition - GlobalPosition;
-
-        if (GlobalPosition.DistanceTo(link.GlobalPosition) < sightRange)
-            visionCast.TargetPosition = relitiveLinkPos;
-        else
-            visionCast.TargetPosition = Vector2.Zero;
-
         //facing right
         if (Velocity.X > 0)
         {
@@ -63,49 +91,25 @@ public partial class MoblinV3 : EnemyBase
         }
         facingRight = animator.FlipH;
 
-        if (visionCast.GetColliderRid() == link.GetRid())
-        {
-            if (((Mathf.Sign(relitiveLinkPos.X) >= 0 && animator.FlipH) || (Mathf.Sign(relitiveLinkPos.X) <= 0 && !animator.FlipH)))
-            {
-
-                canSee = true;
-            }
-            else
-            {
-                canSee = false;
-            }
-
-
-            if (machine.CurrentState != "EnemyAlertState" && machine.CurrentState != "EnemyPanicState" && !isAlerted && canSee && !isBusy)
-            {
-                machine.ChangeState("EnemyAlertState", null);
-            }
-
-        }
-        else
-        {
-            canSee = false;
-        }
-
-
         if (!takingDamage)
-        {
+            {
 
-            if (walkDirection != 0)
-            {
-                FlipDirection();
-                velocity.X = walkSpeed * walkDirection;
+                if (walkDirection != 0)
+                {
+                    FlipDirection();
+                    velocity.X = walkSpeed * walkDirection;
+                }
+                else
+                {
+                    velocity.X = Mathf.MoveToward(Velocity.X, 0, walkSpeed);
+                }
             }
-            else
-            {
-                velocity.X = Mathf.MoveToward(Velocity.X, 0, walkSpeed);
-            }
-        }
-        
-        
+
+
+       
 
         Velocity = velocity;
-
+        
         
             MoveAndSlide(); 
         

@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://hel6a8ts6ds4"]
+
+[ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="1_ckei3"]
+[ext_resource type="PackedScene" uid="uid://c2xfoaah6ib1d" path="res://Scenes/Doors and Locks/Doors/door_wall.tscn" id="2_leqir"]
+[ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="3_5u6e2"]
+
+[node name="Puzzle Notes" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource("1_ckei3")
+format = 2
+layer_0/tile_data = PackedInt32Array(-5, 589824, 0, -4, 589824, 0, -3, 589824, 0, -2, 589824, 0, -1, 589824, 0, -65536, 589824, 0, -65535, 589824, 0, -65534, 589824, 0, -65533, 589824, 0, -65532, 589824, 0, -262149, 589824, 0, -262148, 589824, 0, -262147, 589824, 0, -131068, 786432, 5, -327685, 0, 5)
+
+[node name="Door-Wall" parent="." instance=ExtResource("2_leqir")]
+position = Vector2(-24, -40)
+
+[node name="LockSwitch" parent="Door-Wall" instance=ExtResource("3_5u6e2")]
+position = Vector2(16, 16)

@@ -3,10 +3,13 @@ using System;
 using System.Linq;
 using System.Net.NetworkInformation;
 
-public partial class BossWing : Door
+public partial class BossWing : Door, IDoor
 {
 	BossLogic logic;
 	AnimatedSprite2D animator;
+
+	bool openedThisFrame = false;
+
 	public enum WingState { Healthy, Targetable, Dead}
 	public WingState state = WingState.Healthy;
 
@@ -22,7 +25,7 @@ public partial class BossWing : Door
 		animator = GetNode<AnimatedSprite2D>("Animator");
 		animator.AnimationFinished += AnimationFinished;
 		logic = (BossLogic)Owner;
-		animator.Play("Full"+state.ToString());
+		//animator.Play("Full"+state.ToString());
 		foreach(BossOrb eye in GetChildren().OfType<BossOrb>())
 		{
 			eye.door = this;
@@ -38,7 +41,7 @@ public partial class BossWing : Door
 		}
 		if (animator.Animation == "Flap" + myState)
 		{
-
+			
 			ShowBossEyes(true);
             animator.Play("Full"+ myState);
 		}
@@ -49,33 +52,41 @@ public partial class BossWing : Door
 	
 
     public override bool AttemptToOpen()
-    {
-		if (base.AttemptToOpen())
-		{
-			state = WingState.Dead;
-			logic.LoseWing(lostWing: this);
-			ShowBossEyes(false);
-			
-		}
-		return true;
+	{
+		
+			openedThisFrame = true;
+			if (base.AttemptToOpen())
+			{
+				GD.Print("Succeeded opening " + Name);
+				state = WingState.Dead;
+				logic.LoseWing(lostWing: this);
+				ShowBossEyes(false);
 
+				return true;
+			}
+		return false;
     }
+
+	
 
     public override bool Close()
     {
-        if( base.Close())
+
+		//state = WingState.Healthy;
+		if (!active)
 		{
-			//state = WingState.Healthy;
-			foreach(BossOrb orb in lockList)
+
+			foreach (BossOrb orb in lockList)
 			{
-				
+
 				orb.LockMe();
 			}
 			state = WingState.Healthy;
-			return true;
 		}
-		return false;
-    }
+		return true;
+
+
+	}
 
     public void AnimateTakedown(bool reverse = false)
 	{
@@ -84,7 +95,16 @@ public partial class BossWing : Door
         {
             myState = "Dead";
         }
-        animator.Play("Hit" +myState,customSpeed:reverse?-1:1,reverse);
+		if (reverse)
+		{
+
+		    animator.PlayBackwards("Hit" +myState);
+		}
+		else
+		{
+	        animator.Play("Hit" +myState);
+
+		}
 	}
 
 	public void ShowBossEyes(bool canSee)
@@ -133,6 +153,7 @@ public partial class BossWing : Door
 
 	public void Activate()
 	{
+		GD.Print(Name + " is active wing");
 		active = true;
 		TryBecomeTarget();
 	}

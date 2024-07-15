@@ -37,16 +37,13 @@ public partial class ButtonLock : Lock
         if (HasOverlappingBodies() && inverted)
             return;
         base.UnlockMe(node);
-        GD.Print("Unlocked");
 
         if (!inverted)
         {
-            GD.Print("Sprite 1");
             sprite.Frame = 1;
         }
         else
         {
-            GD.Print("Sprite 0");
             sprite.Frame = 0;
         }
 
@@ -60,7 +57,6 @@ public partial class ButtonLock : Lock
         base._PhysicsProcess(delta);
         if (queued)
         {
-                GD.Print("Locked");
                 Lock();
             queued = false;
         }
@@ -83,12 +79,10 @@ public partial class ButtonLock : Lock
         base.LockMe();
         if (!inverted)
         {
-            GD.Print("Sprite 0");
             sprite.Frame = 0;
         }
         else
         {
-            GD.Print("Sprite 1");
             sprite.Frame = 1;
         }
     }

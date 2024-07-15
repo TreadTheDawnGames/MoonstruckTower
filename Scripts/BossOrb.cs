@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.ComponentModel.Design;
 
-public partial class BossOrb : Lock
+public partial class BossOrb : Lock, ILock
 {
     [Export] int maxHitPoints = 3;
      int currentHitPoints;
@@ -10,6 +10,7 @@ public partial class BossOrb : Lock
     string currentAnimation;
     [Export] public bool active = false;
 
+    [Signal] public delegate void DamagedEventHandler();
 
     public override void _Ready()
     {
@@ -55,7 +56,6 @@ public partial class BossOrb : Lock
 
     public override void UnlockMe(Node2D node)
     {
-        GD.Print("Attempting to unlock " + Name + " with " + node.Name);
         if (unlocked || animator.Animation == "Hidden")
         {
             return;
@@ -71,6 +71,7 @@ public partial class BossOrb : Lock
             currentHitPoints--;
             if (currentHitPoints <= 0)
             {
+            GD.Print("Unlocked " + Name);
                 animator.Play("Explode");
                 unlocked = true;
                 door.AttemptToOpen();
@@ -78,7 +79,7 @@ public partial class BossOrb : Lock
             else
             {
                 animator.Play("Damaged");
-
+                EmitSignal(SignalName.Damaged);
             }
 
         }

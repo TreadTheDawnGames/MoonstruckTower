@@ -1,12 +1,16 @@
 using Godot;
 using System;
 
-public partial class DebugTools : Node
+public partial class DebugTools : Node2D
 {
+
+	Fader fader;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-	}
+		fader = GetNodeOrNull<Fader>("CanvasLayer/Fader");
+		fader?.FadeIn();
+    }
 
 	bool slowTimeToggle = false;
 

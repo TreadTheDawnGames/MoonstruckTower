@@ -17,6 +17,7 @@ public partial class BossDeathPuppet : CharacterBody2D
 		//positionCurveY.Bake();
 		counter = -counterMax;
 		startPos = GlobalPosition;
+		startPos.Y += 128;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

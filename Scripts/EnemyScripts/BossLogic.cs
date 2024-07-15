@@ -46,17 +46,24 @@ public partial class BossLogic : CharacterBody2D
 
 	bool finalPhase = false;
 	[Export]
-	int hitsToFinalTakeDown = 2;//7;
+	int hitsToFinalTakeDown = 7;
 	int bodyHits = 0;
-	int activeWings;
 
 	bool downed;
-	bool flappable = true;
+	bool flappable = false;
 	public enum BodyState { Healthy, Targetable }
 	BodyState state = BodyState.Healthy;
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	PackedScene deathPuppet = GD.Load<PackedScene>("res://Scenes/Enemies/Boss/boss_death_puppet.tscn");
+
+	Area2D activationZone;
+	bool active = false;
+
+	enum FlyPosition { Left, Right, Center };
+	FlyPosition flyPosition;
+
+	BossWing activeWing;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -69,25 +76,29 @@ public partial class BossLogic : CharacterBody2D
 		hurtBox = GetNode<HurtBox2D>("HurtBox2D");
 		finalHurtBox = GetNode<HurtBox2D>("FinalHurtBox");
 		deathZoneDetector = GetNode<Area2D>("DeathZoneDetector");
-		flapTimer.Timeout += Flap;
+		activationZone = GetNode<Area2D>("../ActivationZone");
 		wakeUpTimer.Timeout += WakeUp;
 
 		animator.AnimationFinished += AnimationFinished;
 		hurtBox.SetEnabled(false);
 		finalHurtBox.SetEnabled(false);
 
-		wings[0].state = BossWing.WingState.Targetable;
-		wings[1].state = BossWing.WingState.Healthy;
+		
 
-		signalLock = GetNode<SignalLock>(signalLockPath);
+        foreach (BossWing wing in wings)
+        {
+            wing.ShowBossEyes(false);
+        }
+
+        signalLock = GetNode<SignalLock>(signalLockPath);
 
 		wingCount = wings.Length;
 		originalWingCount = wingCount;
 
 		driftDirection = Mathf.Sign(GD.RandRange(-1, 1));
 
-		Flap();
-
+		activationZone.BodyEntered += ActivateBoss;
+		hitsToFinalTakeDown--;
 	}
 
 	void Flap()
@@ -130,14 +141,24 @@ public partial class BossLogic : CharacterBody2D
 		}
 		else if (animator.Animation == "WakeUp" + state.ToString())
 		{
-			hitBox.SetEnabled(true);
+            foreach (BossWing wing in wings)
+            {
+                wing.AnimateTakedown(true);
+			}
+            animator.PlayBackwards("Hit" + state.ToString());
+
+            hitBox.SetEnabled(true);
 
 			CheckForDeath();
 
 			downed = false;
 
 			//need to pick a wing
-
+			if (finalPhase)
+			{
+				if(bodyHits > hitsToFinalTakeDown/2)
+				bodyHits = Mathf.CeilToInt(hitsToFinalTakeDown * 0.5f);
+			}
 			if (deathZoneDetector.HasOverlappingAreas())
 			{
 
@@ -158,30 +179,23 @@ public partial class BossLogic : CharacterBody2D
 				foreach (BossWing wing in wings)
 				{
 					if (!wing.permaDead)
+					{
+						wing.active = false;
 						wing.Close();
+					}
 				}
-			}
-			;
-
-
-			
-
-
-
-			animator.Play("Hit" + state.ToString(), -1, true);
-			foreach (BossWing wing in wings)
-			{
-				string name = wing.Name;
-				wing.AnimateTakedown(true);
-
-
-
 			}
             wakeUpTimer.WaitTime = wakeUpTime;
 
         }
         else if (animator.Animation == "Hit" + state.ToString() && !downed)
 		{
+            if (!active)
+            {
+                active = true;
+                flapTimer.Timeout += Flap;
+
+            }
             if (PickActiveWing())
             {
                 state = BodyState.Healthy;
@@ -191,22 +205,21 @@ public partial class BossLogic : CharacterBody2D
                 EnterFinalPhase();
             }
             animator.Play(state.ToString());
-			foreach (BossWing wing in wings)
-			{
-				wing.Flap();
-
-			}
-			if (finalPhase)
-			{
-				bodyHits = (int)(hitsToFinalTakeDown * 0.5f);
-			}
+			Flap();
+			
 			flappable = true;
 		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
+		if(!active) return;
+
+		//body hits starts halfway
+
+		GD.Print(bodyHits);
+
 		Vector2 velocity = Velocity;
 		if (!flappable)
 		{
@@ -243,18 +256,23 @@ public partial class BossLogic : CharacterBody2D
 		}
 		else
 		{
-			velocity.Y = -speed * originalWingCount - wingCount;
+			velocity.Y = -speed * originalWingCount - wingCount*2;
 
 			if (Position.Y > bossFloorHeight - wakeUpHeight)
 			{
 
-				Flap();
 
 				velocity.Y *= gravity * 2 * (float)delta;
 			}
+
+			/*if(Position.Y > bossFloorHeight)
+			{
+				Flap();
+
+			}*/
+
 			else
 			{
-
 
 				if (Position.X < -31)
 				{
@@ -265,12 +283,26 @@ public partial class BossLogic : CharacterBody2D
 					driftDirection = -1;
 				}
 
+
+
 				if (Position.X < -32 || Position.X > 32)
 				{
 					driftDirection *= 4;
+					//Flap();
 				}
 
 				velocity.X = driftSpeed * driftDirection;
+
+
+				if (wingCount < wings.Count() * 0.5f)
+				{
+					velocity *= 1.5f;
+				}
+				else if (wingCount <= 0)
+				{
+					velocity *= 2f;
+				}
+					
 			}
 		}
 		Velocity = velocity;
@@ -280,6 +312,7 @@ public partial class BossLogic : CharacterBody2D
 
 	public void LoseWing(BodyState stateToShow = BodyState.Targetable, BossWing lostWing = null)
 	{
+
 		foreach (BossWing wing in wings)
 		{
 			wing.AnimateTakedown();
@@ -400,8 +433,30 @@ public partial class BossLogic : CharacterBody2D
 
 			int rand = (int)(GD.Randi() % (uint)aliveWings.Count);
 			aliveWings[rand].Activate();
+			
+			activeWing = aliveWings[rand];
+			if (activeWing != null)
+			{
+				if ((activeWing.GlobalPosition.X - GlobalPosition.X)>0)
+				{
+					GD.Print("RightSide");
+					flyPosition = FlyPosition.Left;
+				}
+				else if ((activeWing.GlobalPosition.X - GlobalPosition.X)<0)
+				{
+					flyPosition = FlyPosition.Right;
+					GD.Print("LeftSide");
+				}
+			}
+			
+
 			return true;
 		}
+		else
+			{
+				GD.Print("NoWings");
+					flyPosition = FlyPosition.Center;
+			}
 		return false;
 	}
 
@@ -410,6 +465,25 @@ public partial class BossLogic : CharacterBody2D
         finalPhase = true;
         finalHurtBox.SetEnabled(true);
 		state = BodyState.Targetable;
+    }
+
+	void ActivateBoss(Node2D node)
+	{
+		if (!active)
+		{
+			active = true;
+			WakeUp();
+			//animator.Play("WakeUp" + state.ToString());
+            /*animator.Play("Hit" + state.ToString(), -1, true);
+            foreach (BossWing wing in wings)
+            {
+                string name = wing.Name;
+                wing.AnimateTakedown(true);
+
+
+
+            }*/
+        }
     }
 
 }

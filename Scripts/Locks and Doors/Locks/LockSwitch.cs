@@ -23,7 +23,6 @@ public partial class LockSwitch : Lock
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
-        GD.Print(Name + " | " + unlocked);
     }
 
     public override void UnlockMe(Node2D node)
