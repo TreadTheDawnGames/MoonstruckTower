@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dhe3uos236bk6" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_blue.tscn" id="6_uys8w"]
 [ext_resource type="PackedScene" uid="uid://bh88sisih878a" path="res://Scenes/Doors and Locks/bossroom_fall_door.tscn" id="7_siny8"]
 [ext_resource type="PackedScene" uid="uid://oppjvs06ffas" path="res://Scenes/Doors and Locks/boss_button_switch.tscn" id="8_i4a3s"]
-[ext_resource type="PackedScene" uid="uid://b6ku5ta6gbmki" path="res://Scenes/Doors and Locks/Doors/door_fall_thru.tscn" id="9_d85ku"]
+[ext_resource type="PackedScene" uid="uid://b6ku5ta6gbmki" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_3.tscn" id="9_d85ku"]
 [ext_resource type="PackedScene" uid="uid://c7n174kp7rlhf" path="res://Scenes/Doors and Locks/Doors/door_jump_thru_long.tscn" id="10_862qy"]
 [ext_resource type="PackedScene" uid="uid://by83b6vfre6xe" path="res://Scenes/Doors and Locks/Locks/lock_signal.tscn" id="11_w7vq4"]
 [ext_resource type="PackedScene" uid="uid://bepdipajb15sk" path="res://Scenes/ladder_frog.tscn" id="12_jk6uf"]

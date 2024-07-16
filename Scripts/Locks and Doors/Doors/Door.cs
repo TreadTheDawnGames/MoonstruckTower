@@ -8,8 +8,7 @@ public partial class Door : Node2D, IDoor
 {
     public List<ILock> lockList { get; set; } = new();
     public bool opened { get; set; } = false;
-    enum GateType { AND, NAND, OR, NOR, XOR, XNOR, FORCED };
-    [Export] GateType type = GateType.AND;
+    [Export] public IDoor.GateType type { get; set; }
 
     public override void _EnterTree()
     {
@@ -37,10 +36,10 @@ public partial class Door : Node2D, IDoor
     {
         base._Ready();
         AttemptToOpen();
-        if(GetParentOrNull<Door>() != null)
+        /*if(GetParentOrNull<Door>() != null)
         {
             type = GateType.FORCED;
-        }
+        }*/
     }
 
     //rename to update door state
@@ -60,49 +59,77 @@ public partial class Door : Node2D, IDoor
 
         switch (type)
         {
-            case GateType.AND:
+            case IDoor.GateType.AND:
                 if (locksUnlocked == lockList.Count())
                 {
                     opened = true;
                 }
                 break;
+            
+            case IDoor.GateType.XAND:
+                if (locksUnlocked > 0 && locksUnlocked == lockList.Count())
+                {
+                    opened = true;
+                }
+                break;
 
-            case GateType.NAND:
+            case IDoor.GateType.NAND:
                 if (locksUnlocked < lockList.Count())
                 {
                     opened = true;
                 }
                 break;
 
-            case GateType.OR:
+            case IDoor.GateType.OR:
                 if (locksUnlocked > 0)
                 {
                     opened = true;
                 }
                 break;
             
-            case GateType.NOR:
+            case IDoor.GateType.NOR:
                 if (locksUnlocked == 0)
                 {
                     opened = true;
                 }
                 break;
 
-            case GateType.XOR:
+            case IDoor.GateType.XOR:
                 if (locksUnlocked > 0 && locksUnlocked < lockList.Count())
                 {
                     opened = true;
                 }
                 break;
 
-            case GateType.XNOR:
+            case IDoor.GateType.XNOR:
                 if (locksUnlocked == 0 || locksUnlocked == lockList.Count())
                 {
                     opened = true;
                 }
                 break;
 
-            case GateType.FORCED:
+            case IDoor.GateType.SAVEONE:
+                if (locksUnlocked == lockList.Count()-1)
+                {
+                    opened = true;
+                }
+                break;
+            
+            case IDoor.GateType.ODDS:
+                if (locksUnlocked % 2 == 1)
+                {
+                    opened = true;
+                }
+                break;
+            
+            case IDoor.GateType.EVENS:
+                if (locksUnlocked % 2 == 0)
+                {
+                    opened = true;
+                }
+                break;
+            
+            case IDoor.GateType.FORCED:
                 opened = true;
                 break;
 

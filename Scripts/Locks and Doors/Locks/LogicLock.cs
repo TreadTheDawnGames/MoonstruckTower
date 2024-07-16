@@ -12,9 +12,9 @@ public partial class LogicLock : Lock, IDoor
 
     public List<ILock> lockList { get; set; }
     public bool opened { get; set; }
-    
-    
-
+    List<ILock> IDoor.lockList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    bool IDoor.opened { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    IDoor.GateType IDoor.type { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
     public override void _EnterTree()
     {
@@ -132,5 +132,13 @@ public partial class LogicLock : Lock, IDoor
         door.AttemptToOpen();
     }
 
-   
+    bool IDoor.AttemptToOpen()
+    {
+        throw new NotImplementedException();
+    }
+
+    bool IDoor.Close()
+    {
+        throw new NotImplementedException();
+    }
 }

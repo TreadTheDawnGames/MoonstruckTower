@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://csmrvs8ntqtpn" path="res://Scenes/chest.tscn" id="2_p40s3"]
 [ext_resource type="PackedScene" uid="uid://c7n174kp7rlhf" path="res://Scenes/Doors and Locks/Doors/door_jump_thru_long.tscn" id="3_meg1w"]
 [ext_resource type="PackedScene" uid="uid://b572ef6jxv3tx" path="res://Scenes/Doors and Locks/Locks/lock_eye.tscn" id="4_a062q"]
-[ext_resource type="PackedScene" uid="uid://b6ku5ta6gbmki" path="res://Scenes/Doors and Locks/Doors/door_fall_thru.tscn" id="5_la4m5"]
+[ext_resource type="PackedScene" uid="uid://b6ku5ta6gbmki" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_3.tscn" id="5_la4m5"]
 [ext_resource type="PackedScene" uid="uid://b1j7yhdcvd5eu" path="res://Scenes/Enemies/enemy_spawner.tscn" id="6_20gox"]
 [ext_resource type="PackedScene" uid="uid://c2xfoaah6ib1d" path="res://Scenes/Doors and Locks/Doors/door_wall.tscn" id="8_788wp"]
 [ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/Locks/lock_button.tscn" id="9_mxwxc"]

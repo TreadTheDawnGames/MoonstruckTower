@@ -11,13 +11,17 @@ public partial class LockSwitch : Lock
     public override void _Ready()
     {
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-        base._Ready();
          
-        unlocked = inverted;
-        
+        base._Ready();
 
-        visualUnlocked = false;
-        sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
+        if (inverted)
+        {
+            visualUnlocked = false;
+            UnlockMe(null);
+        }
+
+        sprite.Play("Locked");
+        
     }
 
     public override void _PhysicsProcess(double delta)
@@ -27,34 +31,45 @@ public partial class LockSwitch : Lock
 
     public override void UnlockMe(Node2D node)
     {
-
-       
-
-        if (node.Owner is Player || node.Owner is Projectile)
+        if (HasOverlappingBodies())
         {
-            if (node.Owner is Projectile)
+
+            if (!GetOverlappingBodies().OfType<Player>().Any())
             {
-                //get arrow owner script /detect if box was on projectile and if it was, delete it
-
-                Projectile arrow = node.Owner.GetNode<Projectile>(node.Owner.GetPath());
-
-                arrow.HitHurtBox();
-
+                GD.Print("Overlapping body!");
+                return;
             }
-            else if (node.Owner is Player) 
+        }
+
+        if (node != null)
+        {
+
+            if (node.Owner is Player || node.Owner is Projectile)
             {
-
-                //get arrow owner script /detect if box was on projectile and if it was, delete it
-                Player link = node.Owner.GetNode<Player>(node.Owner.GetPath());
-
-                if (link != null && link.flippedSwitchThisAnimation)
+                if (node.Owner is Projectile)
                 {
-                    return;
+                    //get arrow owner script /detect if box was on projectile and if it was, delete it
+
+                    Projectile arrow = node.Owner.GetNode<Projectile>(node.Owner.GetPath());
+
+                    arrow.HitHurtBox();
+
+                }
+                else if (node.Owner is Player)
+                {
+
+                    //get arrow owner script /detect if box was on projectile and if it was, delete it
+                    Player link = node.Owner.GetNode<Player>(node.Owner.GetPath());
+
+                    if (link != null && link.flippedSwitchThisAnimation)
+                    {
+                        return;
+                    }
+
+                    link.flippedSwitchThisAnimation = true;
                 }
 
-                link.flippedSwitchThisAnimation = true;
             }
-
         }
 
  unlocked = !unlocked;

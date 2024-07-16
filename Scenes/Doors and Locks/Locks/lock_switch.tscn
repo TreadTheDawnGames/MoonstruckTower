@@ -17,7 +17,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ii6di")
 }],
-"loop": true,
+"loop": false,
 "name": &"Locked",
 "speed": 5.0
 }, {
@@ -25,7 +25,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m3ko0")
 }],
-"loop": true,
+"loop": false,
 "name": &"Unlocked",
 "speed": 5.0
 }]
@@ -37,13 +37,14 @@ radius = 5.0
 z_index = 1
 position = Vector2(0, -8)
 collision_layer = 0
-collision_mask = 256
+collision_mask = 257
 script = ExtResource("1_g3oqo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tl4v8")
 animation = &"Unlocked"
+autoplay = "Locked"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 3)
+position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_li7x2")

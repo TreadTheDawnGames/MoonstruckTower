@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Sign : Area2D
 {
@@ -26,8 +27,8 @@ public partial class Sign : Area2D
             panel.Show();
 
     }
-	
-	void HideText(Node2D node)
+
+void HideText(Node2D node)
 	{
 		GD.Print("Hidden");
             panel.Hide();

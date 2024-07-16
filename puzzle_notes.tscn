@@ -1,18 +1,122 @@
-[gd_scene load_steps=4 format=3 uid="uid://hel6a8ts6ds4"]
+[gd_scene load_steps=8 format=3 uid="uid://hel6a8ts6ds4"]
 
 [ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="1_ckei3"]
 [ext_resource type="PackedScene" uid="uid://c2xfoaah6ib1d" path="res://Scenes/Doors and Locks/Doors/door_wall.tscn" id="2_leqir"]
 [ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="3_5u6e2"]
+[ext_resource type="PackedScene" uid="uid://c5j6pvr4kowjw" path="res://Scenes/Doors and Locks/Doors/door_multi.tscn" id="4_kjm3v"]
+[ext_resource type="PackedScene" uid="uid://b6ku5ta6gbmki" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_3.tscn" id="5_kp0wu"]
+[ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/Locks/lock_button.tscn" id="6_viqh7"]
+[ext_resource type="PackedScene" uid="uid://b1j7yhdcvd5eu" path="res://Scenes/Enemies/enemy_spawner.tscn" id="7_3htso"]
 
 [node name="Puzzle Notes" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("1_ckei3")
 format = 2
-layer_0/tile_data = PackedInt32Array(-5, 589824, 0, -4, 589824, 0, -3, 589824, 0, -2, 589824, 0, -1, 589824, 0, -65536, 589824, 0, -65535, 589824, 0, -65534, 589824, 0, -65533, 589824, 0, -65532, 589824, 0, -262149, 589824, 0, -262148, 589824, 0, -262147, 589824, 0, -131068, 786432, 5, -327685, 0, 5)
+layer_0/tile_data = PackedInt32Array(-5, 589824, 0, -4, 589824, 0, -3, 589824, 0, -2, 589824, 0, -1, 589824, 0, -65536, 589824, 0, -65535, 589824, 0, -65534, 589824, 0, -65533, 589824, 0, -65532, 589824, 0, -262149, 589824, 0, -262148, 589824, 0, -262147, 589824, 0, -131068, 786432, 5, -327685, 0, 5, -196630, 589824, 0, -196631, 589824, 0, -196632, 589824, 0, -196633, 589824, 0, -196634, 589824, 0, 65520, 589824, 0, 65519, 589824, 0, 65518, 589824, 0, 65517, 589824, 0, 65516, 589824, 0, 65515, 589824, 0, 65514, 589824, 0, 65513, 0, 8, 65512, 0, 8, 65511, 0, 8, 65510, 589824, 1, -196622, 589824, 0, -196620, 589824, 0, -196619, 589824, 0, -196618, 589824, 0, -196617, 589824, 0, -16, 786432, 5, -458771, 0, 8, -458770, 0, 8, -458769, 0, 8, -458768, 0, 8, -458767, 0, 8, -458766, 0, 8, -524305, 0, 5, -524295, 655360, 7, -458759, 655360, 7, -393223, 655360, 7, -327687, 655360, 7, -262151, 655360, 7, -196615, 655360, 7, -131079, 655360, 7, -65543, 655360, 7, -7, 655360, 7, 65529, 655360, 7, 131065, 655360, 7, -589816, 655360, 7, -524280, 655360, 7, -458744, 655360, 7, -393208, 655360, 7, -327672, 655360, 7, -262136, 655360, 7, -196600, 655360, 7, -131064, 655360, 7, -65528, 655360, 7, 8, 655360, 7, 65544, 655360, 7, -524318, 655360, 7, -458782, 655360, 7, -393246, 655360, 7, -327710, 655360, 7, -262174, 655360, 7, -196638, 655360, 7, -131102, 655360, 7, -65566, 655360, 7, -30, 655360, 7, 65506, 655360, 7, -131098, 589824, 1, -65562, 589824, 1, -26, 589824, 1, 327657, 0, 8, 327658, 0, 8, 327659, 0, 8, 327660, 0, 8, 327666, 0, 8, 327661, 0, 8, 327662, 0, 8, 327663, 0, 8, 327664, 0, 8, 327665, 0, 8, 327656, 0, 8, 327655, 0, 8, -196621, 589824, 0, -786487, 589824, 0, -589879, 0, 8, 65481, 0, 8, 524233, 0, 8, -589878, 589824, 0, 65482, 0, 8, 524234, 0, 8, -786485, 589824, 0, -589877, 65536, 6, 65483, 0, 8, 524235, 0, 8, -786484, 65536, 8, -589876, 589824, 0, 524236, 0, 8, -786483, 65536, 8, -589875, 65536, 5, 655309, 589824, 0, -786482, 65536, 8, -589874, 589824, 0, -65586, 0, 8, 655310, 589824, 0, -786481, 0, 8, -589873, 65536, 6, -65585, 0, 8, 655311, 589824, 0, -786480, 0, 8, -589872, 589824, 0, -65584, 589824, 0, 655312, 589824, 0, -917551, 0, 8, -262191, 0, 8, -65583, 589824, 0, 655313, 589824, 0, -917550, 0, 8, -262190, 0, 8, -65582, 589824, 0, 327634, 589824, 0, 655314, 589824, 0, -917549, 0, 8, -262189, 0, 8, -65581, 589824, 0, 327635, 589824, 0, -917548, 0, 8, -327724, 589824, 0, -262188, 589824, 1, -196652, 589824, 1, -131116, 589824, 1, -65580, 589824, 1, 327636, 589824, 0, -327723, 589824, 0, -65579, 589824, 0, 327637, 65536, 8, 655317, 0, 8, -1310762, 589824, 0, -524330, 0, 8, -327722, 589824, 0, -65578, 589824, 0, 327638, 65536, 8, 655318, 0, 8, -1310761, 589824, 0, -524329, 0, 8, -327721, 589824, 0, -65577, 589824, 0, 327639, 65536, 8, 655319, 0, 8, -1310760, 589824, 0, -524328, 0, 8, 327640, 589824, 0, 655320, 0, 8, -1310759, 589824, 0, 327641, 589824, 0, -393254, 0, 8, 65498, 0, 8, 327642, 589824, 0, -393253, 0, 8, 65499, 0, 8, 327643, 589824, 0, -393252, 0, 8, 65500, 0, 8, 327644, 589824, 0, -393251, 0, 8, 65501, 0, 8, 65502, 0, 8, 65503, 0, 8, -1310780, 655360, 7, -1245244, 655360, 7, -1179708, 655360, 7, -1114172, 655360, 7, -1048636, 655360, 7, -983100, 655360, 7, -917564, 655360, 7, -852028, 655360, 7, -786492, 655360, 7, -720956, 655360, 7, -655420, 655360, 7, -589884, 655360, 7, -524348, 655360, 7, -458812, 655360, 7, -393276, 655360, 7, -327740, 655360, 7, -262204, 655360, 7, -196668, 655360, 7, -131132, 655360, 7, -65596, 655360, 7, -60, 655360, 7, 65476, 655360, 7, 131012, 655360, 7, 196548, 655360, 7, 262084, 655360, 7, 327620, 655360, 7, 393156, 655360, 7, 458692, 655360, 7, 524228, 655360, 7, 589764, 655360, 7, 655300, 655360, 7, 720836, 655360, 7, -655388, 196608, 7, -589852, 196608, 7, -524316, 196608, 7, -458780, 196608, 7, -393244, 196608, 7, -327708, 196608, 7, -262172, 196608, 7, -196636, 196608, 7, -131100, 196608, 7, -65564, 196608, 7, -28, 196608, 7, 65508, 196608, 7, 131044, 196608, 7, 196580, 196608, 7, 262116, 196608, 7, 327652, 196608, 7, 393188, 196608, 7, 393208, 196608, 7, 393207, 196608, 7, 393206, 196608, 7, 393205, 196608, 7, 393204, 196608, 7, 393203, 196608, 7, 393202, 196608, 7, 393201, 196608, 7, 393200, 196608, 7, 393199, 196608, 7, 393198, 196608, 7, 393197, 196608, 7, 393196, 196608, 7, 393195, 196608, 7, 393194, 196608, 7, 393193, 196608, 7, 393192, 196608, 7, 393191, 196608, 7, 393190, 196608, 7, 393189, 196608, 7, -655387, 196608, 7, -655386, 196608, 7, -655385, 196608, 7, -655384, 196608, 7, -655383, 196608, 7, -655382, 196608, 7, -655381, 196608, 7, -655380, 196608, 7, -655379, 196608, 7, -655378, 196608, 7, -655377, 196608, 7, -655376, 196608, 7, -655375, 196608, 7, -655374, 196608, 7, -655373, 196608, 7, -655372, 196608, 7, -655371, 196608, 7, -655370, 196608, 7, -655369, 196608, 7, -655368, 196608, 7, -589832, 196608, 7, -524296, 196608, 7, -458760, 196608, 7, -393224, 196608, 7, -327688, 196608, 7, -262152, 196608, 7, -196616, 196608, 7, -131080, 196608, 7, -65544, 196608, 7, -8, 196608, 7, 65528, 196608, 7, 131064, 196608, 7, 196600, 196608, 7, 262136, 196608, 7, 327672, 196608, 7)
 
 [node name="Door-Wall" parent="." instance=ExtResource("2_leqir")]
 position = Vector2(-24, -40)
 
 [node name="LockSwitch" parent="Door-Wall" instance=ExtResource("3_5u6e2")]
 position = Vector2(16, 16)
+
+[node name="MultiDoor" parent="." instance=ExtResource("4_kjm3v")]
+position = Vector2(-310, -54)
+
+[node name="Door-Wall" parent="MultiDoor" instance=ExtResource("2_leqir")]
+position = Vector2(-34, 30)
+type = 8
+
+[node name="Door-FallThru4" parent="MultiDoor" instance=ExtResource("5_kp0wu")]
+position = Vector2(30, 10)
+type = 8
+
+[node name="LockSwitch2" parent="MultiDoor" instance=ExtResource("3_5u6e2")]
+position = Vector2(14, 46)
+
+[node name="Door-FallThru3" parent="MultiDoor" instance=ExtResource("5_kp0wu")]
+position = Vector2(-34, -38)
+type = 2
+
+[node name="LockSwitch" parent="MultiDoor" instance=ExtResource("3_5u6e2")]
+position = Vector2(-66, 14)
+rotation = 3.14159
+
+[node name="LockSwitch3" parent="MultiDoor" instance=ExtResource("3_5u6e2")]
+position = Vector2(126, -18)
+
+[node name="Door-Wall2" parent="." instance=ExtResource("2_leqir")]
+position = Vector2(-776, 121)
+
+[node name="LockSwitch" parent="Door-Wall2" instance=ExtResource("3_5u6e2")]
+position = Vector2(-96, -32)
+rotation = 1.5708
+
+[node name="LockSwitch2" parent="Door-Wall2" instance=ExtResource("3_5u6e2")]
+position = Vector2(32, 16)
+
+[node name="MultiDoor2" parent="." instance=ExtResource("4_kjm3v")]
+position = Vector2(-692, 41)
+
+[node name="Door-FallThru5" parent="MultiDoor2" instance=ExtResource("5_kp0wu")]
+position = Vector2(-100, -4)
+inverted = false
+
+[node name="Door-FallThru4" parent="MultiDoor2" instance=ExtResource("5_kp0wu")]
+position = Vector2(108, -4)
+
+[node name="ButtonSwitch" parent="MultiDoor2" instance=ExtResource("6_viqh7")]
+position = Vector2(28, 24)
+rotation = -3.14159
+scale = Vector2(1, 1)
+
+[node name="EnemySpawner4" parent="." instance=ExtResource("7_3htso")]
+position = Vector2(-584, 17)
+respawnTime = 5.0
+
+[node name="Door-Wall3" parent="." instance=ExtResource("2_leqir")]
+position = Vector2(-712, -55)
+
+[node name="LockSwitch" parent="Door-Wall3" instance=ExtResource("3_5u6e2")]
+position = Vector2(32, 16)
+
+[node name="LockSwitch2" parent="Door-Wall3" instance=ExtResource("3_5u6e2")]
+position = Vector2(-16, 16)
+
+[node name="Door-Wall4" parent="." instance=ExtResource("2_leqir")]
+position = Vector2(-856, -183)
+
+[node name="LockSwitch" parent="Door-Wall4" instance=ExtResource("3_5u6e2")]
+position = Vector2(16, 16)
+
+[node name="LockSwitch2" parent="Door-Wall4" instance=ExtResource("3_5u6e2")]
+position = Vector2(48, 16)
+inverted = true
+
+[node name="LockSwitch3" parent="Door-Wall4" instance=ExtResource("3_5u6e2")]
+position = Vector2(80, 16)
+
+[node name="EnemySpawner5" parent="." instance=ExtResource("7_3htso")]
+position = Vector2(-808, 129)
+respawnTime = 10.0
+tilesToFallBeforeDeath = 6
+
+[node name="Door-FallThru4" parent="." instance=ExtResource("5_kp0wu")]
+position = Vector2(-808, -283)
+
+[node name="LockSwitch" parent="Door-FallThru4" instance=ExtResource("3_5u6e2")]
+position = Vector2(-64, 100)
+rotation = 1.5708
+
+[node name="Door-FallThru5" parent="." instance=ExtResource("5_kp0wu")]
+position = Vector2(-728, -315)
+inverted = false
+
+[node name="ButtonSwitch" parent="Door-FallThru5" instance=ExtResource("6_viqh7")]
+position = Vector2(-80, 108)
+rotation = -3.14159
+scale = Vector2(1, 1)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("7_3htso")]
+position = Vector2(-808, -304)

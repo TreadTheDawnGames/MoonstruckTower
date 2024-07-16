@@ -8,7 +8,7 @@ public partial class JumpThruDoor : Door
 	Sprite2D sprite;
     CollisionShape2D collisionShape;
     StaticBody2D staticBody;
-	[Export] bool inverted = false;
+	[Export] bool unlocked = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,7 +17,7 @@ public partial class JumpThruDoor : Door
 		collisionShape = GetNode<CollisionShape2D>("StaticBody2D/CollisionShape2D");
 		staticBody = GetNode<StaticBody2D>("StaticBody2D");
         
-        if (inverted)
+        if (unlocked)
         {
             foreach (Lock locke in lockList)
             {
@@ -63,7 +63,7 @@ public partial class JumpThruDoor : Door
     void ToggleCollision()
     {
 
-        if (inverted)
+        if (unlocked)
         {
                 staticBody.SetCollisionLayerValue(1, opened);
             collisionShape.SetDeferred("one_way_collision", !opened);

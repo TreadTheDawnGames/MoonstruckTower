@@ -8,7 +8,7 @@ public partial class FallThroughDoor : Door
     Sprite2D sprite;
     CollisionShape2D collisionShape;
     StaticBody2D characterBody;
-    [Export] int layer;
+    [Export] int layer = 7;
     [Export] bool inverted = true;
    
 

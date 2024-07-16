@@ -70,7 +70,7 @@ tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Vector2(16, 48)]
 }
 tracks/2/type = "value"
@@ -82,7 +82,7 @@ tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Vector2(0, 0)]
 }
 
@@ -100,6 +100,7 @@ texture = ExtResource("1_yfevt")
 hframes = 7
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+collision_layer = 257
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
 shape = SubResource("RectangleShape2D_usbm3")

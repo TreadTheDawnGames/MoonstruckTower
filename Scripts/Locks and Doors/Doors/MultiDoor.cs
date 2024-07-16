@@ -7,31 +7,40 @@ using System.Linq;
 [Icon("res://Assets/Locks and Doors/Icons/MultiDoorIcon.png")]
 public partial class MultiDoor : Door
 {
-
-    List<Door> doors = new();
+    [Export] bool forced = false;
+    List<IDoor> doors = new();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        foreach (Door door in GetChildren().OfType<Door>())
+        foreach (IDoor door in GetChildren().OfType<IDoor>())
         {
             doors.Add(door);
         }
         base._Ready();
+        foreach (IDoor door in doors)
+        {
+            door.lockList = lockList;
+        }
     }
 
     public override bool AttemptToOpen()
     {
-        foreach (Door door in doors)
+        foreach (IDoor door in doors)
         {
-            if (!base.AttemptToOpen())
+            if (forced)
             {
-               door.AttemptToOpen();
+                door.type = IDoor.GateType.FORCED;
             }
-            else
+
+            /*if (!base.AttemptToOpen())
+            {*/
+               door.AttemptToOpen();
+            //}
+            /*else
             {
                 door.Close();
-            }
+            }*/
         }
         return true;
     }
