@@ -39,6 +39,7 @@ position = Vector2(-7, -16)
 shape = SubResource("RectangleShape2D_uowra")
 
 [node name="RoofCheck" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoofCheck"]
 position = Vector2(0, -16)

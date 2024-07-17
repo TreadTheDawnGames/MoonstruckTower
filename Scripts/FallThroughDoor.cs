@@ -9,7 +9,7 @@ public partial class FallThroughDoor : Door
     CollisionShape2D collisionShape;
     StaticBody2D characterBody;
     [Export] int layer = 7;
-    [Export] bool inverted = true;
+    [Export] bool visible = true;
    
 
     public override void _Ready()
@@ -22,7 +22,7 @@ public partial class FallThroughDoor : Door
             characterBody.SetCollisionLayerValue(layer, true);
         }
 
-        if (inverted)
+        if (visible)
         {
             foreach(ILock locke in lockList)
             {
@@ -81,7 +81,7 @@ public partial class FallThroughDoor : Door
             return;
         }
 
-        if (inverted)
+        if (visible)
         {
             characterBody.SetCollisionLayerValue(layer, opened);
             sprite.Frame = opened ? 0 : 1;

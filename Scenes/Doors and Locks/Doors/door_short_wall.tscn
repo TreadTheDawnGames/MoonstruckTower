@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1o673omp2ok3"]
+[gd_scene load_steps=8 format=3 uid="uid://d1o673omp2ok3"]
 
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Doors/WallDoor.cs" id="1_6kqoa"]
 [ext_resource type="Texture2D" uid="uid://baeppdb6m2hw7" path="res://Assets/Locks and Doors/WallDoor.png" id="1_ath2v"]
@@ -6,6 +6,10 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vf3b0"]
 resource_local_to_scene = true
 size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aw27m"]
+resource_local_to_scene = true
+size = Vector2(14, 2)
 
 [sub_resource type="Animation" id="Animation_tncte"]
 resource_name = "Open"
@@ -53,6 +57,30 @@ tracks/3/path = NodePath("CharacterBody2D/CollisionShape2D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CheckIfBodyOnTop/CheckShape:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(0, -9), Vector2(0, -1), Vector2(0, 9)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CheckIfBodyOnTop/CheckShape:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
@@ -109,6 +137,30 @@ tracks/3/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CheckIfBodyOnTop/CheckShape:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(0, -9)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CheckIfBodyOnTop/CheckShape:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_krder"]
 _data = {
@@ -116,7 +168,7 @@ _data = {
 "RESET": SubResource("Animation_i6ol1")
 }
 
-[node name="Door-ShortWall" type="Node2D"]
+[node name="Door-Wall_Short" type="Node2D"]
 script = ExtResource("1_6kqoa")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -131,6 +183,14 @@ collision_layer = 257
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_vf3b0")
+
+[node name="CheckIfBodyOnTop" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 9
+
+[node name="CheckShape" type="CollisionShape2D" parent="CheckIfBodyOnTop"]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_aw27m")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

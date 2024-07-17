@@ -60,17 +60,45 @@ public partial class LadderFrog : Node2D
         }
         else if(animator.Animation == "Deactivate")
         {
-            animator.Play("Idle");
+            animator.Play("Smile");
             deactivated = true;
-            link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = true;
-            link.toolBag.GetNode<LadderSpawner>("LadderSpawner").ladderPlaced = true;
+            try
+            {
 
+                link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = true;
+                link.toolBag.GetNode<LadderSpawner>("LadderSpawner").ladderPlaced = true;
+            }
+            catch { }
+
+        }
+        else if (animator.Animation == "Smile")
+        {
+            animator.Play("Idle");
+            
+        }
+        else if (animator.Animation == "NoLadderWarning")
+        {
+            animator.Play("Idle");
         }
     }
 
     void TakeDamage(int damage, HitBox2D box)
 	{
-        if(deactivated)
+        link = (Player)GetTree().GetFirstNodeInGroup("Player");  // (Player)hitBox.Owner;
+
+
+        if (link.toolBag.GetNodeOrNull<LadderSpawner>("LadderSpawner") != null)
+        {
+            link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = false;
+
+        }
+        else
+        {
+            animator.Play("NoLadderWarning");
+            return;
+
+        }
+        if (deactivated)
         {
             direction = Mathf.Sign(GlobalPosition.X - box.GlobalPosition.X);
             foreach (Ladder existingLadder in GetTree().GetNodesInGroup("Ladders").OfType<Ladder>())
@@ -87,10 +115,10 @@ public partial class LadderFrog : Node2D
                 arrow.HitHurtBox();
 
             }
-            link = (Player)GetTree().GetFirstNodeInGroup("Player");  // (Player)hitBox.Owner;
+            
 
-                link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = false;
 
+            
 
             animator.Play("Activate");
             deactivated = false;

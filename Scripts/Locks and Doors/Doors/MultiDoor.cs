@@ -17,7 +17,7 @@ public partial class MultiDoor : Door
         {
             doors.Add(door);
         }
-        base._Ready();
+        //base._Ready();
         foreach (IDoor door in doors)
         {
             door.lockList = lockList;

@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://duydkrfttb2n3"]
+[gd_scene load_steps=6 format=3 uid="uid://duydkrfttb2n3"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_hrsn0"]
-[ext_resource type="PackedScene" uid="uid://d1o673omp2ok3" path="res://Scenes/Doors and Locks/Doors/door_short_wall.tscn" id="2_pnmc4"]
 [ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="3_5i5a0"]
-[ext_resource type="PackedScene" uid="uid://kvc2vb023ndb" path="res://Scenes/Doors and Locks/Locks/lock_orb_switch.tscn" id="4_4rudx"]
+[ext_resource type="PackedScene" uid="uid://c2xfoaah6ib1d" path="res://Scenes/Doors and Locks/Doors/door_wall.tscn" id="3_xp5p6"]
 [ext_resource type="Script" path="res://Scripts/CameraSmoother.cs" id="4_vsxgu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpajm"]
@@ -17,25 +16,24 @@ size = Vector2(210, 20)
 position = Vector2(6, 0)
 shape = SubResource("RectangleShape2D_cpajm")
 
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(-4, -68)
+shape = SubResource("RectangleShape2D_cpajm")
+
 [node name="Player" parent="." instance=ExtResource("1_hrsn0")]
-position = Vector2(5, -18)
+position = Vector2(-30, -19)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 position = Vector2(0, -26)
 
-[node name="Door-ShortWall" parent="." instance=ExtResource("2_pnmc4")]
-position = Vector2(-57, -20)
-
-[node name="LockSwitch" parent="Door-ShortWall" instance=ExtResource("3_5i5a0")]
-position = Vector2(78, 2)
-inverted = true
-
-[node name="Lock-OrbSwitch" parent="Door-ShortWall" instance=ExtResource("4_4rudx")]
-position = Vector2(26, 2)
-
-[node name="LockSwitch2" parent="Door-ShortWall" instance=ExtResource("3_5i5a0")]
-position = Vector2(108, 2)
-
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("4_vsxgu")
 TargetNodepath = NodePath("../Player/CameraTrolley")
+
+[node name="Door-Wall" parent="." instance=ExtResource("3_xp5p6")]
+position = Vector2(-48, -34)
+
+[node name="LockSwitch" parent="Door-Wall" instance=ExtResource("3_5i5a0")]
+position = Vector2(16, 15)
