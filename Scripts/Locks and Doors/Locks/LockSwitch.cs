@@ -78,9 +78,15 @@ public partial class LockSwitch : Lock
 
 
 
-       
+        try
+        {
+
             door.AttemptToOpen();
-        
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr(Name + " has no assigned door");
+        }
         
         
 

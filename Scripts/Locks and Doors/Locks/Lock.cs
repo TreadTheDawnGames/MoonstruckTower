@@ -18,7 +18,6 @@ public partial class Lock : Area2D, ILock
 	}
 
     
-    
 
     public virtual void UnlockMe(Node2D node)
     {
@@ -30,7 +29,14 @@ public partial class Lock : Area2D, ILock
             return ;
         }
         unlocked = true;
-        door.AttemptToOpen();
+        try
+        {
+            door.AttemptToOpen();
+        }
+        catch
+        {
+            GD.PrintErr(Name + " does not have an assigned door");
+        }
     }
     
     public virtual void LockMe()
@@ -41,7 +47,14 @@ public partial class Lock : Area2D, ILock
             return ;
         }
         unlocked = false;
-        door.AttemptToOpen();
+        try
+        {
+            door.AttemptToOpen();
+        }
+        catch
+        {
+            GD.PrintErr(Name + " does not have an assigned door");
+        }
     }
     
     public void SetActive(bool active)

@@ -12,13 +12,19 @@ public partial class WallDoor : Door
     bool animationOpen = false;
     [Export] bool startOpen = false;
     Area2D checkIfBodyOnTop;
+    Area2D checkRightWall;
+    Area2D checkLeftWall;
+
+    [Export] bool shortWall = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         checkIfBodyOnTop = GetNode<Area2D>("CheckIfBodyOnTop");
-
+        checkRightWall = GetNode<Area2D>("CheckRightWall");
+        checkLeftWall = GetNode<Area2D>("CheckLeftWall");
+        
         //base._Ready();
         if (startOpen)
         {
@@ -67,10 +73,32 @@ public partial class WallDoor : Door
                     GD.Print("Myself");
                     continue;
                 }
+                int direction;
+                if (checkLeftWall.GetOverlappingBodies().OfType<TileMap>().Count()>0)
+                {
+                    direction = 1;
+                    GD.Print("on left wall");
+                }
+                else if (checkRightWall.GetOverlappingBodies().OfType<TileMap>().Count()>0)
+                {
+                    direction = -1;
+                    GD.Print("on right wall");
+                }
+                else
+                {
+                    direction = Mathf.Sign(link.GlobalPosition.X - GlobalPosition.X);
 
-                int direction = Mathf.Sign(link.GlobalPosition.X - GlobalPosition.X);
+                }
 
-                link.GlobalPosition += new Vector2(direction, 8);
+                int y = 10;
+
+                if (shortWall)
+                {
+                    y = 0;
+                }
+
+                link.GlobalPosition += new Vector2(direction*2, y);
+
 
                 GD.Print(body.GetType().ToString() + " " + body.Name) ;
             }
