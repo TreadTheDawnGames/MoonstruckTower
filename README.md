@@ -14,7 +14,7 @@ Getting hyped for GMTK! That project will be on itch when it's done.
 
 ### DISCLAIMER:
 I am not affiliated with Nintendo or The Legend of Zelda franchise in any form.
-World, Link, Ocrorok (and Pellet), Moblin, and Death Effect sprites were ripped by k0n9, Mister Mike, and Darth RPG from Oracle of Seasons and Mothula from A Link to the Past by Barack Obama on spriters-resource.com. I do not hold rights for use of these assets. Alterations were made to them by me for animation. Ladder Frog inspired by photonstorm.com. All other sprites are my own.
+World, Link, Ocrorok (and Pellet), Moblin, and Death Effect sprites were ripped by k0n9, Mister Mike, and Darth RPG from Oracle of Seasons and Mothula from A Link to the Past by Barack Obama on [spriters-resource.com](https://www.spriters-resource.com/). I do not hold rights for use of these assets. Alterations were made to them by me for animation. Ladder Frog inspired by [photonstorm.com](https://photonstorm.com/art/tutorials-art/16x16-pixel-art-tutorial). All other sprites are my own.
 
 
 
