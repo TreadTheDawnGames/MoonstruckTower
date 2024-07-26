@@ -4,7 +4,7 @@
 Mothula has taken over the tower, and it's up to Link to deliver the eviction notice! Fight your way through this vertical puzzle platformer to the top to reach the unlawful moth and remove it from the tower to restore peace in the minds of the royal family! But be careful not to get hit by the monsters or you'll fall and have to climb up again.
 
 ## Personal Note
-This is my second full game. It's much better organized and has cleaner code. It is also nearing completion! I'm just making the level at this point (other than fixing bugs when I find them 🤫). When it's finished I will release it to my [itch.io](https://treadthedawngames.itch.io/).
+This is my second full game. It's much better organized and has cleaner code. It is also nearing completion! I'm just making the level at this point (other than fixing bugs when I find them 🤫). When it's finished I will release it to [my itch.io](https://treadthedawngames.itch.io/).
 
 This game was made for the purpose of learning the Godot engine in preparation for the GMTK Game Jam 2024. My team member had only used GameMaker up until we decided to do the jam, and I'd only used Unity. I'd tried GameMaker, but I didn't like the workflow. We decided on Godot for the engine because we both had interest in learning it, and that way neither one of us would be overwealmed learning a new engine. We'd both be :).
 
