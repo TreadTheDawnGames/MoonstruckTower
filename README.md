@@ -8,7 +8,7 @@ This is my second full game (see [Heavens Ablaze](http://sumrbrandr.github.io) a
 
 This game is nearing completion! I'm just making the level at this point (other than fixing bugs when I find them 🤫). When it's finished I will release it to [my itch.io](https://treadthedawngames.itch.io/).
 
-This game was made for the purpose of learning the Godot engine in preparation for the GMTK Game Jam 2024. My team member had only used GameMaker up until we decided to do the jam, and I'd only used Unity. I'd tried GameMaker, but I didn't like the workflow. We decided on Godot for the engine because we both had interest in learning it, and that way neither one of us would be overwealmed learning a new engine. We'd both be :).
+The purpose of project was to learn the Godot engine in preparation for the GMTK Game Jam 2024. My team member had only used GameMaker up until we decided to do the jam, and I'd only used Unity. I'd tried GameMaker, but I didn't like the workflow. We decided on Godot for the engine because we both had interest in learning it, and that way neither one of us would be overwealmed learning a new engine. We'd both be :).
 
 Getting hyped for GMTK! That project will be on itch when it's done.
 
