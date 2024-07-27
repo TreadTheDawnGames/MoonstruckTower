@@ -11,7 +11,7 @@ public partial class CameraSmoother : Camera2D
     
 
 
-        public override void _Ready()
+    public override void _Ready()
     {
 
         targetNode = GetNode<Node2D>(TargetNodepath);

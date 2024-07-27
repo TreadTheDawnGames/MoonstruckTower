@@ -12,9 +12,9 @@ public partial class BossOrb : Lock, ILock
 
     [Signal] public delegate void DamagedEventHandler();
 
-    public override void _Ready()
+    public override void SetUp()
     {
-        base._Ready();
+        base.SetUp();
         animator = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         animator.AnimationFinished += AnimatorEnd;
         currentHitPoints = maxHitPoints;

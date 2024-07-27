@@ -17,7 +17,10 @@ public partial class EnemySpawner : Node2D, ILock
     public IDoor door { get; set; }
     public CollisionShape2D shape { get; set; }
 
-    // Called when the node enters the scene tree for the first time.
+	// Called when the node enters the scene tree for the first time.
+	public void SetUp() {
+	}
+
     public override void _Ready()
 	{
 		

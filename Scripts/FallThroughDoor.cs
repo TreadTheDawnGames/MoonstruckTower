@@ -24,15 +24,9 @@ public partial class FallThroughDoor : Door
 
         if (visible)
         {
-            foreach(ILock locke in lockList)
-            {
-                locke.unlocked = true;
-            }
-            Close();
-            foreach(ILock locke in lockList)
-            {
-                locke.unlocked = false;
-            }
+            ToggleCollision();
+
+
         }
         base._Ready();
 
@@ -57,14 +51,18 @@ public partial class FallThroughDoor : Door
 
     public override bool Close()
     {
-       
+        //GD.Print("Called Close");
 
         if (!base.Close())
         {
             return false;
         }
 
-        ToggleCollision();
+        if (!opened)
+        {
+            ToggleCollision();
+
+        }
             
 
             
@@ -77,7 +75,7 @@ public partial class FallThroughDoor : Door
     {
         if (characterBody == null)
         {
-            GD.Print(Name);
+            GD.PrintErr(Name + " has no character body");
             return;
         }
 

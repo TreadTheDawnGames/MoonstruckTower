@@ -32,12 +32,12 @@ public partial class WallDoor : Door
             {
                 locke.unlocked = true;
             }
-            AttemptToOpen();
             foreach (Lock locke in lockList)
             {
                 locke.unlocked = false;
             }
         }
+            AttemptToOpen();
         animator.AnimationFinished += AnimationFinished;
     }
 
@@ -174,7 +174,7 @@ public partial class WallDoor : Door
             {
                 if (!animationOpen)
                 {
-                    animator.Play("Open");
+                    animator?.Play("Open");
                     animationOpen = true;
                 }
             }
@@ -182,7 +182,7 @@ public partial class WallDoor : Door
             {
                 if (animationOpen)
                 {
-                    animator.PlayBackwards("Open");
+                    animator?.PlayBackwards("Open");
                     animationOpen = false;
                 }
             }

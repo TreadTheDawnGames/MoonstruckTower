@@ -2,12 +2,13 @@ using Godot;
 using System;
 
 [Icon("res://Assets/Locks and Doors/Icons/EyeIcon.png")]
-public partial class LockEye : Lock
+public partial class LockEye : Lock, ILock
 {
 	AnimatedSprite2D sprite;
 	[Export] bool inverted = false;
-    public override void _Ready()
+    public override void SetUp()
     {
+		base.SetUp();
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         shape = GetNode<CollisionShape2D>("CollisionShape2D");
 

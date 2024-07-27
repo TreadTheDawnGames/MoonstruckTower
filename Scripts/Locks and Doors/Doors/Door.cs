@@ -20,11 +20,12 @@ public partial class Door : Node2D, IDoor
             {
                 locke.door = this;
                 lockList.Add(locke);
+                locke.SetUp();
             }
         }
         catch(Exception ex) 
         {
-            GD.PrintErr(Name + " is not assigned to a locklist");
+            GD.PrintErr(Name + " has no assigned locklist");
             GD.Print(ex.Message);
             GD.Print(ex.StackTrace);
         }
@@ -34,12 +35,18 @@ public partial class Door : Node2D, IDoor
 
     public override void _Ready()
     {
+        
         base._Ready();
+        
         AttemptToOpen();
+
+        
         /*if(GetParentOrNull<Door>() != null)
         {
             type = GateType.FORCED;
         }*/
+
+        
     }
 
     //rename to update door state
@@ -56,6 +63,7 @@ public partial class Door : Node2D, IDoor
                 locksUnlocked++;
             }
         }
+
 
         switch (type)
         {

@@ -178,7 +178,7 @@ shortWall = true
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -14)
 texture = ExtResource("1_ath2v")
-hframes = 10
+hframes = 12
 frame = 6
 
 [node name="CharacterBody2D" type="AnimatableBody2D" parent="."]

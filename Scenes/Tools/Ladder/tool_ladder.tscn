@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bw0h53cp0em5y"]
+[gd_scene load_steps=18 format=3 uid="uid://bw0h53cp0em5y"]
 
 [ext_resource type="Script" path="res://Scripts/Ladder.cs" id="1_oqf3g"]
 [ext_resource type="Texture2D" uid="uid://dypun32o7itq2" path="res://Assets/Ladder.png" id="2_dgesi"]
@@ -59,7 +59,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kdox1"]
-size = Vector2(12, 48)
+size = Vector2(12, 50)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r3bv5"]
 size = Vector2(12, 1)
@@ -68,7 +68,7 @@ size = Vector2(12, 1)
 size = Vector2(34.9925, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jclux"]
-size = Vector2(17, 11)
+size = Vector2(26, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bl384"]
 size = Vector2(12, 42)
@@ -79,6 +79,9 @@ size = Vector2(17, 7)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b1ymp"]
 size = Vector2(12, 48)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nf3is"]
+size = Vector2(6, 5)
+
 [node name="ToolLadder" type="RigidBody2D"]
 collision_layer = 4
 collision_mask = 65
@@ -87,10 +90,8 @@ script = ExtResource("1_oqf3g")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -24)
 sprite_frames = SubResource("SpriteFrames_sx6sj")
-animation = &"Despawn"
+animation = &"Idle"
 autoplay = "Idle"
-frame = 4
-frame_progress = 1.0
 
 [node name="ClimbableSurface" type="Area2D" parent="."]
 collision_layer = 4
@@ -100,16 +101,25 @@ collision_mask = 4
 position = Vector2(0, -24)
 shape = SubResource("RectangleShape2D_kdox1")
 
-[node name="Lid" type="StaticBody2D" parent="."]
-collision_layer = 5
-collision_mask = 4
+[node name="EndCaps" type="CharacterBody2D" parent="."]
+collision_layer = 2048
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Lid"]
-position = Vector2(0, -47.7)
+[node name="TopFloor" type="CollisionShape2D" parent="EndCaps"]
+position = Vector2(0, -48.5)
 shape = SubResource("RectangleShape2D_r3bv5")
+disabled = true
+one_way_collision = true
+
+[node name="BottomFloor" type="CollisionShape2D" parent="EndCaps"]
+position = Vector2(7.54979e-08, 0.5)
+rotation = -3.14159
+shape = SubResource("RectangleShape2D_r3bv5")
+disabled = true
 one_way_collision = true
 
 [node name="PickupArea" type="Area2D" parent="."]
+visible = false
 collision_layer = 4
 collision_mask = 4
 
@@ -133,6 +143,23 @@ position = Vector2(0, 3.5)
 shape = SubResource("RectangleShape2D_l6uvb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(-6.82121e-13, -24)
 rotation = -3.14159
 shape = SubResource("RectangleShape2D_b1ymp")
+
+[node name="UpCast" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 65
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpCast"]
+position = Vector2(0, -51)
+shape = SubResource("RectangleShape2D_nf3is")
+
+[node name="DownCast" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 65
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DownCast"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_nf3is")

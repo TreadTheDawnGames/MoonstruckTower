@@ -8,22 +8,22 @@ public partial class MoblinV3 : EnemyBase
 {
     
 
-    public override void _Ready()
-    {
-        base._Ready();
-        passiveHitBox.BodyEntered += (node) => CheckConfused(node);
-        animator.AnimationFinished += Activate;
+    
 
-    }
-    void Activate()
+    public override void Activate()
     {
         if (animator.Animation == "Spawn")
         {
-
-            active = true; 
-            machine.SetUp();
+            base.Activate();
+            passiveHitBox.BodyEntered += CheckConfused;
         }
+    }
 
+    public override void Destroy()
+    {
+        passiveHitBox.BodyEntered -= CheckConfused;
+
+        base.Destroy();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

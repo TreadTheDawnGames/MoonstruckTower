@@ -11,8 +11,9 @@ public partial class ButtonLock : Lock
     [Export] bool inverted = false;
 
     // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    public override void SetUp()
     {
+
         sprite = GetNode<Sprite2D>("Sprite2D");
         //unpressTimer = GetNode<Timer>("Timer");
         unlocked = inverted;

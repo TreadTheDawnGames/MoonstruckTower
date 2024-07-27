@@ -241,6 +241,7 @@ radius = 7.5
 radius = 0.0
 
 [node name="OctorokV2" type="CharacterBody2D"]
+z_index = 5
 collision_layer = 0
 collision_mask = 65
 script = ExtResource("1_2woma")
@@ -317,6 +318,7 @@ collision_mask = 65
 [node name="Flippables" type="Node2D" parent="."]
 
 [node name="HurtBox2D" type="Area2D" parent="Flippables"]
+visible = false
 collision_layer = 32
 collision_mask = 32
 script = ExtResource("11_cwpea")
@@ -327,6 +329,7 @@ position = Vector2(-1, 0.5)
 shape = SubResource("CircleShape2D_7shsc")
 
 [node name="PassiveHitBox2D" type="Area2D" parent="Flippables"]
+visible = false
 collision_layer = 0
 collision_mask = 8
 
@@ -335,6 +338,7 @@ position = Vector2(-1, 0.5)
 shape = SubResource("CircleShape2D_rcieo")
 
 [node name="PassiveHitBox2DDamager" type="Area2D" parent="Flippables/PassiveHitBox2D"]
+visible = false
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("12_3q4so")
@@ -345,6 +349,7 @@ position = Vector2(-1, 0.5)
 shape = SubResource("CircleShape2D_rcieo")
 
 [node name="HitBox2D" type="Area2D" parent="Flippables"]
+visible = false
 script = ExtResource("12_3q4so")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Flippables/HitBox2D"]

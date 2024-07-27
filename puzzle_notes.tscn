@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c5j6pvr4kowjw" path="res://Scenes/Doors and Locks/Doors/door_multi.tscn" id="4_kjm3v"]
 [ext_resource type="PackedScene" uid="uid://b6ku5ta6gbmki" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_3.tscn" id="5_kp0wu"]
 [ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/Locks/lock_button.tscn" id="6_viqh7"]
-[ext_resource type="PackedScene" uid="uid://b1j7yhdcvd5eu" path="res://Scenes/Enemies/enemy_spawner.tscn" id="7_3htso"]
+[ext_resource type="PackedScene" uid="uid://b1j7yhdcvd5eu" path="res://Scenes/Doors and Locks/Locks/enemy_spawner.tscn" id="7_3htso"]
 
 [node name="Puzzle Notes" type="Node2D"]
 

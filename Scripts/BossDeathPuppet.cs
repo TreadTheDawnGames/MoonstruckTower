@@ -34,8 +34,7 @@ public partial class BossDeathPuppet : CharacterBody2D
 
 	        yPosition = -(Mathf.Pow(dasCounter,2f));
 		}
-		GD.Print(counter / counterMax);
-		GD.Print(yPosition);
+		
 		/*yPosition = positionCurveY.SampleBaked(counterMax/counter++);
 		xPosition = positionCurveX.SampleBaked(xPosition);*/
 		Vector2 position = new Vector2(0, yPosition);

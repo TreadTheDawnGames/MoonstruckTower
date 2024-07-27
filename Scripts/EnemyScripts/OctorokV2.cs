@@ -15,25 +15,29 @@ public partial class OctorokV2 : EnemyBase
         projectileSpawnPoint = GetNode<Marker2D>("Flippables/Marker2D");
         shootTimer = GetNode<Timer>("ShootTimer");
         //passiveHitBox.BodyEntered += (node) => CheckConfused(node);
-        animator.AnimationFinished += Activate;
-        shootTimer.Timeout += ChargePellet;
     }
 
+    public override void Activate()
+    {
+        if (animator.Animation == "Spawn")
+        {
+            shootTimer.Timeout += ChargePellet;
+            GD.Print("started timer");
+
+        }
+        base.Activate();
+    }
     void ChargePellet()
     {
+        GD.Print("Charged");
         shootCharged = true;
     }
 
 
-    void Activate()
+    public override void Destroy()
     {
-        if (animator.Animation == "Spawn")
-        {
 
-            active = true;
-            machine.SetUp();
-        }
-
+        base.Destroy();
     }
     public override void _PhysicsProcess(double delta)
     {

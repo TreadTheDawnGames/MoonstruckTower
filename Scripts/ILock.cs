@@ -13,7 +13,7 @@ public interface ILock
 
     public void LockMe();
 
-
+    public void SetUp();
     public void SetActive(bool active);
     
 }

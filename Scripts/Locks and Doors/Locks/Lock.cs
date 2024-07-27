@@ -9,9 +9,9 @@ public partial class Lock : Area2D, ILock
     public IDoor door { get; set; }
     public CollisionShape2D shape { get; set; }
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public virtual void SetUp()
 	{
-		base._Ready();
+		
 		//sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		AreaEntered += (node) => UnlockMe(node);
         shape = GetNode<CollisionShape2D>("CollisionShape2D");

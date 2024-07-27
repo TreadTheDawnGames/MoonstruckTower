@@ -214,7 +214,7 @@ script = ExtResource("1_2hspi")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_8rr32")
-animation = &"Smile"
+animation = &"NoLadderWarning"
 autoplay = "Idle"
 
 [node name="HurtBox2D" type="Area2D" parent="."]

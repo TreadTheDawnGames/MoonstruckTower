@@ -14,7 +14,7 @@ public partial class EnemyBase : CharacterBody2D
     public RayCast2D edgeDetectR;
     public RayCast2D edgeDetectL;
     public bool canSee = false;
-    public CollisionShape2D hurtBox;
+    public HurtBox2D hurtBox;
     public CollisionShape2D collisionBox;
     public HitBox2D hitBox;
     public Area2D passiveHitBox;
@@ -58,11 +58,13 @@ public partial class EnemyBase : CharacterBody2D
         statusAnimator = GetNode<AnimatedSprite2D>("Animator/StatusAnimator");
         
         
-        hurtBox = GetNode<CollisionShape2D>(flippables.GetPath() + "/HurtBox2D/CollisionShape2D");
+        hurtBox = GetNode<HurtBox2D>(flippables.GetPath() + "/HurtBox2D");
                 visionCast = GetNode<RayCast2D>("VisionCast");
                 hitBox = GetNode<HitBox2D>("Flippables/HitBox2D");
                 passiveHitBox = GetNode<Area2D>("Flippables/PassiveHitBox2D");
 
+        hurtBox.SetEnabled(false);
+        
 
         if (display)
         {
@@ -75,15 +77,27 @@ public partial class EnemyBase : CharacterBody2D
         {
                 startingPosition = GlobalPosition;
                 animator.FlipH = GD.Randi() % 2 == 1 ? true : false;
+            Vector2 flipScale = new(animator.FlipH ? -1 : 1, 0);
+            flippables.Scale = flipScale;
                 link = (Player)GetTree().GetFirstNodeInGroup("Player");
             animator.Play("Spawn");
-            return;
         }
 
-       
+        animator.AnimationFinished += Activate;
 
 
-        
+
+    }
+    public virtual void Activate()
+    {
+        if (animator.Animation == "Spawn")
+        {
+            GD.Print("spawned");
+            active = true;
+            machine.SetUp();
+            hurtBox.SetEnabled(true);
+        }
+
     }
     protected void FlipDirection()
     {
@@ -113,7 +127,7 @@ public partial class EnemyBase : CharacterBody2D
         }
 
     }
-    public void Destroy()
+    public virtual void Destroy()
     {
         spawner.StartRespawnTimer();
         spawner.UnlockMe(null);

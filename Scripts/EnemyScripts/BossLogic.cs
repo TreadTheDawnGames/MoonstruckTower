@@ -218,7 +218,6 @@ public partial class BossLogic : CharacterBody2D
 
 		//body hits starts halfway
 
-		GD.Print(bodyHits);
 
 		Vector2 velocity = Velocity;
 		if (!flappable)
@@ -374,7 +373,6 @@ public partial class BossLogic : CharacterBody2D
 	} 
 	public void HeadBonk()
 	{
-		GD.Print("BONK!");
 		wakeUpTimer.WaitTime = 0.001f;
 		state = BodyState.Healthy;
 		LoseWing(BodyState.Healthy);
@@ -439,13 +437,11 @@ public partial class BossLogic : CharacterBody2D
 			{
 				if ((activeWing.GlobalPosition.X - GlobalPosition.X)>0)
 				{
-					GD.Print("RightSide");
 					flyPosition = FlyPosition.Left;
 				}
 				else if ((activeWing.GlobalPosition.X - GlobalPosition.X)<0)
 				{
 					flyPosition = FlyPosition.Right;
-					GD.Print("LeftSide");
 				}
 			}
 			
@@ -454,7 +450,6 @@ public partial class BossLogic : CharacterBody2D
 		}
 		else
 			{
-				GD.Print("NoWings");
 					flyPosition = FlyPosition.Center;
 			}
 		return false;

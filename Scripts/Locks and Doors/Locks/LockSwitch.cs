@@ -8,26 +8,20 @@ public partial class LockSwitch : Lock
     [Export] bool inverted = false;
     bool visualUnlocked = false;
     AnimatedSprite2D sprite;
-    public override void _Ready()
+
+    public override void SetUp()
     {
+        base.SetUp();
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
          
+           unlocked = inverted;
         base._Ready();
 
-        if (inverted)
-        {
-            visualUnlocked = false;
-            UnlockMe(null);
-        }
 
-        sprite.Play("Locked");
-        
+        //sprite.Play("Locked");
     }
 
-    public override void _PhysicsProcess(double delta)
-    {
-        base._PhysicsProcess(delta);
-    }
+ 
 
     public override void UnlockMe(Node2D node)
     {
@@ -72,9 +66,13 @@ public partial class LockSwitch : Lock
             }
         }
 
- unlocked = !unlocked;
+        unlocked = !unlocked;
         visualUnlocked = !visualUnlocked;
-        sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
+
+        
+
+            sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
+        
 
 
 
@@ -85,7 +83,7 @@ public partial class LockSwitch : Lock
         }
         catch (Exception ex)
         {
-            GD.PrintErr(Name + " has no assigned door");
+            GD.PrintErr(Name + " has no assigned door" + " | " + Owner.Name);
         }
         
         
