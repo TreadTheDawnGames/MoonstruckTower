@@ -7,13 +7,14 @@
 size = Vector2(64, 7)
 
 [node name="FallThruFour" type="Node2D"]
+z_index = -3
 script = ExtResource("1_031io")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_42geu")
 hframes = 2
 region_enabled = true
-region_rect = Rect2(96, 0, 128, 16)
+region_rect = Rect2(112, 0, 128, 16)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 1024

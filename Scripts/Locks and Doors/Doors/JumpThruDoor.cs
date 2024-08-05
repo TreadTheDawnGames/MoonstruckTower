@@ -67,7 +67,8 @@ public partial class JumpThruDoor : Door
                 staticBody.SetCollisionLayerValue(1, opened);
             collisionShape.SetDeferred("one_way_collision", !opened);
             sprite.Frame = opened ? 0 : 1;
-            
+            ZIndex = opened ? 0 : -3;
+
         }
         else
         {
@@ -75,6 +76,8 @@ public partial class JumpThruDoor : Door
             
             collisionShape.SetDeferred("one_way_collision", opened);
             sprite.Frame = opened ? 1 : 0;
+            ZIndex = opened ? -3 : 0;
+
         }
 
 

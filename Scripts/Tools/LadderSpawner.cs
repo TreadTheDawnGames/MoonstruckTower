@@ -20,9 +20,11 @@ public partial class LadderSpawner : Node2D, ITool
     Area2D ladderGrabber;
     Area2D roofSpawnCheck;
     Area2D wallSpawnCheck;
+    Area2D edgeSpawnCheck;
+
     PackedScene ladderScene;
-    Marker2D ladderSpawnpoint;
-    Marker2D ladderSpawnpoint2;
+    Marker2D farLadderSpawnpoint;
+    Marker2D nearLadderSpawnpoint;
 
     public bool canUse = true;
 
@@ -33,10 +35,11 @@ public partial class LadderSpawner : Node2D, ITool
 	{
         ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
         ladderGrabber = GetNode<Area2D>("LadderGrabber");
-        ladderSpawnpoint = GetNode<Marker2D>("LadderSpawnpoint");
-        ladderSpawnpoint2 = GetNode<Marker2D>("LadderSpawnpoint2");
+        farLadderSpawnpoint = GetNode<Marker2D>("FarSpawn");
+        nearLadderSpawnpoint = GetNode<Marker2D>("NearSpawn");
         roofSpawnCheck = GetNode<Area2D>("RoofCheck");
         wallSpawnCheck = GetNode<Area2D>("WallCheck");
+        edgeSpawnCheck = GetNode<Area2D>("EdgeCheck");
         
 	}
 
@@ -61,7 +64,6 @@ public partial class LadderSpawner : Node2D, ITool
 
     public void Use(Vector2 direction)
     {
-       
 
             animating = true;
             linkSprite.Play("LadderPlace");
@@ -108,9 +110,21 @@ public partial class LadderSpawner : Node2D, ITool
         }
         else
         {
-            if(!roofSpawnCheck.HasOverlappingBodies())
+            if (!roofSpawnCheck.HasOverlappingBodies())
+            {
+                GD.Print("Placing");
+
                 PlaceLadder();
 
+            }
+            else
+            {
+                GD.Print("Not Placing due to overhead bodies: ");
+                foreach (Node2D body in roofSpawnCheck.GetOverlappingBodies())
+                {
+                    GD.Print(body.Name);
+                }
+            }
         }
     }
     private void PickupLadder(Ladder ladder)
@@ -125,13 +139,23 @@ public partial class LadderSpawner : Node2D, ITool
 
         Ladder ladder = ladderScene.Instantiate<Ladder>();
 
-        if (!wallSpawnCheck.HasOverlappingBodies())
+
+        if (edgeSpawnCheck.HasOverlappingBodies())
         {
-            ladder.GlobalPosition = ladderSpawnpoint.GlobalPosition;
+
+            if (!wallSpawnCheck.HasOverlappingBodies())
+            {
+                ladder.GlobalPosition = farLadderSpawnpoint.GlobalPosition;
+            }
+            else
+            {
+                ladder.GlobalPosition = nearLadderSpawnpoint.GlobalPosition;
+
+            }
         }
         else
         {
-            ladder.GlobalPosition = ladderSpawnpoint2.GlobalPosition;
+            ladder.GlobalPosition = nearLadderSpawnpoint.GlobalPosition;
 
         }
 

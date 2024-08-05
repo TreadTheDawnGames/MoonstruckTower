@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://cu3dkujga8gcn"]
+[gd_scene load_steps=67 format=3 uid="uid://cu3dkujga8gcn"]
 
 [ext_resource type="Texture2D" uid="uid://btgy5agxy3d2h" path="res://Assets/LinkAnimations/Link.png" id="1_s8cc8"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_x0gvu"]
@@ -12,7 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://di1pn02xfxovi" path="res://Assets/LinkAnimations/LinkBowWalk.png" id="6_mm0si"]
 [ext_resource type="Texture2D" uid="uid://cgpt33cbs3yrc" path="res://Assets/LinkAnimations/LinkBowVert.png" id="7_c37ub"]
 [ext_resource type="Texture2D" uid="uid://bgv1pfa45mf74" path="res://Assets/LinkAnimations/LinkPlaceLadder.png" id="10_ki7hp"]
-[ext_resource type="PackedScene" uid="uid://detdm2r8imhmx" path="res://Scenes/Tools/Ladder/ladder_spawner.tscn" id="13_fk4aq"]
+[ext_resource type="PackedScene" uid="uid://detdm2r8imhmx" path="res://Scenes/Tools/Ladder/ladder_spawner.tscn" id="13_gtgiv"]
+[ext_resource type="PackedScene" uid="uid://bkkw6362t6vol" path="res://Scenes/Tools/Bow/bow.tscn" id="14_prsh2"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="14_uuvc3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ydce0"]
@@ -431,7 +432,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qbe5h"]
-size = Vector2(8, 14)
+size = Vector2(8, 16)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_teyai"]
 radius = 13.4536
@@ -466,7 +467,6 @@ frame = 4
 frame_progress = 1.0
 
 [node name="LinkCollider" type="CollisionShape2D" parent="."]
-position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_qbe5h")
 debug_color = Color(0, 1, 0, 0.419608)
 
@@ -474,38 +474,65 @@ debug_color = Color(0, 1, 0, 0.419608)
 process_callback = 0
 one_shot = true
 
-[node name="Flippables" type="Node2D" parent="."]
+[node name="HitBoxL" type="Area2D" parent="."]
 visible = false
-
-[node name="HitBox" type="Area2D" parent="Flippables"]
 collision_layer = 0
 collision_mask = 288
 script = ExtResource("4_16p3j")
 layers = 288
 
-[node name="HitShape" type="CollisionShape2D" parent="Flippables/HitBox"]
+[node name="HitShape" type="CollisionShape2D" parent="HitBoxL"]
 position = Vector2(-9, -6)
 rotation = 0.785398
 shape = SubResource("CircleShape2D_teyai")
 disabled = true
 
-[node name="HitBoxAir" type="Area2D" parent="Flippables"]
+[node name="HitBoxAirL" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 288
 script = ExtResource("4_16p3j")
 layers = 288
 
-[node name="Right" type="CollisionShape2D" parent="Flippables/HitBoxAir"]
+[node name="Right" type="CollisionShape2D" parent="HitBoxAirL"]
 position = Vector2(-11, 0)
 shape = SubResource("CapsuleShape2D_fvajs")
 disabled = true
 
+[node name="HitBoxR" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 288
+script = ExtResource("4_16p3j")
+layers = 288
+
+[node name="HitShape" type="CollisionShape2D" parent="HitBoxR"]
+position = Vector2(9, -6)
+rotation = 0.785398
+shape = SubResource("CircleShape2D_teyai")
+disabled = true
+
+[node name="HitBoxAirR" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 288
+script = ExtResource("4_16p3j")
+layers = 288
+
+[node name="Right" type="CollisionShape2D" parent="HitBoxAirR"]
+position = Vector2(11, 0)
+shape = SubResource("CapsuleShape2D_fvajs")
+disabled = true
+
+[node name="Flippables" type="Node2D" parent="."]
+
 [node name="Toolbag" type="Node2D" parent="Flippables"]
 
-[node name="LadderSpawner" parent="Flippables/Toolbag" instance=ExtResource("13_fk4aq")]
+[node name="LadderSpawner" parent="Flippables/Toolbag" instance=ExtResource("13_gtgiv")]
+
+[node name="Bow" parent="Flippables/Toolbag" instance=ExtResource("14_prsh2")]
 
 [node name="FloorCheck" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 
 [node name="FloorCheckShape" type="CollisionShape2D" parent="FloorCheck"]
@@ -515,10 +542,10 @@ shape = SubResource("SegmentShape2D_8fi5b")
 
 [node name="HurtBox2D" type="Area2D" parent="."]
 visible = false
-collision_layer = 2
-collision_mask = 0
+collision_layer = 0
+collision_mask = 130
 script = ExtResource("14_uuvc3")
-layers = 2
+layers = 130
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox2D"]
 position = Vector2(0, 0.5)

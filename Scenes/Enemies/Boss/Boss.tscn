@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://djh07rnu37o72"]
+[gd_scene load_steps=28 format=3 uid="uid://djh07rnu37o72"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/BossLogic.cs" id="1_ou4oa"]
 [ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="1_uab8f"]
@@ -186,8 +186,18 @@ radius = 8.00174
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lpvga"]
 size = Vector2(10.6667, 12)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r7y3w"]
+size = Vector2(60, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rettr"]
+size = Vector2(60, 1.33326)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v8042"]
+radius = 6.0
+height = 26.6667
+
 [node name="Boss" type="CharacterBody2D"]
-z_index = -1
+z_index = -3
 scale = Vector2(1.5, 1.5)
 collision_layer = 1024
 collision_mask = 1537
@@ -232,7 +242,7 @@ shape = SubResource("CapsuleShape2D_pcqk8")
 one_shot = true
 
 [node name="WakeUpTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 3.0
 one_shot = true
 
 [node name="HitBox2D" type="Area2D" parent="."]
@@ -261,3 +271,25 @@ collision_mask = 512
 position = Vector2(-3.5, 0)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_pcqk8")
+
+[node name="ArrowDetectorArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArrowDetectorArea"]
+position = Vector2(-6.35783e-07, 26.6667)
+shape = SubResource("RectangleShape2D_r7y3w")
+
+[node name="ArrowBlocker" type="CharacterBody2D" parent="."]
+collision_layer = 4096
+collision_mask = 4096
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArrowBlocker"]
+position = Vector2(1.43051e-06, 15.3334)
+rotation = 3.14159
+shape = SubResource("RectangleShape2D_rettr")
+disabled = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="ArrowBlocker"]
+position = Vector2(0, 3.33333)
+shape = SubResource("CapsuleShape2D_v8042")

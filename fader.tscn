@@ -72,8 +72,10 @@ _data = {
 }
 
 [node name="Fader" type="ColorRect"]
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_left = -73.0
+offset_top = -71.0
+offset_right = 1223.0
+offset_bottom = 741.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 script = ExtResource("1_fyw8l")

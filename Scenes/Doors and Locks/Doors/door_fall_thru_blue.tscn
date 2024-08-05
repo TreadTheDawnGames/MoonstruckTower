@@ -7,8 +7,8 @@
 size = Vector2(64, 7)
 
 [node name="Door_FallThrough" type="Node2D"]
+z_index = -3
 script = ExtResource("1_ih6cb")
-layer = 7
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_mcdm8")

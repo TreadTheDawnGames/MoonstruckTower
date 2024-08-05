@@ -24,6 +24,10 @@ public partial class BossLogic : CharacterBody2D
 	int wingCount;
 	int originalWingCount;
 
+	Area2D arrowDetector;
+	CollisionShape2D arrowBlocker;
+	CollisionShape2D bodyArrowBlocker;
+
 	[Export] NodePath signalLockPath;
 	SignalLock signalLock;
 
@@ -32,7 +36,8 @@ public partial class BossLogic : CharacterBody2D
 	[Export] int bossFloorHeight = -207;
 
 	[Export] int wakeUpHeight = 112;
-
+	[Export] int maxLeft;
+	[Export] int maxRight;
 
 	bool queueTimer = false;
 	int driftDirection;
@@ -77,6 +82,13 @@ public partial class BossLogic : CharacterBody2D
 		finalHurtBox = GetNode<HurtBox2D>("FinalHurtBox");
 		deathZoneDetector = GetNode<Area2D>("DeathZoneDetector");
 		activationZone = GetNode<Area2D>("../ActivationZone");
+		arrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D");
+		bodyArrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D2");
+		arrowDetector = GetNode<Area2D>("ArrowDetectorArea");
+
+		arrowDetector.BodyEntered += (node) => BlockArrow(true);
+		arrowDetector.BodyExited += (node) => BlockArrow(false);
+
 		wakeUpTimer.Timeout += WakeUp;
 
 		animator.AnimationFinished += AnimationFinished;
@@ -99,6 +111,14 @@ public partial class BossLogic : CharacterBody2D
 
 		activationZone.BodyEntered += ActivateBoss;
 		hitsToFinalTakeDown--;
+	}
+
+	void BlockArrow(bool block)
+	{
+		if (active)
+		{
+			arrowBlocker.SetDeferred("disabled", !block);
+		}
 	}
 
 	void Flap()
@@ -273,18 +293,18 @@ public partial class BossLogic : CharacterBody2D
 			else
 			{
 
-				if (Position.X < -31)
+				if (Position.X < maxLeft)
 				{
 					driftDirection = 1;
 				}
-				else if (Position.X > 31)
+				else if (Position.X > maxRight)
 				{
 					driftDirection = -1;
 				}
 
 
 
-				if (Position.X < -32 || Position.X > 32)
+				if (Position.X < maxLeft-1 || Position.X > maxRight+1)
 				{
 					driftDirection *= 4;
 					//Flap();
@@ -381,7 +401,7 @@ public partial class BossLogic : CharacterBody2D
 	void FinalDeath()
 	{
         BossDeathPuppet puppet = deathPuppet.Instantiate<BossDeathPuppet>();
-        puppet.Position = Position;
+        puppet.GlobalPosition = GlobalPosition;
         GetTree().Root.AddChild(puppet);
 		signalLock.Unlock();
         QueueFree();
@@ -460,6 +480,7 @@ public partial class BossLogic : CharacterBody2D
         finalPhase = true;
         finalHurtBox.SetEnabled(true);
 		state = BodyState.Targetable;
+		bodyArrowBlocker.SetDeferred("disabled", true);
     }
 
 	void ActivateBoss(Node2D node)

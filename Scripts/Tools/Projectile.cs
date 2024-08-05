@@ -12,8 +12,8 @@ public partial class Projectile : CharacterBody2D
 	[Export] public Vector2 shootDirection;
 	[Export] bool destroyOnContact = false;
 	Area2D collisionBox;
-    HitBox2D hitBox;
-	bool fallDown = false;
+    protected HitBox2D hitBox;
+	protected bool fallDown = false;
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
     // Called when the node enters the scene tree for the first time.
@@ -43,7 +43,7 @@ public partial class Projectile : CharacterBody2D
 		//CallDeferred("reparent", node);
        // collisionBox.GetChild<CollisionShape2D>(0).SetDeferred("disabled", true);
 		hitBox.SetEnabled(false);
-
+		
         Velocity = Vector2.Zero;
 		speed = 0;
 		
@@ -75,7 +75,7 @@ public partial class Projectile : CharacterBody2D
 		if (fallDown)
 		{
 			Rotation = Mathf.DegToRad(-90);
-            velo.Y += 100;
+            velo.Y += 120;
 		}
 
 		Velocity = velo;

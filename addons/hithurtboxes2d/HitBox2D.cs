@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class HitBox2D : Area2D
 {
@@ -16,7 +17,7 @@ public partial class HitBox2D : Area2D
 
         List<CollisionShape2D> nodes = new List<CollisionShape2D>();
 
-        foreach (CollisionShape2D child in GetChildren())
+        foreach (CollisionShape2D child in GetChildren().OfType<CollisionShape2D>())
         {
                 nodes.Add(child);
         }

@@ -8,7 +8,8 @@ public partial class BossWing : Door, IDoor
 	BossLogic logic;
 	AnimatedSprite2D animator;
 
-	bool openedThisFrame = false;
+
+    bool openedThisFrame = false;
 
 	public enum WingState { Healthy, Targetable, Dead}
 	public WingState state = WingState.Healthy;
@@ -25,14 +26,17 @@ public partial class BossWing : Door, IDoor
 		animator = GetNode<AnimatedSprite2D>("Animator");
 		animator.AnimationFinished += AnimationFinished;
 		logic = (BossLogic)Owner;
-		//animator.Play("Full"+state.ToString());
-		foreach(BossOrb eye in GetChildren().OfType<BossOrb>())
+
+
+        //animator.Play("Full"+state.ToString());
+        foreach (BossOrb eye in GetChildren().OfType<BossOrb>())
 		{
 			eye.door = this;
 		}
 	}
 
-	void AnimationFinished()
+   
+    void AnimationFinished()
 	{
 		string myState = state.ToString();
 		if(state.ToString().Contains("Dead"))

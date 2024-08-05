@@ -87,7 +87,8 @@ public partial class WallDoor : Door
                 else
                 {
                     direction = Mathf.Sign(link.GlobalPosition.X - GlobalPosition.X);
-
+                    if (direction == 0)
+                        direction = 1;
                 }
 
                 int y = 10;

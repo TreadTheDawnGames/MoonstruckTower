@@ -63,7 +63,7 @@ public partial class EnemyBase : CharacterBody2D
                 hitBox = GetNode<HitBox2D>("Flippables/HitBox2D");
                 passiveHitBox = GetNode<Area2D>("Flippables/PassiveHitBox2D");
 
-        hurtBox.SetEnabled(false);
+       // hurtBox.SetEnabled(false);
         
 
         if (display)

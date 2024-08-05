@@ -1,9 +1,10 @@
 using Godot;
 using System;
 
-public partial class BossButtonSwitch : ButtonLock
+public partial class BossButtonSwitch : Lock, ILock/*ButtonLock*/
 {
     Timer timer;
+    Sprite2D sprite;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {

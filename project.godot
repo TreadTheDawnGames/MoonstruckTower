@@ -126,6 +126,7 @@ Debug-TimeSlowToggle={
 2d_physics/layer_10="BossDeathZone"
 2d_physics/layer_11="Boss"
 2d_physics/layer_12="LadderFloor"
+2d_physics/layer_13="ArrowBlocker"
 
 [rendering]
 

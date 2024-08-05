@@ -19,14 +19,24 @@ public partial class CameraSmoother : Camera2D
 
     public override void _Process(double delta)
     {
-        Vector2 cameraPosition;
-        cameraPosition.X = Mathf.Lerp(GlobalPosition.X, targetNode.GlobalPosition.X, lerpSpeedX);
-        
-            cameraPosition.Y = Mathf.Lerp(GlobalPosition.Y, targetNode.GlobalPosition.Y, lerpSpeedY);
-        
-        
+        try
+        {
 
-        GlobalPosition = cameraPosition;
+
+            Vector2 cameraPosition;
+            cameraPosition.X = Mathf.Lerp(GlobalPosition.X, targetNode.GlobalPosition.X, lerpSpeedX);
+
+            cameraPosition.Y = Mathf.Lerp(GlobalPosition.Y, targetNode.GlobalPosition.Y, lerpSpeedY);
+
+
+
+        
+            GlobalPosition = cameraPosition;
+        }
+        catch 
+        {
+
+        }
     }
 
 

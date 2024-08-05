@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class Sign : Area2D
 {
-	[Export] string content;
+	//[Export] string content;
 	RichTextLabel text;
 	Panel panel;
 	// Called when the node enters the scene tree for the first time.
@@ -17,7 +17,7 @@ public partial class Sign : Area2D
 		text = GetNode<RichTextLabel>("Panel/RichTextLabel");
 
 
-		text.Text = content;
+		//text.Text = content;
 	
 		panel.Hide();
 	}

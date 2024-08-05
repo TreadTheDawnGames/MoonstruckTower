@@ -17,12 +17,13 @@ size = Vector2(4, 1)
 z_index = -1
 z_as_relative = false
 collision_layer = 128
+collision_mask = 4097
 script = ExtResource("1_m65hw")
 speed = 250.0
 
 [node name="HitBox2D" type="Area2D" parent="."]
-collision_layer = 130
-collision_mask = 2
+collision_layer = 0
+collision_mask = 162
 script = ExtResource("2_uvvdu")
 layers = 162
 
@@ -47,7 +48,7 @@ one_way_collision_margin = 10.2
 
 [node name="CollisionBox" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 17
+collision_mask = 4097
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionBox"]
 position = Vector2(-5, -0.5)

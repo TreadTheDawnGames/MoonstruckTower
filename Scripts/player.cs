@@ -17,8 +17,10 @@ public partial class Player : CharacterBody2D
 
     AnimatedSprite2D animator;
     Timer coyoteTimer;
-    HitBox2D attackHitbox;
-    HitBox2D attackHitboxAir;
+    HitBox2D attackHitboxL;
+    HitBox2D attackHitboxAirL;
+    HitBox2D attackHitboxR;
+    HitBox2D attackHitboxAirR;
 
 
     CollisionShape2D linkCollider;
@@ -73,8 +75,13 @@ public partial class Player : CharacterBody2D
         animator = (AnimatedSprite2D)GetNode(new NodePath("AnimatedSprite2D"));
         coyoteTimer = (Timer)GetNode(new NodePath("CoyoteTimer"));
         coyoteTimer.WaitTime = coyoteFrames / 60.0;
-        attackHitbox = (HitBox2D)GetNode(new NodePath("Flippables/HitBox"));
-        attackHitboxAir = (HitBox2D)GetNode(new NodePath("Flippables/HitBoxAir"));
+        
+        attackHitboxL = (HitBox2D)GetNode(new NodePath("HitBoxL"));
+        attackHitboxAirL = (HitBox2D)GetNode(new NodePath("HitBoxAirL"));
+        attackHitboxR = (HitBox2D)GetNode(new NodePath("HitBoxR"));
+        attackHitboxAirR = (HitBox2D)GetNode(new NodePath("HitBoxAirR"));
+       
+        
         linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
         damageTimer = GetNode<Timer>("DamageTimer");
         toolBoxDisplay = (TextureRect)GetTree().GetFirstNodeInGroup("ToolBoxDisplay");
@@ -83,7 +90,7 @@ public partial class Player : CharacterBody2D
 
         cameraDefaultPosition = cameraTrolley.Position;
         cameraDownPosition = cameraTrolley.Position;
-        cameraDownPosition.Y += 48 ;
+        cameraDownPosition.Y += 96 ;
 //        cameraUpPosition.Y -= 72 ;
 
 
@@ -110,8 +117,10 @@ public partial class Player : CharacterBody2D
             attacking = false;
             flippedSwitchThisAnimation = false;
 
-                attackHitbox.SetEnabled(false);
-                attackHitboxAir.SetEnabled(false);
+                attackHitboxL.SetEnabled(false);
+                attackHitboxAirL.SetEnabled(false);
+                attackHitboxR.SetEnabled(false);
+                attackHitboxAirR.SetEnabled(false);
 
             
         }
@@ -171,13 +180,26 @@ public partial class Player : CharacterBody2D
 
             if (animator.Animation == new StringName("Attack") || animator.Animation == new StringName("AttackWalk"))
             {
-                attackHitbox.SetEnabled(true);
-
+                if (flipped)
+                {
+                    attackHitboxR.SetEnabled(true);
+                }
+                else
+                {
+                    attackHitboxL.SetEnabled(true);
+                }
             }
 
             if (animator.Animation == "AttackAir" || animator.Animation == "AttackLadder")
             {
-                attackHitboxAir.SetEnabled(true);
+                if(flipped)
+                {
+                    attackHitboxAirR.SetEnabled(true);
+                }
+                else
+                {
+                    attackHitboxAirL.SetEnabled(true);
+                }
 
 
             }
@@ -262,51 +284,40 @@ public partial class Player : CharacterBody2D
         {
             jumping = true;
             GlobalPosition += new Vector2(0, 2);
+            //cameraPanDownCounter = 0;
         }
     }
 
     void HandleCamera(Vector2 direction)
     {
-        //Use count UP not Timer
-        //if(direction.Y > 0)
-        //counter++
-        //else
-        //counter=0
-
-        //if(counter>=cameraWaitTime)
-        //cameraLookLocation = lower
-        //else 
-        //cameraLookLocation = normal
-
+       
+        //if down control is held count up
         if (direction.Y > 0 )
         {
             cameraPanDownCounter++;
         }
-        /*else if(direction.Y < 0 && !onLadder)
-        {
-            cameraPanDownCounter--;
-        }*/
+        //otherwise don't
         else
         {
             cameraPan = false;
             cameraPanDownCounter = 0;
         }
 
+        //if the counter is done move the camera down
         if ( cameraPanDownCounter > 20)
         {
-            cameraTrolley.Position = cameraDownPosition;
-            camera.PositionSmoothingSpeed = 2.5f;
-        }
-        /*else if (cameraPanDownCounter < -50 && !onLadder )
-        {
-            cameraTrolley.Position = cameraUpPosition;
-            camera.PositionSmoothingSpeed = 2.5f;
+            cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDownPosition, camSmoothY);
 
-        }*/
+            //cameraTrolley.Position = cameraDownPosition;
+            //cameraTrolley.Position = cameraDownPosition;
+           // camera.lerpSpeedY=camSmoothY;
+        }
+        
         else
         {
-                cameraTrolley.Position = cameraDefaultPosition;
+                cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDefaultPosition, camSmoothY);
             
+            //this makes it so the camera keeps up if you fall infinitely
             if(Velocity.Y > 0)
             {
                 fallTimeCounter++;
@@ -321,11 +332,7 @@ public partial class Player : CharacterBody2D
             }
            
 
-                /*else
-                {
-                    camera.lerpSpeedY = camSmooth;
-                }*/
-            
+               
 
         }
 
@@ -365,8 +372,9 @@ public partial class Player : CharacterBody2D
         if (IsOnFloor() && animator.Animation == "AttackAir")
         {
             attacking = false;
-            attackHitboxAir.SetEnabled(false);
-
+            attackHitboxAirL.SetEnabled(false);
+            attackHitboxAirR.SetEnabled(false);
+            flippedSwitchThisAnimation = false;
 
             //because the attack is canceled
         }

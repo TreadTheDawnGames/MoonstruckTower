@@ -7,7 +7,6 @@
 size = Vector2(96, 7)
 
 [node name="Door-JumpThruLong" type="Node2D"]
-z_index = -1
 script = ExtResource("1_tgkg1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
