@@ -222,16 +222,17 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sofpr"]
-resource_local_to_scene = true
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5nk1g"]
 resource_local_to_scene = true
 radius = 5.0
 height = 16.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wldy1"]
-radius = 7.01783
+radius = 7.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sofpr"]
+resource_local_to_scene = true
+radius = 8.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mb820"]
 radius = 5.0
@@ -308,15 +309,6 @@ collision_mask = 65
 
 [node name="Flippables" type="Node2D" parent="."]
 
-[node name="HurtBox2D" type="Area2D" parent="Flippables"]
-collision_layer = 0
-collision_mask = 32
-script = ExtResource("10_fke7u")
-layers = 32
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Flippables/HurtBox2D"]
-shape = SubResource("CircleShape2D_sofpr")
-
 [node name="HitBox2D" type="Area2D" parent="Flippables"]
 visible = false
 collision_layer = 0
@@ -346,6 +338,15 @@ layers = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Flippables/PassiveHitBox2D/PassiveHitBox2DDamager"]
 position = Vector2(-1, 0.5)
 shape = SubResource("CircleShape2D_wldy1")
+
+[node name="HurtBox2D" type="Area2D" parent="Flippables"]
+collision_layer = 0
+collision_mask = 32
+script = ExtResource("10_fke7u")
+layers = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Flippables/HurtBox2D"]
+shape = SubResource("CircleShape2D_sofpr")
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)

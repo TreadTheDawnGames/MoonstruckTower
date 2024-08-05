@@ -432,7 +432,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qbe5h"]
-size = Vector2(8, 16)
+size = Vector2(8, 15)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_teyai"]
 radius = 13.4536
@@ -467,6 +467,7 @@ frame = 4
 frame_progress = 1.0
 
 [node name="LinkCollider" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_qbe5h")
 debug_color = Color(0, 1, 0, 0.419608)
 

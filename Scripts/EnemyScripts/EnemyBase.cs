@@ -77,7 +77,7 @@ public partial class EnemyBase : CharacterBody2D
         {
                 startingPosition = GlobalPosition;
                 animator.FlipH = GD.Randi() % 2 == 1 ? true : false;
-            Vector2 flipScale = new(animator.FlipH ? -1 : 1, 0);
+            Vector2 flipScale = new Vector2(animator.FlipH ? -1 : 1, 1);
             flippables.Scale = flipScale;
                 link = (Player)GetTree().GetFirstNodeInGroup("Player");
             animator.Play("Spawn");
