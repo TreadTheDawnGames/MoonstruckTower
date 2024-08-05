@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://df51jpjla8u7e"]
+
+[ext_resource type="Script" path="res://Scripts/BossOrb.cs" id="1_ib1sj"]
+[ext_resource type="SpriteFrames" uid="uid://cq58vduqbkmwh" path="res://Scenes/Enemies/Boss/BossOrb.tres" id="2_mi5hv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m7uvw"]
+resource_local_to_scene = true
+radius = 4.0
+
+[node name="BossEye" type="Area2D"]
+collision_layer = 0
+collision_mask = 128
+script = ExtResource("1_ib1sj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_mi5hv")
+animation = &"Healthy"
+autoplay = "Healthy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_m7uvw")

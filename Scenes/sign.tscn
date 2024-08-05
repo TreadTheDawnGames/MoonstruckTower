@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvm7cr6i0tmsg"]
+
+[ext_resource type="Texture2D" uid="uid://dr2tm1iuukxfa" path="res://Assets/WorldTiles/Signs.png" id="1_7w7uf"]
+[ext_resource type="Script" path="res://Scripts/Sign.cs" id="1_tlkv4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_accg2"]
+size = Vector2(30, 13)
+
+[node name="Sign" type="Area2D"]
+collision_layer = 0
+collision_mask = 10
+script = ExtResource("1_tlkv4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_7w7uf")
+hframes = 6
+vframes = 3
+frame = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_accg2")

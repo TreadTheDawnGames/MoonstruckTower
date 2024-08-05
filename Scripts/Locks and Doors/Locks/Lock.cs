@@ -1,46 +1,65 @@
 using Godot;
 using System;
 
-public partial class Lock : Area2D
+[Icon("res://Assets/Locks and Doors/Icons/LockIcon.png")]
+public partial class Lock : Area2D, ILock
 {
-    public bool unlocked;
-    protected Door door;
-	protected AnimatedSprite2D sprite;
-    protected AudioStreamPlayer2D audioPlayer;
+    [Export]
+    public bool unlocked { get; set; } = false;
+    public IDoor door { get; set; }
+    public CollisionShape2D shape { get; set; }
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public virtual void SetUp()
 	{
-		base._Ready();
-		sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-        audioPlayer = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
-		AreaEntered += (node) => UnlockMe();
+		
+		//sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		AreaEntered += (node) => UnlockMe(node);
+        shape = GetNode<CollisionShape2D>("CollisionShape2D");
 	}
 
-    public override void _EnterTree()
-    {
-        base._Ready();
-        door = GetParent<Door>();
-        door.lockList.Add(this);
-    }
+    
 
-    protected virtual void UnlockMe()
+    public virtual void UnlockMe(Node2D node)
     {
+
+            
+        
         if(unlocked == true)
         {
             return ;
         }
         unlocked = true;
-        door.Open();
+        try
+        {
+            door.AttemptToOpen();
+        }
+        catch
+        {
+            GD.PrintErr(Name + " does not have an assigned door");
+        }
     }
     
-    protected virtual void LockMe()
+    public virtual void LockMe()
     {
-        if(unlocked == false)
+        
+        if (unlocked == false)
         {
             return ;
         }
         unlocked = false;
-        door.Close();
+        try
+        {
+            door.AttemptToOpen();
+        }
+        catch
+        {
+            GD.PrintErr(Name + " does not have an assigned door");
+        }
     }
     
+    public void SetActive(bool active)
+    {
+        shape.SetDeferred("disabled", !active);
+    }
+
 }

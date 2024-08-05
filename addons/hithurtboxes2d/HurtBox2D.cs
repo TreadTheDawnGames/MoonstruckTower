@@ -5,16 +5,21 @@ public partial class HurtBox2D : Area2D
 {
 
     [Export] public uint layers;
+    CollisionShape2D collisionShape;
 
     public override void _Ready()
     {
         CollisionLayer = 0;
         CollisionMask = layers;
         AreaEntered += (AreaEntered) => OnAreaEntered(AreaEntered);
+        collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
     }
 
     
-   
+   public void SetEnabled(bool enabled)
+    {
+        collisionShape.SetDeferred("disabled", !enabled);
+    }
 
 
 

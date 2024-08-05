@@ -1,0 +1,86 @@
+[gd_scene load_steps=12 format=3 uid="uid://bj5wg213wrdmu"]
+
+[ext_resource type="PackedScene" uid="uid://0axl161yeqcm" path="res://Scenes/projectile.tscn" id="1_uq2f8"]
+[ext_resource type="Texture2D" uid="uid://tlw81eomfwmr" path="res://Assets/Enemy Sprites/OctorokPellet.png" id="2_khl25"]
+[ext_resource type="Script" path="res://Scripts/EnemyScripts/OctorokPellet.cs" id="2_rlfj8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_noa4y"]
+atlas = ExtResource("2_khl25")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r44ka"]
+atlas = ExtResource("2_khl25")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4fyt3"]
+atlas = ExtResource("2_khl25")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hech"]
+atlas = ExtResource("2_khl25")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qfk5c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_noa4y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r44ka")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4fyt3")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"Destroy",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hech")
+}],
+"loop": true,
+"name": &"Full",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ltydi"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m1li0"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oxcrq"]
+radius = 4.0
+
+[node name="OktoPellet" instance=ExtResource("1_uq2f8")]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("2_rlfj8")
+speed = 250.0
+destroyOnContact = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_qfk5c")
+animation = &"Destroy"
+autoplay = "Full"
+
+[node name="HitBox2D" parent="." index="1"]
+layers = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox2D" index="0"]
+shape = SubResource("CircleShape2D_ltydi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+shape = SubResource("CircleShape2D_m1li0")
+disabled = true
+
+[node name="CollisionBox" type="Area2D" parent="." index="4"]
+collision_layer = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionBox" index="0"]
+shape = SubResource("CircleShape2D_oxcrq")

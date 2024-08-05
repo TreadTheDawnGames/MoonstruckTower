@@ -1,9 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://dril5bi3h5s0p"]
 
-[ext_resource type="Script" path="res://LockSwitch.cs" id="1_g3oqo"]
-[ext_resource type="Texture2D" uid="uid://c21igfq0amnaq" path="res://Assets/LockSwitch.png" id="2_j7yab"]
-[ext_resource type="AudioStream" uid="uid://ix40tkd4y4a8" path="res://Assets/Sounds/Locks and Doors/Locks/SwitchFlipClose.wav" id="2_mbdv1"]
-[ext_resource type="AudioStream" uid="uid://pgpx01go8w2" path="res://Assets/Sounds/Locks and Doors/Locks/SwitchFlipOpen.wav" id="3_pocni"]
+[ext_resource type="Script" path="res://Scripts/Locks and Doors/Locks/LockSwitch.cs" id="1_g3oqo"]
+[ext_resource type="Texture2D" uid="uid://c21igfq0amnaq" path="res://Assets/Locks and Doors/LockSwitch.png" id="2_j7yab"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ii6di"]
 atlas = ExtResource("2_j7yab")
@@ -19,7 +17,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ii6di")
 }],
-"loop": true,
+"loop": false,
 "name": &"Locked",
 "speed": 5.0
 }, {
@@ -27,13 +25,13 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m3ko0")
 }],
-"loop": true,
+"loop": false,
 "name": &"Unlocked",
 "speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_li7x2"]
-radius = 5.0
+radius = 7.0
 
 [node name="LockSwitch" type="Area2D"]
 position = Vector2(0, -8)
@@ -45,10 +43,11 @@ unlockSound = ExtResource("3_pocni")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tl4v8")
-animation = &"Locked"
+animation = &"Unlocked"
+autoplay = "Locked"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 3)
+z_as_relative = false
 shape = SubResource("CircleShape2D_li7x2")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

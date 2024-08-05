@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6ku5ta6gbmki"]
+
+[ext_resource type="Script" path="res://Scripts/FallThroughDoor.cs" id="1_y6c7l"]
+[ext_resource type="Texture2D" uid="uid://cjk6glumia656" path="res://Assets/Locks and Doors/FallAwayFloorOrange.png" id="2_4j3hc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_628td"]
+size = Vector2(48, 7)
+
+[node name="Door-FallThru" type="Node2D"]
+z_index = -3
+script = ExtResource("1_y6c7l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_4j3hc")
+hframes = 2
+region_enabled = true
+region_rect = Rect2(128, 0, 96, 16)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 1024
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_628td")
+one_way_collision = true

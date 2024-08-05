@@ -1,53 +1,58 @@
 using Godot;
 using System;
+using System.IO;
 using System.Linq;
+using static Godot.WebSocketPeer;
+using System.Reflection.Emit;
+using System.Threading.Channels;
 
 public partial class Projectile : CharacterBody2D
 {
 	[Export] public float speed = 300;
 	[Export] public Vector2 shootDirection;
+	[Export] bool destroyOnContact = false;
 	Area2D collisionBox;
-    HitBox2D hitBox;
+    protected HitBox2D hitBox;
+	protected bool fallDown = false;
+    public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
 		collisionBox = GetNode<Area2D>("CollisionBox");
 		hitBox = GetNode<HitBox2D>("HitBox2D");
 
 		collisionBox.BodyEntered += (node) => HitWorld(node);
-
+        collisionBox.BodyExited += (node) => fallDown = true;
     }
 
-   
+    
 
-
-    void HitWorld(Node2D node)
+    protected virtual void HitWorld(Node2D node)
 	{
 
-		var noyd = node.GetType();
-        
+		GD.Print(node.GetType());
+		GD.Print();
 
-        if (node.GetType() == typeof(EnemyPathfinder))
+        /*if (node.GetType() == typeof(HurtBox2D))
 		{
-			HitHurtBox(node);
+			HitHurtBox();
 			
 			return;
-        }
-		CallDeferred("reparent", node);
-        collisionBox.GetChild<CollisionShape2D>(0).SetDeferred("disabled", true);
+        }*/
+		//CallDeferred("reparent", node);
+       // collisionBox.GetChild<CollisionShape2D>(0).SetDeferred("disabled", true);
 		hitBox.SetEnabled(false);
-
+		
         Velocity = Vector2.Zero;
 		speed = 0;
 		
-		//QueueFree();
+		
 	}
 
-    void HitHurtBox(Node2D area)
+    public virtual void HitHurtBox()
 	{
 		
-		GD.Print("Called HitHurtBox()");
         //CallDeferred("reparent", node);
         //collisionBox.GetChild<CollisionShape2D>(0).Set("disabled", true);
 
@@ -66,13 +71,17 @@ public partial class Projectile : CharacterBody2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{
-		Velocity = shootDirection*speed;
+		var velo = shootDirection * speed;
+		if (fallDown)
+		{
+			Rotation = Mathf.DegToRad(-90);
+            velo.Y += 120;
+		}
 
-        
-
+		Velocity = velo;
         MoveAndSlide();
-		
 
-	}
 
+    }
+	
 }

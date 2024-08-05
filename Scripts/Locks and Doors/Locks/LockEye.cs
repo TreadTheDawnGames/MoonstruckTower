@@ -1,18 +1,31 @@
 using Godot;
 using System;
 
-public partial class LockEye : Lock
+[Icon("res://Assets/Locks and Doors/Icons/EyeIcon.png")]
+public partial class LockEye : Lock, ILock
 {
-	
+	AnimatedSprite2D sprite;
+	[Export] bool inverted = false;
+    public override void SetUp()
+    {
+		base.SetUp();
+        sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        shape = GetNode<CollisionShape2D>("CollisionShape2D");
 
-    protected override void UnlockMe()
+		if(!inverted )
+		{
+	        AreaEntered += (node) => UnlockMe(node);
+		}
+
+    }
+    public override void UnlockMe(Node2D node)
 	{
 		if (!unlocked)
 		{
-			base.UnlockMe();
+			base.UnlockMe(node);
 
 			sprite.Play("Close");
-			door.Open();
+			door.AttemptToOpen();
 		}
 	}
 

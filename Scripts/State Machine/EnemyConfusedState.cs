@@ -11,7 +11,6 @@ public partial class EnemyConfusedState : EnemyState
     {
         base.SetUp(message);
         timer = GetNode<Timer>("Timer");
-        timer.Timeout += () => FlipLook();
     }
 
     
@@ -19,6 +18,8 @@ public partial class EnemyConfusedState : EnemyState
     public override void OnStart(Dictionary<string, object> message)
     {
         base.OnStart(message);
+
+        timer.Timeout += FlipLook;
         animator.Play("Idle");
         statusAnimator.Play("?");
         FlipLook();
@@ -50,5 +51,7 @@ public partial class EnemyConfusedState : EnemyState
         timesToFlip = 0;
         timesFlipped = 0;
         statusAnimator.Play("None");
+        timer.Timeout -= FlipLook;
+
     }
 }

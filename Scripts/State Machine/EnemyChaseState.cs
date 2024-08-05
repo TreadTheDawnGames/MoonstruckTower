@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class EnemyChaseState : EnemyState
 {
-    player link;
+    Player link;
     Area2D rangeArea;
     Timer repathTimer;
     private Vector2 lastLocation;
@@ -25,84 +25,19 @@ public partial class EnemyChaseState : EnemyState
     public override void OnStart(Dictionary<string, object> message)
     {
         /*statusAnimator.Play("!");
-        logic.pathfinder.HaltPathing();
+        logic.HaltPathing();
         logic.isAlerted = true;*/
         base.OnStart(message);
-        AllowTimerRepath();
-        AllowPositionRepath();
         animator.Play("Walk", 1.5f);
-        LastLocation = logic.lastSighting;
         //lastLocation = goToPoint;
         repathTimer.Start();
 
-        UpdateChaseLocation(lastLocation);
-        logic.pathfinder.PathfindEnd += EndChase;
-        logic.pathfinder.ReachedPoint += AllowPositionRepath;
-        logic.pathfinder.UnableToReachPoint+= OverrideAllowRepath;
-        repathTimer.Timeout += AllowTimerRepath;
 
         GD.Print(logic.Name + " is Chasing to " + lastLocation);
 
     }
 
-    void AllowPositionRepath()
-    {
-        allowPointRepath = true;
-    }
-
-    void AllowTimerRepath()
-    {
-        allowTimerRepath = true;
-    }
-
-    void OverrideAllowRepath()
-    {
-        overrideAllowRepath = true;
-    }
-
-    public override void UpdateState(float delta)
-    {
-        base.UpdateState(delta);
-        if(allowPointRepath && allowTimerRepath || overrideAllowRepath  /*|| (allowTimerRepath && logic.pathfinder.IsOnFloor())*/)
-        {
-            UpdateChaseLocation(lastLocation);
-            allowPointRepath=false;
-            allowTimerRepath = false;
-            overrideAllowRepath = false;
-        }
-    }
-
-    void UpdateChaseLocation(Vector2 goToPoint)
-    {
-        // if inRangeofcurrentTargetpoint 
-        repathTimer.Start();
-        LastLocation = goToPoint;
-        if (!locationUpdated)
-        {
-            //machine.ChangeState("EnemyConfusedState", null);
-            return;
-        }
-        locationUpdated = false;
-            //goToPoint.Y -= 16;
-            var attemps = -1;
-            do
-            {
-                if (!logic.pathfinder.CreateAndGoToValidPath(goToPoint))
-                {
-                    attemps++;
-                }
-                else
-                {
-                    break;
-                }
-                //goToPoint.Y++;
-
-            }
-            while (attemps <= 12);
-            //   repathTimer.Start();
-
-            if (attemps > 0) { GD.PrintErr("Failed find valid chase path"); }
-    }
+    
 
 
     void EndChase()
@@ -122,11 +57,6 @@ public partial class EnemyChaseState : EnemyState
     public override void OnExit(string nextState)
     {
         base.OnExit(nextState);
-        logic.pathfinder.PathfindEnd -= EndChase;
-        logic.pathfinder.ReachedPoint -= AllowPositionRepath;
-        logic.pathfinder.UnableToReachPoint -= OverrideAllowRepath;
-
-        repathTimer.Timeout -= AllowTimerRepath;
 
         logic.isAlerted = false;
         locationUpdated = true;

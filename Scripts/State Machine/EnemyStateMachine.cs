@@ -7,13 +7,13 @@ using System.Reflection.PortableExecutable;
 
 public partial class EnemyStateMachine : StateMachine
 {
-    public EnemyV2 body;
+    public EnemyBase body;
 
     // Called when the node enters the scene tree for the first time.
     public  void SetUp()
 	{
 
-		body = Owner.GetNode<EnemyV2>(Owner.GetPath()+"/EnemyLogic");
+		body = Owner.GetNode<EnemyBase>(Owner.GetPath());
 		foreach (EnemyState enemyState in States)
 		{
             enemyState.SetUp(new Dictionary<string, object>() {
@@ -26,7 +26,6 @@ public partial class EnemyStateMachine : StateMachine
 		ChangeState("EnemyIdleState", null);
         
 
-        GD.Print(Owner.Name + " is " + state.Name);
 
     }
 }

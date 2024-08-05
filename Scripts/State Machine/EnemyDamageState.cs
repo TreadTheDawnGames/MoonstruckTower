@@ -5,7 +5,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 public partial class EnemyDamageState : EnemyState
 {
-    [Export] float knockbackAmount = 150f;
+    [Export] float knockbackAmount = 75f;
     [Export] float damageWaitTime = 0.5f;
 
     public override void SetUp(Dictionary<string, object> message)
@@ -21,51 +21,55 @@ public partial class EnemyDamageState : EnemyState
     public override void OnStart(Dictionary<string, object> message)
     {
         base.OnStart(message);
-        GD.Print(Owner.Name + " is being damaged");
         int damage = (int)message["damage"];
         HitBox2D caller = (HitBox2D)message["hitBox"];
         
         logic.hitPoints -= damage;
         logic.isBusy = true;
-        logic.pathfinder.takingDamage = true;
-        logic.pathfinder.HaltPathing();
+        logic.takingDamage = true;
+       
         //body.takingDamage = true;
+        statusAnimator.Play("None");
+
         if (logic.hitPoints <= 0)
         {
+            logic.velocity.X = 0;
             animator.Play("Death");
-            
-            
-            // logic.hurtBox.SetDeferred("disabled", true);
-            // logic.collisionBox.SetDeferred("disabled", true);
-            // animator.Stop();
-
         }
         else
-        {var direction = Mathf.Sign(logic.pathfinder.GlobalPosition.X - caller.GlobalPosition.X);
+        {
+            var direction = Mathf.Sign(logic.GlobalPosition.X - caller.GlobalPosition.X);
 
             animator.Play("Damage");
-
             var hitVelX = direction * knockbackAmount * 2;
-            var hitVelY = -GD.RandRange(100, 200);
+            var hitVelY = GD.RandRange(6, 12);
+            float jumpInPixels = -Mathf.Sqrt(2 * logic.gravity * hitVelY);
+
+            //logic.velocity.Y = jumpInPixels;
 
 
 
-            logic.pathfinder.Velocity = new Vector2(hitVelX, hitVelY);
-            logic.damageTimer.WaitTime = damageWaitTime;
-            logic.damageTimer.Start();
+            logic.velocity = new Vector2(hitVelX, jumpInPixels);
 
 
+        }
+    }
+
+    public override void UpdateState(float delta)
+    {
+        base.UpdateState(delta);
+        if (logic.IsOnFloor())
+        {
+            logic.velocity.X = 0;
         }
     }
 
     void Destroy()
     {
 
-        logic.isBusy = false;
-        logic.pathfinder.takingDamage = false;
             if (animator.Animation == "Death")
             {
-                logic.pathfinder.Destroy ();
+                logic.Destroy ();
             }
             else if (animator.Animation == "Damage")
             {
@@ -74,9 +78,17 @@ public partial class EnemyDamageState : EnemyState
 
                     machine.ChangeState("EnemyConfusedState", null);
                 }
-                else { machine.ChangeState("EnemyChaseState", null); }
+                else { machine.ChangeState("EnemyAlertState", null); }
             }
 
         
+    }
+
+    public override void OnExit(string nextState)
+    {
+        base.OnExit(nextState);
+        logic.isBusy = false;
+        logic.takingDamage = false;
+
     }
 }

@@ -3,7 +3,9 @@ using System;
 
 public interface ITool 
 {
-	public bool useRelease { get; }
+	public Texture2D displayTexture { get; }
+
+    public bool useRelease { get; }
 	public bool charged { get; }
 	public bool animating { get;  }
 	public string name { get;  }
@@ -16,5 +18,5 @@ public interface ITool
 
 	public void UpdateUseDirection(Vector2 direction = new()) { }
 
-	public void SetupTool(AnimatedSprite2D character, player playerLink) { }
+	public void SetupTool(AnimatedSprite2D character, Player playerLink) { }
 }

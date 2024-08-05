@@ -8,12 +8,11 @@ public partial class MoblinAttackState : EnemyAttackState
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
-        animator.AnimationFinished += () => EndAttack();
     }
    
     public override void OnStart(Dictionary<string, object> message)
     {
-        GD.Print(logic.Name + " is Attacking");
+        animator.AnimationFinished +=  EndAttack;
         animator.Stop();
         animator.Play("Attack");
         base.OnStart(message);
@@ -24,13 +23,23 @@ public partial class MoblinAttackState : EnemyAttackState
 
     void EndAttack()
     {
-        if(animator.Animation == "Attack")  
-            machine.ChangeState("EnemyIdleState", null);
+        if(animator.Animation == "Attack")
+        {
+            if (logic.canSee)
+            {
+                machine.ChangeState("EnemyAlertState", null);
+            }
+            else
+            {
+                machine.ChangeState("EnemyIdleState", null);
+            }
+        }
     }
 
     public override void OnExit(string nextState)
     {
         base.OnExit(nextState);
+        animator.AnimationFinished -= EndAttack;
         logic.hitBox.SetEnabled(false);
         logic.isBusy = false;
         logic.isAlerted = false;

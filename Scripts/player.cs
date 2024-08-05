@@ -7,17 +7,20 @@ using static Godot.TextServer;
 
 
 [GlobalClass]
-public partial class player : CharacterBody2D
+public partial class Player : CharacterBody2D
 {
     [Export] public float Speed = 150.0f;
     [Export] public float climbSpeed = 75.0f;
     [Export] public float JumpVelocity = -270.0f;
     [Export] private float damageWaitTime = 0.5f;
 
+
     AnimatedSprite2D animator;
     Timer coyoteTimer;
-    HitBox2D attackHitbox;
-    HitBox2D attackHitboxAir;
+    HitBox2D attackHitboxL;
+    HitBox2D attackHitboxAirL;
+    HitBox2D attackHitboxR;
+    HitBox2D attackHitboxAirR;
 
 
     CollisionShape2D linkCollider;
@@ -27,12 +30,25 @@ public partial class player : CharacterBody2D
 
     Node2D flippables;
 
+    [Export] float fallTimeMax = 20;
+    float fallTimeCounter = 0;
+
+    int cameraPanDownCounter = 0;
+    Marker2D cameraTrolley;
+    Vector2 cameraDefaultPosition;
+    Vector2 cameraDownPosition;
+   // Vector2 cameraUpPosition;
+
+    CameraSmoother camera;
+    bool cameraPan = false;
+
     ITool selectedTool;
-    ITool[] toolBagList;
+    public ITool[] toolBagList { get; private set; }
     int toolBagItemCount;
     int selectedToolIndex = 0;
-    Node2D toolBag;
+    public Node2D toolBag;
     public bool usingTool = false;
+    TextureRect toolBoxDisplay;
 
     int coyoteFrames = 6;
     bool coyote = false;
@@ -44,7 +60,9 @@ public partial class player : CharacterBody2D
     public bool onLadder = false;
     bool takingDamage = false;
     int damageDirection = 0;
+    public bool flippedSwitchThisAnimation = false;
 
+    [Export] float camSmoothY = 0.07f;
     
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -57,19 +75,34 @@ public partial class player : CharacterBody2D
         animator = (AnimatedSprite2D)GetNode(new NodePath("AnimatedSprite2D"));
         coyoteTimer = (Timer)GetNode(new NodePath("CoyoteTimer"));
         coyoteTimer.WaitTime = coyoteFrames / 60.0;
-        attackHitbox = (HitBox2D)GetNode(new NodePath("Flippables/HitBox"));
-        attackHitboxAir = (HitBox2D)GetNode(new NodePath("Flippables/HitBoxAir"));
+        
+        attackHitboxL = (HitBox2D)GetNode(new NodePath("HitBoxL"));
+        attackHitboxAirL = (HitBox2D)GetNode(new NodePath("HitBoxAirL"));
+        attackHitboxR = (HitBox2D)GetNode(new NodePath("HitBoxR"));
+        attackHitboxAirR = (HitBox2D)GetNode(new NodePath("HitBoxAirR"));
+       
+        
         linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
         damageTimer = GetNode<Timer>("DamageTimer");
+        toolBoxDisplay = (TextureRect)GetTree().GetFirstNodeInGroup("ToolBoxDisplay");
+        cameraTrolley = GetNode<Marker2D>("CameraTrolley");
+        camera = Owner.GetNode<CameraSmoother>("Camera2D");
+
+        cameraDefaultPosition = cameraTrolley.Position;
+        cameraDownPosition = cameraTrolley.Position;
+        cameraDownPosition.Y += 96 ;
+//        cameraUpPosition.Y -= 72 ;
+
 
         damageTimer.Timeout += () => takingDamage = false;
         coyoteTimer.Timeout += () => CoyoteDone();
         animator.AnimationFinished += () => AnimationDone();
         damageTimer.Stop();
-        
+            UpdateToolbag();
+
     }
 
-   
+
 
 
     private void CoyoteDone()
@@ -82,10 +115,12 @@ public partial class player : CharacterBody2D
         if (animator.Animation == new StringName("Attack") || animator.Animation == new StringName("AttackAir") || animator.Animation == new StringName("AttackLadder") || animator.Animation == new StringName("AttackWalk"))
         {
             attacking = false;
-            
+            flippedSwitchThisAnimation = false;
 
-                attackHitbox.SetEnabled(false);
-                attackHitboxAir.SetEnabled(false);
+                attackHitboxL.SetEnabled(false);
+                attackHitboxAirL.SetEnabled(false);
+                attackHitboxR.SetEnabled(false);
+                attackHitboxAirR.SetEnabled(false);
 
             
         }
@@ -97,7 +132,7 @@ public partial class player : CharacterBody2D
     bool jumpReleased = false;
 
 
-    void UpdateToolbag()
+    public void UpdateToolbag()
     {
         List<ITool> toolList = new List<ITool>();
         foreach (Node tool in toolBag.GetChildren())
@@ -115,6 +150,7 @@ public partial class player : CharacterBody2D
         }
         toolBagList = toolList.ToArray();
         toolBagItemCount = toolList.Count;
+        HandleToolSwap();
         //GD.Print($"{toolBagItemCount} items in toolbag");
     }
 
@@ -144,13 +180,26 @@ public partial class player : CharacterBody2D
 
             if (animator.Animation == new StringName("Attack") || animator.Animation == new StringName("AttackWalk"))
             {
-                attackHitbox.SetEnabled(true);
-
+                if (flipped)
+                {
+                    attackHitboxR.SetEnabled(true);
+                }
+                else
+                {
+                    attackHitboxL.SetEnabled(true);
+                }
             }
 
             if (animator.Animation == "AttackAir" || animator.Animation == "AttackLadder")
             {
-                attackHitboxAir.SetEnabled(true);
+                if(flipped)
+                {
+                    attackHitboxAirR.SetEnabled(true);
+                }
+                else
+                {
+                    attackHitboxAirL.SetEnabled(true);
+                }
 
 
             }
@@ -210,12 +259,10 @@ public partial class player : CharacterBody2D
     
     void HandleToolSwap()
     {
-        if (Input.IsActionJustPressed("SwapTool"))
-        {
+        
             if (usingTool)
                 usingTool = false;
 
-            UpdateToolbag();
             if (toolBagList.Length != 0)
             {
 
@@ -225,9 +272,11 @@ public partial class player : CharacterBody2D
                 }
 
                 selectedTool = toolBagList[selectedToolIndex - 1];
+            if(toolBoxDisplay!=null)
+                toolBoxDisplay.Texture = selectedTool.displayTexture;
                // GD.Print("Selected " + selectedTool.name);
             }
-        }
+        
     }
     void HandleDropthrough(float direction)
     {
@@ -235,10 +284,60 @@ public partial class player : CharacterBody2D
         {
             jumping = true;
             GlobalPosition += new Vector2(0, 2);
+            //cameraPanDownCounter = 0;
         }
     }
 
+    void HandleCamera(Vector2 direction)
+    {
+       
+        //if down control is held count up
+        if (direction.Y > 0 )
+        {
+            cameraPanDownCounter++;
+        }
+        //otherwise don't
+        else
+        {
+            cameraPan = false;
+            cameraPanDownCounter = 0;
+        }
 
+        //if the counter is done move the camera down
+        if ( cameraPanDownCounter > 20)
+        {
+            cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDownPosition, camSmoothY);
+
+            //cameraTrolley.Position = cameraDownPosition;
+            //cameraTrolley.Position = cameraDownPosition;
+           // camera.lerpSpeedY=camSmoothY;
+        }
+        
+        else
+        {
+                cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDefaultPosition, camSmoothY);
+            
+            //this makes it so the camera keeps up if you fall infinitely
+            if(Velocity.Y > 0)
+            {
+                fallTimeCounter++;
+
+            }
+            else { fallTimeCounter=0; }
+
+
+            if (camera.lerpSpeedY < 1f)
+            {
+                camera.lerpSpeedY = Mathf.Lerp(camSmoothY, camSmoothY * 3f, fallTimeCounter / fallTimeMax);
+            }
+           
+
+               
+
+        }
+
+
+    }
     
     void HandleCoyoteTime()
     {
@@ -273,8 +372,9 @@ public partial class player : CharacterBody2D
         if (IsOnFloor() && animator.Animation == "AttackAir")
         {
             attacking = false;
-            attackHitboxAir.SetEnabled(false);
-
+            attackHitboxAirL.SetEnabled(false);
+            attackHitboxAirR.SetEnabled(false);
+            flippedSwitchThisAnimation = false;
 
             //because the attack is canceled
         }
@@ -336,18 +436,20 @@ public partial class player : CharacterBody2D
             touchingLadder = false;
     }
 
-    public void TakeDamage(int amount, HitBox2D caller)
+    public void TakeDamage(int amount, HitBox2D box)
     {
-        var direction = Mathf.Sign(GlobalPosition.X-caller.GlobalPosition.X);
+        
+        
+        var direction = Mathf.Sign(GlobalPosition.X-box.GlobalPosition.X);
         GD.Print("PLAYER TOOK DAMAGE");
-
+        
 
         var hitVelX = Velocity.X;
         var hitVelY = Velocity.Y;
 
 
 
-        if (floorCheck.GetOverlappingBodies().Count == 0)
+        if (floorCheck.GetOverlappingBodies().Count == 0 && IsOnFloor())
         {
             hitVelX = direction * Speed*2;
             GlobalPosition += new Vector2(0, 2);
@@ -355,22 +457,36 @@ public partial class player : CharacterBody2D
         else
         {
             hitVelX = direction * Speed*2;
-            hitVelY = -GD.RandRange(200, 300);
+            hitVelY = GD.RandRange(6,12);
+            float jumpInPixels = -Mathf.Sqrt(2 * gravity * hitVelY);
+
+            hitVelY = jumpInPixels;
+
 
         }
         takingDamage = true;
 
-        Velocity = new Vector2(hitVelX, hitVelY);
+        Velocity = new Vector2(hitVelX*1.25f, hitVelY)*amount;
         
         damageTimer.WaitTime = damageWaitTime;
         damageTimer.Start();
+
+        if (box.Owner is Projectile)
+        {
+            //get arrow owner script /detect if box was on projectile and if it was, delete it
+            // direction = -direction;
+            Projectile arrow = box.Owner.GetNode<Projectile>(box.Owner.GetPath());
+
+            arrow.HitHurtBox();
+
+        }
     }
 
 
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
-
+       
         // Add the gravity.
         if (!IsOnFloor())
             velocity.Y += gravity * (float)delta;
@@ -383,7 +499,10 @@ public partial class player : CharacterBody2D
 
         HandleTool(direction);
 
-        HandleToolSwap();
+        if (Input.IsActionJustPressed("SwapTool"))
+        {
+            HandleToolSwap();
+        }
 
         HandleDropthrough(direction.Y);
 
@@ -407,14 +526,19 @@ public partial class player : CharacterBody2D
         //HandleLadder
         if (onLadder && direction.Y != 0f)
         {
+            if (IsOnWall())
+            {
+                direction *= 1.01f;
+            }
             GlobalPosition += direction;//new Vector2(direction.X, direction.Y * climbSpeed);
         }
         // Handle Jump.
-        if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || coyote) && !jumping)
+        if (Input.IsActionJustPressed("Jump") && (IsOnFloor() /*|| onLadder*/ || coyote) && !jumping)
         {
             velocity.Y = JumpVelocity;
             onLadder = false;
         }
+
 
         if (Input.IsActionJustReleased("Jump"))
         {
@@ -439,10 +563,18 @@ public partial class player : CharacterBody2D
         }
         else if (damageTimer.TimeLeft > 0 || (takingDamage && !IsOnFloor()))
         {
+            if (IsOnFloor())
+            {
+                velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.20);
 
-            velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.15);
+            }
+            else
+            {
+                velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.15);
+            }
 
         }
+        
         else
         {
             velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
@@ -450,12 +582,13 @@ public partial class player : CharacterBody2D
 
         if ((usingTool || direction.Y > 0) && damageTimer.TimeLeft <= 0)
         {
-            velocity.X /= 2.0f;
+            velocity.X *=0.5f;
         }
 
 
         HandleAnimation(direction);
 
+        HandleCamera(direction);
 
         velocity.X = velocity.X * (float)delta * 70;
 
@@ -465,6 +598,8 @@ public partial class player : CharacterBody2D
         MoveAndSlide();
 
         HandleCoyoteTime();
+
+        
     }
 
 

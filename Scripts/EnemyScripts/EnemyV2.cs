@@ -9,7 +9,7 @@ public partial class EnemyV2 : Node2D
 	public AnimatedSprite2D statusAnimator;
 	public EnemyStateMachine machine;
 	public Node2D flippables;
-	public player link;
+	public Player link;
 	RayCast2D visionCast;
 	public bool canSee = false;
 	public CollisionShape2D hurtBox;
@@ -30,6 +30,8 @@ public partial class EnemyV2 : Node2D
 	public Timer damageTimer;
 	float damageWaitTime = 0.5f;
 
+    public Area2D allowedArea;
+    bool playerInAllowedArea = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -46,9 +48,13 @@ public partial class EnemyV2 : Node2D
         hitBox = GetNode<HitBox2D>("Flippables/HitBox2D");
         attackRangeArea = GetNode<Area2D>("Flippables/AttackRangeFinder");
         damageTimer = GetNode<Timer>("DamageTimer");
+		allowedArea=Owner.GetParent<Area2D>();
+
+        allowedArea.BodyEntered += (node) => playerInAllowedArea = true;
+        allowedArea.BodyExited += (node) => playerInAllowedArea = false;
 
 
-        link = (player)GetTree().GetFirstNodeInGroup("Player");
+        link = (Player)GetTree().GetFirstNodeInGroup("Player");
 
         machine.SetUp();
         damageTimer.Timeout += () => pathfinder.takingDamage = false;
@@ -84,7 +90,7 @@ public partial class EnemyV2 : Node2D
 			hitBox.damage = -1;
         }
 
-		if (visionCast.GetColliderRid() == link.GetRid())
+		if (visionCast.GetColliderRid() == link.GetRid() && playerInAllowedArea)
 		{	
 			if(((Mathf.Sign(relitiveLinkPos.X) >= 0 && animator.FlipH) || (Mathf.Sign(relitiveLinkPos.X) <= 0 && !animator.FlipH)) )
 			{
@@ -137,7 +143,7 @@ public partial class EnemyV2 : Node2D
 	{
 		if (machine.CurrentState != "MoblinAttackState" && !isBusy)
 		{
-			if (node.GetType() == typeof(player))
+			if (node.GetType() == typeof(Player))
 			{
 				machine.ChangeState("MoblinAttackState", null);
 			}

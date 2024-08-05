@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://das7lejpkay7d"]
+
+[ext_resource type="Script" path="res://Scripts/BossWing.cs" id="1_ec5dy"]
+[ext_resource type="SpriteFrames" uid="uid://cg1q7h0c6gjcj" path="res://Scenes/Enemies/WingR.tres" id="1_gk6o6"]
+[ext_resource type="PackedScene" uid="uid://coh86i6gt3bkd" path="res://Scenes/Enemies/Boss/boss_eye_mini.tscn" id="2_rc4cy"]
+[ext_resource type="PackedScene" uid="uid://df51jpjla8u7e" path="res://Scenes/Enemies/Boss/boss_eye.tscn" id="3_ndgr6"]
+
+[node name="BossWingR" type="Node2D"]
+script = ExtResource("1_ec5dy")
+
+[node name="Animator" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_gk6o6")
+animation = &"FullHealthy"
+autoplay = "HitTargetable"
+
+[node name="BossEye" parent="." instance=ExtResource("3_ndgr6")]
+position = Vector2(8, -8)
+
+[node name="BossEyeMini" parent="." instance=ExtResource("2_rc4cy")]
+position = Vector2(7, 1)
+
+[node name="BossEyeMini2" parent="." instance=ExtResource("2_rc4cy")]
+position = Vector2(5, 7)
