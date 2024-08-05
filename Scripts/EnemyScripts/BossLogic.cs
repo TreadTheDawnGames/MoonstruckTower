@@ -176,8 +176,8 @@ public partial class BossLogic : CharacterBody2D
 			//need to pick a wing
 			if (finalPhase)
 			{
-				if(bodyHits > hitsToFinalTakeDown/2)
-				bodyHits = Mathf.CeilToInt(hitsToFinalTakeDown * 0.5f);
+				if(bodyHits > Mathf.CeilToInt(hitsToFinalTakeDown * 0.5f))
+					bodyHits = Mathf.CeilToInt(hitsToFinalTakeDown * 0.5f);
 			}
 			if (deathZoneDetector.HasOverlappingAreas())
 			{

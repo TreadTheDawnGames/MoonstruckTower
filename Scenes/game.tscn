@@ -22,7 +22,7 @@ offset_top = -20.0
 offset_bottom = 701.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-138, -6390)
+position = Vector2(59, -7220)
 zoom = Vector2(4, 4)
 limit_left = -208
 limit_top = -7760
@@ -32,7 +32,7 @@ script = ExtResource("13_3xxo8")
 TargetNodepath = NodePath("../Player/CameraTrolley")
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
-position = Vector2(-140, -6405)
+position = Vector2(57, -7235)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 position = Vector2(-1, -44)
