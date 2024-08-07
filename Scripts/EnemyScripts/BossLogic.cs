@@ -340,7 +340,7 @@ public partial class BossLogic : CharacterBody2D
 		if (lostWing != null)
 			lostWing.state = BossWing.WingState.Dead;
 
-		GD.Print(state.ToString());
+		//GD.Print(state.ToString());
 		state = stateToShow;
 		animator.Play("Hit" + state.ToString());// Targetable");
 		queueTimer = true;

@@ -30,7 +30,6 @@ public partial class LockSwitch : Lock
 
             if (!GetOverlappingBodies().OfType<Player>().Any())
             {
-                GD.Print("Overlapping body!");
                 return;
             }
         }

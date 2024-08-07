@@ -33,7 +33,6 @@ public partial class EnemyChaseState : EnemyState
         repathTimer.Start();
 
 
-        GD.Print(logic.Name + " is Chasing to " + lastLocation);
 
     }
 
@@ -43,7 +42,6 @@ public partial class EnemyChaseState : EnemyState
     void EndChase()
     {
 
-        GD.Print("End Chase");
         if (logic.canSee)
         {
             machine.ChangeState("EnemyChaseState", null);

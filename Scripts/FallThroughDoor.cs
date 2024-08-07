@@ -51,7 +51,6 @@ public partial class FallThroughDoor : Door
 
     public override bool Close()
     {
-        //GD.Print("Called Close");
 
         if (!base.Close())
         {

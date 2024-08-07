@@ -3,14 +3,32 @@ using System;
 
 public partial class DebugTools : Node2D
 {
+	bool paused = false;
 
-	Fader fader;
+	PauseMenu pauseMenu;
+
+	public Fader fader;
+
+	Player player;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+
 		fader = GetNodeOrNull<Fader>("CanvasLayer/Fader");
-		fader?.FadeIn();
+		pauseMenu = GetNodeOrNull<PauseMenu>("CanvasLayer/PauseMenu");
+
+		player = GetNode<Player>("Player");
+
+		//fader?.FadeIn();
     }
+
+	void Spawn()
+	{
+
+
+	}
+	
 
 	bool slowTimeToggle = false;
 
@@ -28,5 +46,12 @@ public partial class DebugTools : Node2D
 			Engine.TimeScale = slowTimeToggle ? 0.5f : 1f;
 			GD.Print("Time slowed = " + slowTimeToggle);
 		}
+
+		if (Input.IsActionJustPressed("Debug-ResetPrefs"))
+		{
+			GD.Print("Deleted ALL PlayerPrefs");
+			PlayerPrefs.DeleteAll();
+		}
+
 	}
 }

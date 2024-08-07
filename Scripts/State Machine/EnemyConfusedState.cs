@@ -25,7 +25,6 @@ public partial class EnemyConfusedState : EnemyState
         FlipLook();
         timesToFlip = (int)GD.RandRange(1, 2);
         timesFlipped = 0;
-        GD.Print("Looking " + timesToFlip + " times");
         timer.WaitTime = GD.RandRange(0.5f, 1);
         timer.Start();
     }
@@ -38,7 +37,6 @@ public partial class EnemyConfusedState : EnemyState
 
             timer.WaitTime = GD.RandRange(0.5f, 1);
             timer.Start();
-            GD.Print("Looked " + timesFlipped + " times");
             timesFlipped++;
             return;
         }

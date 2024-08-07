@@ -15,7 +15,6 @@ public partial class boss_button_switch : ButtonLock
 
     public override void UnlockMe(Node2D node)
     {
-		GD.Print("Unlocked");
         base.UnlockMe(node);
 		timer.Start();
     }
@@ -23,7 +22,6 @@ public partial class boss_button_switch : ButtonLock
     public override void LockMe()
     {
         base.LockMe();
-		GD.Print("Locked");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

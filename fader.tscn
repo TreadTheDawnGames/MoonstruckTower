@@ -84,3 +84,4 @@ script = ExtResource("1_fyw8l")
 libraries = {
 "": SubResource("AnimationLibrary_mqqds")
 }
+autoplay = "RESET"

@@ -29,7 +29,6 @@ public partial class LadderFrog : Node2D
         else if (animator.Animation == "SpitLadder")
         {
             animator.Play("Deactivate");
-            GD.Print("Ladder Spat");
             
             
             

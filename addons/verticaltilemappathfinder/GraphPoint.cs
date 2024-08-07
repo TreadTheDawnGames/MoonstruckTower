@@ -63,7 +63,6 @@ public partial class GraphPoint : Sprite2D
             visualPoint.Position = position;
 
 
-            //GD.Print("Placed Visual Point at " + LocalToMap(visualPoint.Position));
 
             parent.GetTree().Root.AddChild(visualPoint);
             if (timer > 0)
@@ -79,11 +78,11 @@ public partial class GraphPoint : Sprite2D
 	{
 		try
 		{
-
-		QueueFree();
-		}catch 
+		    QueueFree();
+		}
+        catch (Exception e) 
 		{
-			//GD.Print(ex.Message);
+			GD.Print(e.Message);
 		}
 	}
 }

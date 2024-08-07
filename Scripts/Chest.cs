@@ -5,19 +5,24 @@ public partial class Chest : AnimatedSprite2D
 {
 
 	Area2D area;
-	bool opened = false;
-	enum Treasure { Bow, Ladder };
+	public bool opened { get; private set; } = false;
+    public enum Treasure { Bow, Ladder };
 	Player link;
 	PackedScene tool;
 
-	[Export] Treasure treasure;
+	[Export] public Treasure treasure { get; private set; }
+
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		area = GetNode<Area2D>("Area2D");
 		area.AreaEntered += (node)=> Open(node);
 		AnimationFinished += End;
-		Play("Closed");
+
+		//opened = PlayerPrefs.GetBool("Opened"+Name, false);
+		opened = PlayerPrefs.GetBool(Name + "Opened", false);
+        Play( opened ? "Opened" : "Closed");
 
 	}
 
@@ -25,14 +30,17 @@ public partial class Chest : AnimatedSprite2D
 	{
 		if (!opened)
 		{
-			if (Animation == "AwardBow")
+            //PlayerPrefs.SetBool("Opened"+Name, true);
+
+            if (Animation == "AwardBow")
 			{
 				tool = GD.Load<PackedScene>("res://Scenes/Tools/Bow/bow.tscn");
+
 			}
 			if (Animation == "AwardLadder")
 			{
 				tool = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/ladder_spawner.tscn");
-
+				PlayerPrefs.SetBool("Ladder", true);
 			}
 			if (tool != null)
 			{
@@ -48,18 +56,22 @@ public partial class Chest : AnimatedSprite2D
 	}
 	void Open(Node2D node)
 	{
-		if (node.Owner is Player)
-        {
-		GD.Print(node.Owner);
-			link = (Player)node.Owner;
-			area.QueueFree();
+		if (!opened)
+		{
 
-			if(treasure == Treasure.Bow)
+			if (node.Owner is Player)
 			{
-				Play("AwardBow");
-			}if(treasure == Treasure.Ladder)
-			{
-				Play("AwardLadder");
+				link = (Player)node.Owner;
+				area.QueueFree();
+
+				if (treasure == Treasure.Bow)
+				{
+					Play("AwardBow");
+				}
+				if (treasure == Treasure.Ladder)
+				{
+					Play("AwardLadder");
+				}
 			}
 		}
 	}

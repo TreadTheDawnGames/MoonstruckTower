@@ -34,7 +34,7 @@ public partial class Player : CharacterBody2D
     float fallTimeCounter = 0;
 
     int cameraPanDownCounter = 0;
-    Marker2D cameraTrolley;
+    public Marker2D cameraTrolley { get; private set; }
     Vector2 cameraDefaultPosition;
     Vector2 cameraDownPosition;
    // Vector2 cameraUpPosition;
@@ -66,6 +66,9 @@ public partial class Player : CharacterBody2D
     
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+
+    bool spawning = false;
+
 
     public override void _Ready()
     {
@@ -100,9 +103,38 @@ public partial class Player : CharacterBody2D
         damageTimer.Stop();
             UpdateToolbag();
 
+        
+
+
+        ToolSaveSys();
+
     }
 
 
+    void ToolSaveSys()
+    {
+        List<PackedScene> tools = new();
+
+        
+
+        if (PlayerPrefs.GetBool("Bow"))
+        {
+            tools.Add(GD.Load<PackedScene>("res://Scenes/Tools/Bow/bow.tscn"));
+        }
+        if (PlayerPrefs.GetBool("Ladder"))
+        {
+            tools.Add(GD.Load<PackedScene>("res://Scenes/Tools/Ladder/ladder_spawner.tscn"));
+
+        }
+        foreach (PackedScene tool in tools)
+        {
+
+            var addedTool = tool.Instantiate();
+            toolBag.AddChild(addedTool);
+            UpdateToolbag();
+        }
+
+    }
 
 
     private void CoyoteDone()
@@ -156,9 +188,11 @@ public partial class Player : CharacterBody2D
 
     void HandleAttack(Vector2 direction)
     {
+            bool flipped = animator.FlipH;
+
         if (Input.IsActionJustPressed("Attack") && !usingTool && !attacking)
         {
-            bool flipped = animator.FlipH;
+
             attacking = true;
             if (IsOnFloor() && direction.X != 0)
             {
@@ -178,14 +212,21 @@ public partial class Player : CharacterBody2D
             }
 
 
+        }
+
+        if (attacking)
+        {
+
             if (animator.Animation == new StringName("Attack") || animator.Animation == new StringName("AttackWalk"))
             {
                 if (flipped)
                 {
+                    attackHitboxL.SetEnabled(false);
                     attackHitboxR.SetEnabled(true);
                 }
                 else
                 {
+                    attackHitboxR.SetEnabled(false);
                     attackHitboxL.SetEnabled(true);
                 }
             }
@@ -194,20 +235,22 @@ public partial class Player : CharacterBody2D
             {
                 if(flipped)
                 {
+                    attackHitboxAirL.SetEnabled(false);
                     attackHitboxAirR.SetEnabled(true);
                 }
                 else
                 {
+                    attackHitboxAirR.SetEnabled(false);
                     attackHitboxAirL.SetEnabled(true);
                 }
 
 
             }
-
-
-
-
         }
+
+
+
+
     }
 
     void HandleTool(Vector2 direction)
@@ -485,8 +528,11 @@ public partial class Player : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
     {
+
+        
+
         Vector2 velocity = Velocity;
-       
+
         // Add the gravity.
         if (!IsOnFloor())
             velocity.Y += gravity * (float)delta;

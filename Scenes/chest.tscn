@@ -170,11 +170,9 @@ animations = [{
 size = Vector2(12, 11)
 
 [node name="Chest" type="AnimatedSprite2D"]
-z_index = 1
 position = Vector2(0, -19)
 sprite_frames = SubResource("SpriteFrames_dfgon")
-animation = &"AwardLadder"
-autoplay = "Closed"
+animation = &"Closed"
 script = ExtResource("2_l8x24")
 
 [node name="Area2D" type="Area2D" parent="."]

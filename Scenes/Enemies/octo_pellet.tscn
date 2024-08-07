@@ -70,17 +70,20 @@ animation = &"Destroy"
 autoplay = "Full"
 
 [node name="HitBox2D" parent="." index="1"]
+collision_layer = 0
+collision_mask = 0
 layers = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox2D" index="0"]
 shape = SubResource("CircleShape2D_ltydi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+visible = false
 shape = SubResource("CircleShape2D_m1li0")
 disabled = true
 
 [node name="CollisionBox" type="Area2D" parent="." index="4"]
-collision_layer = 128
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionBox" index="0"]
 shape = SubResource("CircleShape2D_oxcrq")

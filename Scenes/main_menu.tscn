@@ -272,6 +272,7 @@ format = 2
 layer_0/tile_data = PackedInt32Array(589824, 589824, 0, 655360, 589824, 1, 589825, 589824, 0, 655361, 589824, 1, 589826, 589824, 0, 655362, 589824, 1, 589827, 589824, 0, 655363, 589824, 1, 589828, 589824, 0, 655364, 589824, 1, 589829, 589824, 0, 655365, 589824, 1, 589830, 589824, 0, 655366, 589824, 1, 589831, 589824, 0, 655367, 589824, 1, 589832, 589824, 0, 655368, 589824, 1, 589833, 589824, 0, 655369, 589824, 1, 589834, 589824, 0, 655370, 589824, 1, 589835, 589824, 0, 655371, 589824, 1, 589836, 589824, 0, 655372, 589824, 1, 589837, 589824, 0, 655373, 589824, 1, 589838, 589824, 0, 655374, 589824, 1, 589839, 589824, 0, 655375, 589824, 1, 589840, 589824, 0, 655376, 589824, 1, 589841, 589824, 0, 655377, 589824, 1, 393216, 589824, 0, 393217, 589824, 0, 393218, 589824, 0, 393219, 589824, 0, 393220, 589824, 0, 393221, 0, 8, 393222, 0, 8, 327696, 589824, 0, 327697, 589824, 0, 131073, 0, 8, 131074, 0, 8, 131075, 0, 8, 131076, 0, 8, 327695, 589824, 0, 524289, 589824, 7, 524295, 589824, 7, 393229, 1, 65536)
 
 [node name="MoblinV3" parent="." instance=ExtResource("3_5imvj")]
+z_index = 0
 position = Vector2(210, 545)
 scale = Vector2(4, 4)
 display = true
@@ -326,7 +327,9 @@ one_shot = true
 
 [node name="Fader" parent="." instance=ExtResource("13_yw46t")]
 layout_mode = 0
+offset_left = -50.0
+offset_top = -66.0
+offset_right = 1246.0
+offset_bottom = 746.0
 
-[connection signal="button_down" from="VBoxContainer/TextureButton" to="." method="StartPressed"]
-[connection signal="button_down" from="VBoxContainer/TextureButton2" to="." method="QuitPressed"]
-[connection signal="FadedOut" from="Fader" to="." method="FadeOut"]
+[connection signal="FadedOut" from="Fader" to="." method="QuitApp"]

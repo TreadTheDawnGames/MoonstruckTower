@@ -47,7 +47,7 @@ public partial class WallDoor : Door
         {
             Player link = null;
             bool exit = false ;
-                GD.Print(checkIfBodyOnTop.GetOverlappingBodies().Count);
+                //GD.Print(checkIfBodyOnTop.GetOverlappingBodies().Count);
             
             if (checkIfBodyOnTop.GetOverlappingBodies().Count <= 1)
             {
@@ -56,7 +56,6 @@ public partial class WallDoor : Door
 
             if (exit)
             {
-                GD.Print("No need");
                 return;
             }
             foreach (var body in checkIfBodyOnTop.GetOverlappingBodies().OfType<Player>())
@@ -70,19 +69,19 @@ public partial class WallDoor : Door
             {
                 if(body == this)
                 {
-                    GD.Print("Myself");
+                    //GD.Print("Myself");
                     continue;
                 }
                 int direction;
                 if (checkLeftWall.GetOverlappingBodies().OfType<TileMap>().Count()>0)
                 {
                     direction = 1;
-                    GD.Print("on left wall");
+                    //GD.Print("on left wall");
                 }
                 else if (checkRightWall.GetOverlappingBodies().OfType<TileMap>().Count()>0)
                 {
                     direction = -1;
-                    GD.Print("on right wall");
+                    //GD.Print("on right wall");
                 }
                 else
                 {
@@ -101,7 +100,7 @@ public partial class WallDoor : Door
                 link.GlobalPosition += new Vector2(direction*2, y);
 
 
-                GD.Print(body.GetType().ToString() + " " + body.Name) ;
+                //GD.Print(body.GetType().ToString() + " " + body.Name) ;
             }
 /*
             foreach(PhysicsBody2D body in checkIfBodyOnTop.GetOverlappingBodies().OfType<PhysicsBody2D>())

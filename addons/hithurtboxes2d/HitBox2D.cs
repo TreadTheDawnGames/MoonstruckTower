@@ -36,7 +36,6 @@ public partial class HitBox2D : Area2D
 
     public bool Identify()
     {
-        GD.Print("I am HitBox2D");
         return true;
     }
 

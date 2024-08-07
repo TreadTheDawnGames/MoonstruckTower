@@ -22,14 +22,13 @@ public partial class OctorokV2 : EnemyBase
         if (animator.Animation == "Spawn")
         {
             shootTimer.Timeout += ChargePellet;
-            GD.Print("started timer");
 
         }
         base.Activate();
     }
     void ChargePellet()
     {
-        GD.Print("Charged");
+        //GD.Print("Charged");
         shootCharged = true;
     }
 

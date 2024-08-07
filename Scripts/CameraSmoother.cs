@@ -13,12 +13,20 @@ public partial class CameraSmoother : Camera2D
 
     public override void _Ready()
     {
-
         targetNode = GetNode<Node2D>(TargetNodepath);
+        Vector2 startPos = new Vector2(PlayerPrefs.GetInt("CamPositionX", 166), PlayerPrefs.GetInt("CamPositionY", -143));
+        GlobalPosition = startPos;
+
     }
 
     public override void _Process(double delta)
     {
+        /*if(GetTree().Paused)
+        {
+            lerpSpeedX *= 0.5f;
+            lerpSpeedY *= 0.5f;
+        }*/
+
         try
         {
 

@@ -65,7 +65,7 @@ public partial class Bow : Node, ITool
             GetTree().Root.AddChild(arrow);
 
         }
-            GD.Print("Used Bow");
+            //GD.Print("Used Bow");
             link.usingTool = false;
             charged = false;
     }
@@ -90,7 +90,7 @@ public partial class Bow : Node, ITool
 
 	public bool Identify()
 	{
-		GD.Print("I am Bow");
+		//GD.Print("I am Bow");
 		return true;
 	}
 
@@ -178,7 +178,7 @@ public partial class Bow : Node, ITool
         }
         if (linkSprite == null)
         {
-            GD.Print("Bow Animator Setup");
+            //GD.Print("Bow Animator Setup");
             linkSprite = character;
             linkSprite.AnimationFinished += () => Charge();
 

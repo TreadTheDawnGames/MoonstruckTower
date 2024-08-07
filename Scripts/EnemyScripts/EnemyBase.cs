@@ -92,7 +92,6 @@ public partial class EnemyBase : CharacterBody2D
     {
         if (animator.Animation == "Spawn")
         {
-            GD.Print("spawned");
             active = true;
             machine.SetUp();
             hurtBox.SetEnabled(true);

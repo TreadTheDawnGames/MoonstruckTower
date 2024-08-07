@@ -71,7 +71,7 @@ public partial class BossOrb : Lock, ILock
             currentHitPoints--;
             if (currentHitPoints <= 0)
             {
-            GD.Print("Unlocked " + Name);
+            //GD.Print("Unlocked " + Name);
                 animator.Play("Explode");
                 unlocked = true;
                 door.AttemptToOpen();

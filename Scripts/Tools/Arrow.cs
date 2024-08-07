@@ -17,7 +17,7 @@ public partial class Arrow : Projectile
 
             if (body.GetCollisionLayerValue(13))
             {
-                GD.Print("Got 13");
+                //GD.Print("Got 13");
                 fallDown = true;
                 hitBox.SetEnabled(true);
 

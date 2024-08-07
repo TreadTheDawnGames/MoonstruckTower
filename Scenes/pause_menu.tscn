@@ -1,0 +1,196 @@
+[gd_scene load_steps=15 format=3 uid="uid://bqdhn51mlvqmo"]
+
+[ext_resource type="Script" path="res://Scenes/PauseMenu.cs" id="1_loknk"]
+[ext_resource type="Texture2D" uid="uid://cx2gq43fm64kl" path="res://Assets/UI/PausePanel.png" id="2_rwgf2"]
+[ext_resource type="Texture2D" uid="uid://b3qkyx3ssfhda" path="res://Assets/UI/Buttons/ResumeNormal.png" id="3_70smp"]
+[ext_resource type="Texture2D" uid="uid://dnbl0vxxivgux" path="res://Assets/UI/Buttons/QuitButton-Normal.png" id="3_nb3vr"]
+[ext_resource type="Texture2D" uid="uid://jhwot5r5wx77" path="res://Assets/UI/Buttons/QuitButton-Clicked.png" id="4_1yvb2"]
+[ext_resource type="Texture2D" uid="uid://32x24qfqhhh4" path="res://Assets/UI/Buttons/ResumeClick.png" id="4_kqsge"]
+[ext_resource type="Texture2D" uid="uid://dtpj8scu18kno" path="res://Assets/UI/Buttons/QuitButton-Hover.png" id="5_46003"]
+[ext_resource type="Texture2D" uid="uid://lr4fbup66wp1" path="res://Assets/UI/Buttons/ResumeHover.png" id="5_wqhi4"]
+[ext_resource type="Texture2D" uid="uid://c0aeqmb48uart" path="res://Assets/UI/SavedText.png" id="9_5fwee"]
+[ext_resource type="Texture2D" uid="uid://cxlci0kw5laay" path="res://Assets/UI/Zelda_Logo.png" id="10_g7gua"]
+
+[sub_resource type="Animation" id="Animation_4bkb3"]
+resource_name = "In"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-320, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0, -27.5),
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-256, -0.25, 0, 0.25, 0, -256, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+
+[sub_resource type="Animation" id="Animation_pjn2j"]
+resource_name = "Out"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0, -27.5, -320, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-256, -0.25, 0, 0.25, 0, -256, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+
+[sub_resource type="Animation" id="Animation_3aeq6"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-256, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2fsfw"]
+_data = {
+"In": SubResource("Animation_4bkb3"),
+"Out": SubResource("Animation_pjn2j"),
+"RESET": SubResource("Animation_3aeq6")
+}
+
+[node name="PauseMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("1_loknk")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1267.0
+offset_top = -365.0
+offset_bottom = 421.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.54902)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -256.0
+offset_right = 320.0
+offset_bottom = 256.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("2_rwgf2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -114.0
+offset_top = -92.0
+offset_right = 118.0
+offset_bottom = 104.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="ResumeButton" type="TextureButton" parent="TextureRect/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+texture_normal = ExtResource("3_70smp")
+texture_pressed = ExtResource("4_kqsge")
+texture_hover = ExtResource("5_wqhi4")
+
+[node name="QuitButton" type="TextureButton" parent="TextureRect/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_nb3vr")
+texture_pressed = ExtResource("4_1yvb2")
+texture_hover = ExtResource("5_46003")
+
+[node name="TextureRect2" type="TextureRect" parent="TextureRect"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -29.0
+offset_top = 1.0
+offset_right = 371.0
+offset_bottom = 201.0
+texture = ExtResource("10_g7gua")
+
+[node name="TextureRect" type="TextureRect" parent="TextureRect"]
+layout_mode = 0
+offset_left = -32.0
+offset_top = -2.0
+offset_right = 368.0
+offset_bottom = 198.0
+texture = ExtResource("10_g7gua")
+
+[node name="TextureRect3" type="TextureRect" parent="TextureRect"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 393.0
+offset_right = 280.0
+offset_bottom = 473.0
+texture = ExtResource("9_5fwee")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2fsfw")
+}

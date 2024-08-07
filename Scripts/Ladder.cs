@@ -68,7 +68,6 @@ public partial class Ladder : RigidBody2D
 
     void ChangeFloorOn(CollisionShape2D shape, bool active)
 	{
-		GD.Print("Called | " + shape.Name + " " + active);
 		shape.SetDeferred("disabled", !active);
 
     }
@@ -95,7 +94,6 @@ public partial class Ladder : RigidBody2D
 			node.Call("SetClimb", isClimbing);
 
 
-			GD.Print("Set Climbing to " + isClimbing);
 		}
 	}
 

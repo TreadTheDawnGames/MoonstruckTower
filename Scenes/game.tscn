@@ -1,28 +1,46 @@
-[gd_scene load_steps=10 format=3 uid="uid://dx2jlctrirqip"]
+[gd_scene load_steps=12 format=3 uid="uid://dx2jlctrirqip"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_11jo3"]
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
 [ext_resource type="PackedScene" uid="uid://df0cywkihjnw2" path="res://fader.tscn" id="2_lt3m5"]
+[ext_resource type="PackedScene" uid="uid://bqdhn51mlvqmo" path="res://Scenes/pause_menu.tscn" id="4_ktqft"]
 [ext_resource type="PackedScene" uid="uid://capr45d77pcrk" path="res://Scenes/Levels/level_one_sword.tscn" id="6_5ryyd"]
 [ext_resource type="PackedScene" uid="uid://wjono21bxe4e" path="res://Scenes/Levels/level_two_ladder.tscn" id="7_xw2rh"]
 [ext_resource type="PackedScene" uid="uid://dhyskgn22y6xq" path="res://Scenes/Levels/level_three_bow.tscn" id="8_0nq8m"]
 [ext_resource type="PackedScene" uid="uid://cri412adhg20a" path="res://Scenes/tool_box.tscn" id="8_3ja6y"]
 [ext_resource type="PackedScene" uid="uid://dymlnt6sg3m7u" path="res://Scenes/Levels/boss_room.tscn" id="9_ug76d"]
+[ext_resource type="PackedScene" uid="uid://bpt5mwxsqqgoi" path="res://Scenes/spawn_checker.tscn" id="11_bwkbd"]
 [ext_resource type="Script" path="res://Scripts/CameraSmoother.cs" id="13_3xxo8"]
 
 [node name="Game" type="Node2D"]
+process_mode = 3
 script = ExtResource("1_bm7da")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" parent="CanvasLayer" instance=ExtResource("8_3ja6y")]
+metadata/_edit_use_anchors_ = true
+
+[node name="PauseMenu" parent="CanvasLayer" node_paths=PackedStringArray("fader") instance=ExtResource("4_ktqft")]
+process_mode = 3
+fader = NodePath("../Fader")
 
 [node name="Fader" parent="CanvasLayer" instance=ExtResource("2_lt3m5")]
 offset_top = -20.0
 offset_bottom = 701.0
+metadata/_edit_use_anchors_ = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(59, -7220)
+[node name="Player" parent="." instance=ExtResource("1_11jo3")]
+process_mode = 1
+position = Vector2(166, -99)
+
+[node name="CameraTrolley" type="Marker2D" parent="Player"]
+process_mode = 1
+position = Vector2(0, -44)
+
+[node name="Camera2D" type="Camera2D" parent="." groups=["Camera"]]
+process_mode = 3
+position = Vector2(-9, -2249)
 zoom = Vector2(4, 4)
 limit_left = -208
 limit_top = -7760
@@ -31,20 +49,22 @@ position_smoothing_speed = 200.0
 script = ExtResource("13_3xxo8")
 TargetNodepath = NodePath("../Player/CameraTrolley")
 
-[node name="Player" parent="." instance=ExtResource("1_11jo3")]
-position = Vector2(57, -7235)
-
-[node name="CameraTrolley" type="Marker2D" parent="Player"]
-position = Vector2(-1, -44)
-
 [node name="LevelOne-Sword" parent="." instance=ExtResource("6_5ryyd")]
-position = Vector2(0, -31.9805)
+process_mode = 1
+position = Vector2(0, -75)
 
 [node name="LevelTwo-Ladder" parent="." instance=ExtResource("7_xw2rh")]
-position = Vector2(0, -2111.97)
+process_mode = 1
+position = Vector2(0, -2154.97)
 
 [node name="LevelThree-Bow" parent="." instance=ExtResource("8_0nq8m")]
-position = Vector2(0, -4256)
+process_mode = 1
+position = Vector2(0, -4299)
 
 [node name="BossRoom" parent="." instance=ExtResource("9_ug76d")]
-position = Vector2(0, -7088)
+process_mode = 1
+position = Vector2(0, -7131)
+
+[node name="SpawnChecker" parent="." instance=ExtResource("11_bwkbd")]
+
+[connection signal="FadedOut" from="CanvasLayer/Fader" to="CanvasLayer/PauseMenu" method="QuitApp"]

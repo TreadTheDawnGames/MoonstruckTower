@@ -100,7 +100,6 @@ public partial class EnemyV2 : Node2D
 			}
 			else
 			{
-				//GD.Print("Can't See");
                 canSee = false;
 			}
                 /*EnemyChaseState chaseState = (EnemyChaseState)machine.States[2];
@@ -110,9 +109,6 @@ public partial class EnemyV2 : Node2D
             
 			if (machine.CurrentState != "EnemyAlertedState" && !isAlerted && canSee &&!isBusy)
 			{
-				
-
-				//GD.Print("I SEE YOU");
 				machine.ChangeState("EnemyAlertedState", new Dictionary<string, object> { { "goToPoint", lastSighting } });
 			}
 			

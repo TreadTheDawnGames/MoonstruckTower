@@ -28,7 +28,7 @@ public partial class LadderSpawner : Node2D, ITool
 
     public bool canUse = true;
 
-    public bool ladderPlaced = false;
+    public bool ladderPlaced = true;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -58,7 +58,7 @@ public partial class LadderSpawner : Node2D, ITool
 
     public bool Identify()
     {
-        GD.Print("I am LadderSpawner");
+       // GD.Print("I am LadderSpawner");
         return true;
     }
 
@@ -86,10 +86,11 @@ public partial class LadderSpawner : Node2D, ITool
         }
         if (linkSprite == null)
         {
-            GD.Print("Ladder Animator Setup");
+            //GD.Print("Ladder Animator Setup");
             linkSprite = character;
             linkSprite.AnimationFinished += () => AnimationFinished();
         }
+        ladderPlaced = false;
     }
 
     
@@ -112,19 +113,12 @@ public partial class LadderSpawner : Node2D, ITool
         {
             if (!roofSpawnCheck.HasOverlappingBodies())
             {
-                GD.Print("Placing");
+                //GD.Print("Placing");
 
                 PlaceLadder();
 
             }
-            else
-            {
-                GD.Print("Not Placing due to overhead bodies: ");
-                foreach (Node2D body in roofSpawnCheck.GetOverlappingBodies())
-                {
-                    GD.Print(body.Name);
-                }
-            }
+            
         }
     }
     private void PickupLadder(Ladder ladder)

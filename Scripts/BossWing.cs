@@ -61,7 +61,7 @@ public partial class BossWing : Door, IDoor
 			openedThisFrame = true;
 			if (base.AttemptToOpen())
 			{
-				GD.Print("Succeeded opening " + Name);
+				//GD.Print("Succeeded opening " + Name);
 				state = WingState.Dead;
 				logic.LoseWing(lostWing: this);
 				ShowBossEyes(false);
@@ -157,7 +157,7 @@ public partial class BossWing : Door, IDoor
 
 	public void Activate()
 	{
-		GD.Print(Name + " is active wing");
+		//GD.Print(Name + " is active wing");
 		active = true;
 		TryBecomeTarget();
 	}

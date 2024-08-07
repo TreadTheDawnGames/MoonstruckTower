@@ -5,20 +5,26 @@ public partial class MainMenu : Control
 {
 	Fader fader;
 	bool quitting;
+    TextureButton startButton;
+    TextureButton quitButton;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		fader = GetNode<Fader>("Fader");
-		fader.PlayIdle();
-	}
+		startButton = GetNode<TextureButton>("VBoxContainer/TextureButton");
+		quitButton = GetNode<TextureButton>("VBoxContainer/TextureButton2");
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
+		startButton.ButtonDown += StartPressed;
+		quitButton.ButtonDown += QuitPressed;
+        fader.MouseFilter = MouseFilterEnum.Ignore;
+		fader.FadeIn();
 
-	public void StartPressed()
+    }
+
+
+
+    public void StartPressed()
 	{
 		fader.FadeOut();
 	}
@@ -27,9 +33,11 @@ public partial class MainMenu : Control
 	{
 		fader.FadeOut();
 		quitting = true;
-	}
+        fader.MouseFilter = MouseFilterEnum.Stop;
 
-	void FadeOut()
+    }
+
+    void QuitApp()
 	{
 		if(quitting)
 			GetTree().Quit();
