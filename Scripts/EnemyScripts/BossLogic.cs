@@ -38,6 +38,10 @@ public partial class BossLogic : CharacterBody2D
 	[Export] int wakeUpHeight = 112;
 	[Export] int maxLeft;
 	[Export] int maxRight;
+	[Export] float minFlapTime = 2f;
+	[Export] float maxFlapTime = 7f;
+
+	[Export] AudioStream bonkSound, blinkSound, landSound, flapSound, deadSound, hitSound, finalHitSound;
 
 	bool queueTimer = false;
 	int driftDirection;
@@ -69,6 +73,11 @@ public partial class BossLogic : CharacterBody2D
 	FlyPosition flyPosition;
 
 	BossWing activeWing;
+	AudioPlayer audioPlayer;
+	AudioPlayer blinkAudioPlayer;
+
+
+	bool secondPhase = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -85,8 +94,11 @@ public partial class BossLogic : CharacterBody2D
 		arrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D");
 		bodyArrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D2");
 		arrowDetector = GetNode<Area2D>("ArrowDetectorArea");
+		audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
+		blinkAudioPlayer = GetNode<AudioPlayer>("Blinker");
+        //flapTimer.Timeout += Flap;
 
-		arrowDetector.BodyEntered += (node) => BlockArrow(true);
+        arrowDetector.BodyEntered += (node) => BlockArrow(true);
 		arrowDetector.BodyExited += (node) => BlockArrow(false);
 
 		wakeUpTimer.Timeout += WakeUp;
@@ -125,7 +137,7 @@ public partial class BossLogic : CharacterBody2D
 	{
 
 
-		flapTimer.WaitTime = GD.RandRange(2f, 7f);
+		flapTimer.WaitTime = GD.RandRange(minFlapTime, maxFlapTime);
 		flapTimer.Start();
 		if (downed)
 			return;
@@ -133,6 +145,13 @@ public partial class BossLogic : CharacterBody2D
 		{
 			wing.Flap();
 		}
+
+		if(finalPhase)
+		{
+			bodyArrowBlocker.SetDeferred("disabled", false);
+		}
+
+		audioPlayer.PlaySound(flapSound);
 	}
 
 	void AnimationFinished()
@@ -142,6 +161,10 @@ public partial class BossLogic : CharacterBody2D
 			if (downed)
 			{
 				animator.Play("Downed" + state.ToString());
+				if (finalPhase)
+				{
+					bodyArrowBlocker.SetDeferred("disabled", true);
+				}
 			}
 		}
 		else if (animator.Animation == "Damage")
@@ -155,10 +178,11 @@ public partial class BossLogic : CharacterBody2D
 				animator.Play("Downed" + state.ToString());
 				LoseWing(BodyState.Targetable);
 				finalHurtBox.SetEnabled(false);
+                audioPlayer.PlaySound(finalHitSound);
 
-			}
-			
-		}
+            }
+
+        }
 		else if (animator.Animation == "WakeUp" + state.ToString())
 		{
             foreach (BossWing wing in wings)
@@ -189,9 +213,14 @@ public partial class BossLogic : CharacterBody2D
 					{
 						wing.PermaKill();
 						wingCount--;
-					}
+                    }
 
 
+				}
+				if (wingCount < originalWingCount && !secondPhase)
+				{
+					flapTimer.Timeout += Flap;
+					secondPhase = true;
 				}
 			}
 			else
@@ -231,11 +260,13 @@ public partial class BossLogic : CharacterBody2D
 		}
 	}
 
+	bool playedLandSound = false;
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
 		if(!active) return;
 
+		//GD.Print(flapTimer.TimeLeft);
 		//body hits starts halfway
 
 
@@ -244,12 +275,19 @@ public partial class BossLogic : CharacterBody2D
 		{
 
 			if (!IsOnFloor())
+			{
 				velocity.Y += gravity * (float)delta;
+				playedLandSound = false;
+			}
 
 			if (IsOnFloor())
 			{
 				velocity.X = (float)Mathf.Lerp(Velocity.X, 0, 0.20);
-
+				if(!playedLandSound)
+				{
+					audioPlayer.PlaySound(landSound);
+					playedLandSound = true;
+				}
 
 				if (queueTimer)
 				{
@@ -355,7 +393,10 @@ public partial class BossLogic : CharacterBody2D
 		var direction = Mathf.Sign(Position.X - caller.Position.X);
 
 		animator.Play("HorizontalDamage");
-		var hitVelX = direction * 75 * 2;
+        audioPlayer.PlaySound(hitSound);
+
+
+        var hitVelX = direction * 75 * 2;
 		var hitVelY = GD.RandRange(6, 12);
 		float jumpInPixels = -Mathf.Sqrt(2 * gravity * hitVelY);
 
@@ -384,15 +425,18 @@ public partial class BossLogic : CharacterBody2D
 			bodyHits++;
 			if (bodyHits > hitsToFinalTakeDown + 1)
 			{
-				HandleKnockback(caller);
+                HandleKnockback(caller);
 				downed = true;
 				return;
 			}
 			animator.Play("Damage");
-		}
-	} 
+            if (bodyHits <= hitsToFinalTakeDown)
+				audioPlayer.PlaySound(hitSound);
+        }
+    } 
 	public void HeadBonk()
 	{
+		audioPlayer.PlaySound(bonkSound);
 		wakeUpTimer.WaitTime = 0.001f;
 		state = BodyState.Healthy;
 		LoseWing(BodyState.Healthy);
@@ -404,6 +448,7 @@ public partial class BossLogic : CharacterBody2D
         puppet.GlobalPosition = GlobalPosition;
         GetTree().Root.AddChild(puppet);
 		signalLock.Unlock();
+		audioPlayer.PlaySound(deadSound);
         QueueFree();
     }
 
@@ -422,10 +467,15 @@ public partial class BossLogic : CharacterBody2D
 	{
 		CheckForDeath();
 
-            driftDirection = -MathF.Sign(Position.X);
+		
+
+		//GD.Print(wingCount + " / " + originalWingCount);
+
+        driftDirection = -MathF.Sign(Position.X);
 		hurtBox.SetEnabled(false);
 		
 		animator.Play("WakeUp" + state.ToString());
+		blinkAudioPlayer.Play();
 
 		bool detected = deathZoneDetector.HasOverlappingAreas();
 		
@@ -481,7 +531,16 @@ public partial class BossLogic : CharacterBody2D
         finalHurtBox.SetEnabled(true);
 		state = BodyState.Targetable;
 		bodyArrowBlocker.SetDeferred("disabled", true);
+		activeWing.FlapEnded += EndFlap;
     }
+
+	void EndFlap()
+	{
+		if (finalPhase)
+		{
+			bodyArrowBlocker.SetDeferred("disabled", true);
+		}
+	}
 
 	void ActivateBoss(Node2D node)
 	{

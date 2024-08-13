@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dril5bi3h5s0p"]
+[gd_scene load_steps=10 format=3 uid="uid://dril5bi3h5s0p"]
 
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Locks/LockSwitch.cs" id="1_g3oqo"]
 [ext_resource type="Texture2D" uid="uid://c21igfq0amnaq" path="res://Assets/Locks and Doors/LockSwitch.png" id="2_j7yab"]
+[ext_resource type="AudioStream" uid="uid://d3by8cfgh5oc1" path="res://Assets/Audio/SFX/Switches/SwitchOff.wav" id="2_oq71c"]
+[ext_resource type="AudioStream" uid="uid://43dcmu5tatrr" path="res://Assets/Audio/SFX/Switches/SwitchOn.wav" id="3_tepui"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="5_ivmw0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ii6di"]
 atlas = ExtResource("2_j7yab")
@@ -38,6 +41,8 @@ position = Vector2(0, -8)
 collision_layer = 0
 collision_mask = 256
 script = ExtResource("1_g3oqo")
+unlockedSound = ExtResource("2_oq71c")
+lockedSound = ExtResource("3_tepui")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tl4v8")
@@ -47,3 +52,6 @@ autoplay = "Locked"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 shape = SubResource("CircleShape2D_li7x2")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("5_ivmw0")

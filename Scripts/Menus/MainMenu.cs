@@ -1,3 +1,4 @@
+
 using Godot;
 using System;
 
@@ -8,6 +9,8 @@ public partial class MainMenu : Control
     TextureButton startButton;
     TextureButton quitButton;
 
+	SettingsWindow settingsWindow;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -15,17 +18,46 @@ public partial class MainMenu : Control
 		startButton = GetNode<TextureButton>("VBoxContainer/TextureButton");
 		quitButton = GetNode<TextureButton>("VBoxContainer/TextureButton2");
 
-		startButton.ButtonDown += StartPressed;
-		quitButton.ButtonDown += QuitPressed;
+		startButton.Pressed += StartPressed;
+		quitButton.Pressed += QuitPressed;
         fader.MouseFilter = MouseFilterEnum.Ignore;
-		fader.FadeIn();
+		fader.FadedOut += QuitApp;
+		//fader.FadeIn();
+
+		settingsWindow = GetNodeOrNull<SettingsWindow>("VBoxContainer/OpenSettingButton/SettingsWindow");
+
+		if (GetTree().Paused)
+		{
+			GetTree().Paused = false;
+            AudioServer.SetBusEffectEnabled(1, 0, false);
+
+        }
+
+        if (!GetTree().Root.HasNode("Ambient"))
+		{
+			PackedScene ambient = GD.Load<PackedScene>("res://Scenes/ambient.tscn");
+			Node2D scene = ambient.Instantiate<Node2D>();
+			GetTree().Root.CallDeferred("add_child", scene);
+		}
 
     }
+	
 
 
 
     public void StartPressed()
 	{
+		if(GetTree().Paused)
+		{
+			GetTree().Paused = false;
+		}
+
+		if (settingsWindow.windowOpen)
+		{
+			settingsWindow.Animate();
+		}
+
+        fader.MouseFilter = MouseFilterEnum.Stop;
 		fader.FadeOut();
 	}
 

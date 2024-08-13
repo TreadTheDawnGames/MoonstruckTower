@@ -1,7 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxlaf62hmy5nv"]
+[gd_scene load_steps=8 format=3 uid="uid://bxlaf62hmy5nv"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/ButtonLock.cs" id="1_46a6v"]
+[ext_resource type="AudioStream" uid="uid://43dcmu5tatrr" path="res://Assets/Audio/SFX/Switches/SwitchOn.wav" id="2_if0nr"]
 [ext_resource type="Texture2D" uid="uid://ly26obbsacer" path="res://Assets/Locks and Doors/BigRedButton.png" id="2_r8jew"]
+[ext_resource type="AudioStream" uid="uid://d3by8cfgh5oc1" path="res://Assets/Audio/SFX/Switches/SwitchOff.wav" id="3_14nen"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="5_xwyes"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru3e4"]
 size = Vector2(39, 5)
@@ -14,6 +17,8 @@ scale = Vector2(-1, -1)
 collision_layer = 0
 collision_mask = 28
 script = ExtResource("1_46a6v")
+unlockedSound = ExtResource("2_if0nr")
+lockedSound = ExtResource("3_14nen")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_r8jew")
@@ -29,3 +34,6 @@ collision_mask = 5
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_h8ohj")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("5_xwyes")

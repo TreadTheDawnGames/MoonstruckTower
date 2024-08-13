@@ -15,12 +15,17 @@ public partial class Projectile : CharacterBody2D
     protected HitBox2D hitBox;
 	protected bool fallDown = false;
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+	AudioPlayer audioPlayer;
+	[Export]
+	AudioStream impactSound;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
 		collisionBox = GetNode<Area2D>("CollisionBox");
 		hitBox = GetNode<HitBox2D>("HitBox2D");
+		audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
+		
 
 		collisionBox.BodyEntered += (node) => HitWorld(node);
         collisionBox.BodyExited += (node) => fallDown = true;
@@ -43,6 +48,7 @@ public partial class Projectile : CharacterBody2D
 		//CallDeferred("reparent", node);
        // collisionBox.GetChild<CollisionShape2D>(0).SetDeferred("disabled", true);
 		hitBox.SetEnabled(false);
+		audioPlayer.Play();
 		
         Velocity = Vector2.Zero;
 		speed = 0;

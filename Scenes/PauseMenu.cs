@@ -17,6 +17,9 @@ public partial class PauseMenu : Control
 
     ColorRect rect;
 
+    AudioStreamPlayer audioPlayer;
+    [Export] AudioStream pausedSound, playedSound;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -24,9 +27,11 @@ public partial class PauseMenu : Control
         resumeButton = GetNode<TextureButton>("TextureRect/VBoxContainer/ResumeButton");
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         backgroundFader = GetNode<ColorRect>("ColorRect");
+        audioPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
 
-        quitButton.ButtonDown += QuitPressed;
-        resumeButton.ButtonDown += HandlePause;
+        quitButton.Pressed += QuitPressed;
+        resumeButton.Pressed += HandlePause;
+        fader.FadedOut += QuitToMenu;
         //rect = GetNode<ColorRect>("ColorRect");
     }
 
@@ -34,11 +39,19 @@ public partial class PauseMenu : Control
     {
         if(paused)
         {
+            AudioServer.SetBusEffectEnabled(1, 0, true);
+
             backgroundFader.Show();
+            audioPlayer.Stream = pausedSound;
+            audioPlayer.Play();
         }
         else
         {
+            AudioServer.SetBusEffectEnabled(1, 0, false);
+
             backgroundFader.Hide();
+            audioPlayer.Stream = playedSound;
+            audioPlayer.Play();
         }
     }
     
@@ -62,7 +75,7 @@ public partial class PauseMenu : Control
             }
             else
             {
-                animator.PlayBackwards("Out");
+                animator.Play("In");
 
             }
         }
@@ -177,10 +190,12 @@ public partial class PauseMenu : Control
         fader.MouseFilter = MouseFilterEnum.Stop;
     }
 
-    void QuitApp()
+    void QuitToMenu()
     {
         if (quitting)
-            GetTree().Quit();
+        {
+            GetTree().ChangeSceneToFile("res://Scenes/main_menu.tscn");
+        }
 
 
     }

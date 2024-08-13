@@ -63,7 +63,7 @@ public partial class SpawnChecker : Area2D
 			camera.GlobalPosition = camStartPos;
 
 			DebugTools game = GetParent<DebugTools>();
-			game.fader.FadeIn();
+			//game.fader.FadeIn();
 
 
 

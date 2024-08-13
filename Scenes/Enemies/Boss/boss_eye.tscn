@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://df51jpjla8u7e"]
+[gd_scene load_steps=7 format=3 uid="uid://df51jpjla8u7e"]
 
 [ext_resource type="Script" path="res://Scripts/BossOrb.cs" id="1_ib1sj"]
 [ext_resource type="SpriteFrames" uid="uid://cq58vduqbkmwh" path="res://Scenes/Enemies/Boss/BossOrb.tres" id="2_mi5hv"]
+[ext_resource type="AudioStream" uid="uid://0euvgi7kc6b3" path="res://Assets/Audio/SFX/Enemies/Boss/BossEyeDead.wav" id="2_nntxc"]
+[ext_resource type="AudioStream" uid="uid://b4oe6ftgwpii6" path="res://Assets/Audio/SFX/Enemies/Boss/BossEyeHit.wav" id="3_8kf0l"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="5_tbryn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_m7uvw"]
 resource_local_to_scene = true
@@ -11,6 +14,8 @@ radius = 4.0
 collision_layer = 0
 collision_mask = 128
 script = ExtResource("1_ib1sj")
+unlockedSound = ExtResource("2_nntxc")
+lockedSound = ExtResource("3_8kf0l")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("2_mi5hv")
@@ -19,3 +24,6 @@ autoplay = "Healthy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_m7uvw")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("5_tbryn")

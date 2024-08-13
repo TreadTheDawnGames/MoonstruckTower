@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public partial class EnemyShootState : EnemyState
 {
     OctorokV2 octorok;
-
+    [Export]
+    AudioStream shoot;
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
@@ -57,8 +58,9 @@ public partial class EnemyShootState : EnemyState
             pellet.GlobalRotation = flipped ? Mathf.DegToRad(0f) : Mathf.DegToRad(180f);
             pellet.speed *= flipped ? 1 : -1;
 
-            GetTree().Root.AddChild(pellet);
+            GetTree().Root.GetChild<Node2D>(0).AddChild(pellet);
             animator.Play("EndShoot");
+            audioPlayer.PlaySound(shoot);
         }
         else if (animator.Animation == "EndShoot")
         {

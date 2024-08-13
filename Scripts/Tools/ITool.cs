@@ -19,4 +19,6 @@ public interface ITool
 	public void UpdateUseDirection(Vector2 direction = new()) { }
 
 	public void SetupTool(AnimatedSprite2D character, Player playerLink) { }
+
+	public void BecomeActiveTool() { }
 }

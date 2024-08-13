@@ -11,18 +11,20 @@ public partial class Fader : ColorRect
     [Signal]
     public delegate void FadedOutEventHandler();
 
-    public override void _Ready()
+    public override void _EnterTree()
     {
         base._Ready();
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         animator.AnimationFinished += (finishedAnimation) => AnimationFinished(finishedAnimation);
-        FadeIn();
+        //FadeIn();
     }
 
     public void PlayIdle()
     {
         animator.Play("Idle");
     }
+
+   
 
     void AnimationFinished(string finishedAnimation)
     {
@@ -40,6 +42,7 @@ public partial class Fader : ColorRect
 
     public void FadeIn()
     {
+        GD.Print("Fading in");
         animator.Play("FadeIn");
         
     }

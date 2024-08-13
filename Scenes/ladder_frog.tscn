@@ -1,8 +1,13 @@
-[gd_scene load_steps=30 format=3 uid="uid://bepdipajb15sk"]
+[gd_scene load_steps=35 format=3 uid="uid://bepdipajb15sk"]
 
 [ext_resource type="Script" path="res://Scripts/LadderFrog.cs" id="1_2hspi"]
 [ext_resource type="Texture2D" uid="uid://cb8fndvera73b" path="res://Assets/LadderFrog.png" id="1_455ia"]
+[ext_resource type="AudioStream" uid="uid://crpovnic13rmc" path="res://Assets/Audio/SFX/Frog/FrogHit.wav" id="2_02v3p"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="3_0xst8"]
+[ext_resource type="AudioStream" uid="uid://d3h1jruxhe3hg" path="res://Assets/Audio/SFX/Frog/FrogUpchuckPart1-2.wav" id="3_oj500"]
+[ext_resource type="AudioStream" uid="uid://b804aqsolgkfb" path="res://Assets/Audio/SFX/Frog/FrogUpchuckPart2.wav" id="4_acjxd"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="4_u8nps"]
+[ext_resource type="AudioStream" uid="uid://cb61am4lfflxx" path="res://Assets/Audio/SFX/Frog/FrogSmile.wav" id="5_78jm3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a2yy8"]
 atlas = ExtResource("1_455ia")
@@ -60,10 +65,6 @@ region = Rect2(464, 0, 48, 64)
 atlas = ExtResource("1_455ia")
 region = Rect2(512, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vg1qu"]
-atlas = ExtResource("1_455ia")
-region = Rect2(16, 0, 16, 64)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_y5e0w"]
 atlas = ExtResource("1_455ia")
 region = Rect2(160, 0, 16, 64)
@@ -99,6 +100,10 @@ region = Rect2(128, 0, 16, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_h8vj8"]
 atlas = ExtResource("1_455ia")
 region = Rect2(144, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gs788"]
+atlas = ExtResource("1_455ia")
+region = Rect2(16, 0, 16, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8rr32"]
 animations = [{
@@ -165,9 +170,6 @@ animations = [{
 "speed": 9.0
 }, {
 "frames": [{
-"duration": 7.0,
-"texture": SubResource("AtlasTexture_vg1qu")
-}, {
 "duration": 8.0,
 "texture": SubResource("AtlasTexture_y5e0w")
 }],
@@ -203,6 +205,14 @@ animations = [{
 "loop": false,
 "name": &"SpitLadder",
 "speed": 8.0
+}, {
+"frames": [{
+"duration": 7.0,
+"texture": SubResource("AtlasTexture_gs788")
+}],
+"loop": false,
+"name": &"WaitForSmile",
+"speed": 8.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bkud6"]
@@ -210,11 +220,15 @@ size = Vector2(16, 16)
 
 [node name="LadderFrog" type="Node2D"]
 script = ExtResource("1_2hspi")
+hitSound = ExtResource("2_02v3p")
+pt1 = ExtResource("3_oj500")
+pt2 = ExtResource("4_acjxd")
+smile = ExtResource("5_78jm3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_8rr32")
-animation = &"NoLadderWarning"
+animation = &"WaitForSmile"
 autoplay = "Idle"
 
 [node name="HurtBox2D" type="Area2D" parent="."]
@@ -226,3 +240,6 @@ layers = 32
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox2D"]
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_bkud6")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("4_u8nps")

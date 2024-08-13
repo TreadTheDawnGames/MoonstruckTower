@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://be1q68wmj8mbs"]
+[gd_scene load_steps=9 format=3 uid="uid://be1q68wmj8mbs"]
 
 [ext_resource type="Texture2D" uid="uid://dlpgirgbjjxq0" path="res://Assets/Arrow.png" id="1_jds70"]
 [ext_resource type="Script" path="res://Scripts/Tools/Arrow.cs" id="1_m65hw"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="2_uvvdu"]
+[ext_resource type="AudioStream" uid="uid://b1f0ws6hfxas7" path="res://Assets/Audio/SFX/Tools/Projectiles/ArrowCollide.wav" id="4_xvwd3"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="5_xunxd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rp3fk"]
 size = Vector2(5, 1)
@@ -53,5 +55,9 @@ collision_mask = 4097
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionBox"]
 position = Vector2(-5, -0.5)
 shape = SubResource("RectangleShape2D_nvwly")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_xvwd3")
+script = ExtResource("5_xunxd")
 
 [connection signal="timeout" from="Timer" to="." method="Destroy"]

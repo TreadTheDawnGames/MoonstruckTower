@@ -1,7 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://c2xfoaah6ib1d"]
+[gd_scene load_steps=12 format=3 uid="uid://c2xfoaah6ib1d"]
 
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Doors/WallDoor.cs" id="1_bpfch"]
 [ext_resource type="Texture2D" uid="uid://baeppdb6m2hw7" path="res://Assets/Locks and Doors/WallDoor.png" id="1_yfevt"]
+[ext_resource type="AudioStream" uid="uid://5tgoq554uw7t" path="res://Assets/Audio/SFX/Doors/WallDoorDown.wav" id="2_8l41f"]
+[ext_resource type="AudioStream" uid="uid://cmaqs5ffvpi48" path="res://Assets/Audio/SFX/Doors/WallDoorUp.wav" id="3_406na"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="3_f7o1j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_usbm3"]
 resource_local_to_scene = true
@@ -174,6 +177,8 @@ size = Vector2(2, 12)
 [node name="Door-Wall" type="Node2D"]
 z_as_relative = false
 script = ExtResource("1_bpfch")
+doorOpen = ExtResource("2_8l41f")
+doorClose = ExtResource("3_406na")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_yfevt")
@@ -209,3 +214,6 @@ shape = SubResource("RectangleShape2D_rjy4i")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CheckLeftWall"]
 position = Vector2(-11, 16)
 shape = SubResource("RectangleShape2D_rjy4i")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("3_f7o1j")

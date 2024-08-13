@@ -10,7 +10,9 @@ public partial class LadderSpawner : Node2D, ITool
 
     public bool animating { get; private set; } = false;
 
+    AudioPlayer audioPlayer;
 
+    [Export] AudioStream placeSound, takeSound, blockedSound;
 
     [Export]
     public Texture2D displayTexture { get; private set; }
@@ -40,12 +42,14 @@ public partial class LadderSpawner : Node2D, ITool
         roofSpawnCheck = GetNode<Area2D>("RoofCheck");
         wallSpawnCheck = GetNode<Area2D>("WallCheck");
         edgeSpawnCheck = GetNode<Area2D>("EdgeCheck");
-        
+        audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");   
 	}
 
 
+    public void BecomeActiveTool() { }
 
-    
+
+
 
     void AnimationFinished()
     {
@@ -67,8 +71,8 @@ public partial class LadderSpawner : Node2D, ITool
 
             animating = true;
             linkSprite.Play("LadderPlace");
-        
-        if(canUse) 
+
+        if (canUse)
             HandleLadder();
 
             
@@ -104,19 +108,30 @@ public partial class LadderSpawner : Node2D, ITool
             {
                 if (area.Owner is Ladder)
                 {
+                audioPlayer.PlaySound(takeSound);
                     PickupLadder((Ladder)area.Owner);
                     return;
                 }
+                
             }
+            
+                {
+                        audioPlayer.PlaySound(blockedSound);
+
+                }
         }
         else
         {
             if (!roofSpawnCheck.HasOverlappingBodies())
             {
                 //GD.Print("Placing");
-
+                audioPlayer.PlaySound(placeSound);
                 PlaceLadder();
 
+            }
+            else
+            {
+                audioPlayer.PlaySound(blockedSound);
             }
             
         }

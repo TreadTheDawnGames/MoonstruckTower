@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Godot.Collections;
+using System.Collections.Immutable;
 
 [Icon("res://Assets/Locks and Doors/Icons/FallAwayFloorIcon.png")]
 public partial class FallThroughDoor : Door
@@ -10,13 +11,18 @@ public partial class FallThroughDoor : Door
     StaticBody2D characterBody;
     [Export] int layer = 7;
     [Export] bool visible = true;
-   
 
+    bool shouldPlaySound;
+    bool lastLock;
     public override void _Ready()
     {
         sprite = GetNode<Sprite2D>("Sprite2D");
         collisionShape = GetNode<CollisionShape2D>("StaticBody2D/CollisionShape2D");
         characterBody = GetNode<StaticBody2D>("StaticBody2D");
+
+        doorOpen = GD.Load<AudioStream>("res://Assets/Audio/SFX/Doors/DoorOn1.wav");
+        doorClose = GD.Load<AudioStream>("res://Assets/Audio/SFX/Doors/DoorOff1.wav");
+
         if (!characterBody.GetCollisionLayerValue(layer))
         {
             characterBody.SetCollisionLayerValue(layer, true);
@@ -28,6 +34,7 @@ public partial class FallThroughDoor : Door
 
 
         }
+
         base._Ready();
 
     }
@@ -72,6 +79,8 @@ public partial class FallThroughDoor : Door
 
     void ToggleCollision()
     {
+
+        shouldPlaySound = (lastLock != opened);
         if (characterBody == null)
         {
             GD.PrintErr(Name + " has no character body");
@@ -82,14 +91,24 @@ public partial class FallThroughDoor : Door
         {
             characterBody.SetCollisionLayerValue(layer, opened);
             sprite.Frame = opened ? 0 : 1;
+            if (shouldPlaySound)
+            {
+                audioPlayer.PlaySound(opened ? doorOpen : doorClose);
+                shouldPlaySound = false;
+            }
         }
         else
         {
             characterBody.SetCollisionLayerValue(layer, !opened);
             sprite.Frame = opened ? 1 : 0;
+            if (shouldPlaySound)
+            {
+                audioPlayer.PlaySound(opened ? doorClose:doorOpen);
+                shouldPlaySound = false;
+            }
         }
 
-        
+        lastLock = opened;
     }
     
 

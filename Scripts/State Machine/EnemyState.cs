@@ -12,6 +12,7 @@ public partial class EnemyState : State
     public int moveDirection = 0;
     public float speedMultiplier = 1;
     public bool jumping = false;
+    public AudioPlayer audioPlayer;
     protected bool isCurrentState { get; private set; } = false;
     public override void SetUp(Dictionary<string, object> message)
     {
@@ -20,6 +21,7 @@ public partial class EnemyState : State
         animator = (AnimatedSprite2D)message["Animator"];
         statusAnimator = (AnimatedSprite2D)message["StatusAnimator"];
         logic = (EnemyBase)message["Body"];
+        audioPlayer = (AudioPlayer)message["AudioPlayer"];
     }
     public override void OnStart(Dictionary<string, object> message)
     {

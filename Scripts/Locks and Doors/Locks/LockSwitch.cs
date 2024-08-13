@@ -71,19 +71,20 @@ public partial class LockSwitch : Lock
         
 
             sprite.Play(visualUnlocked ? "Unlocked" : "Locked");
-        
+        audioPlayer.PlaySound(visualUnlocked ? lockedSound : unlockedSound);
 
 
 
+            door.AttemptToOpen();
+/*
         try
         {
 
-            door.AttemptToOpen();
         }
         catch (Exception ex)
         {
             GD.PrintErr(Name + " has no assigned door" + " | " + Owner.Name);
-        }
+        }*/
         
         
 

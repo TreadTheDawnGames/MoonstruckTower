@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO.MemoryMappedFiles;
 
 public partial class OctorokV2 : EnemyBase
 {
@@ -14,9 +15,29 @@ public partial class OctorokV2 : EnemyBase
         base._Ready();
         projectileSpawnPoint = GetNode<Marker2D>("Flippables/Marker2D");
         shootTimer = GetNode<Timer>("ShootTimer");
-        //passiveHitBox.BodyEntered += (node) => CheckConfused(node);
-    }
+        passiveHitBox.BodyEntered += CheckConfused;
 
+        
+    }
+    void CheckConfused(Node2D node)
+    {
+
+
+        if (!canSee && !isBusy)
+        {
+            machine.ChangeState("EnemyConfusedState", null);
+        }
+        else if (canSee && !isBusy)
+        {
+            if (shootCharged)
+                machine.ChangeState("EnemyShootState", null);
+            else
+                machine.ChangeState("EnemyIdleState", null);
+        }
+
+
+
+    }
     public override void Activate()
     {
         if (animator.Animation == "Spawn")
@@ -35,6 +56,7 @@ public partial class OctorokV2 : EnemyBase
 
     public override void Destroy()
     {
+        passiveHitBox.BodyEntered -= CheckConfused;
 
         base.Destroy();
     }
@@ -62,16 +84,26 @@ public partial class OctorokV2 : EnemyBase
         if (Velocity.X > 0)
         {
             animator.FlipH = true;
-            flippables.Scale = new Vector2(-1, 1);
             hitBox.damage = 1;
         }
         //facing left
         else if (Velocity.X < 0)
         {
             animator.FlipH = false;
-            flippables.Scale = new Vector2(1, 1);
             hitBox.damage = -1;
         }
+
+        if(animator.FlipH)
+        {
+            flippables.Scale = new Vector2(-1, 1);
+
+        }
+        else
+        {
+            flippables.Scale = new Vector2(1, 1);
+
+        }
+
         facingRight = animator.FlipH;
 
         if (visionCast.GetColliderRid() == link.GetRid())

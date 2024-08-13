@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6ku5ta6gbmki"]
+[gd_scene load_steps=5 format=3 uid="uid://b6ku5ta6gbmki"]
 
 [ext_resource type="Script" path="res://Scripts/FallThroughDoor.cs" id="1_y6c7l"]
 [ext_resource type="Texture2D" uid="uid://cjk6glumia656" path="res://Assets/Locks and Doors/FallAwayFloorOrange.png" id="2_4j3hc"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="3_nlixj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_628td"]
 size = Vector2(48, 7)
@@ -24,3 +25,6 @@ collision_mask = 0
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_628td")
 one_way_collision = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("3_nlixj")

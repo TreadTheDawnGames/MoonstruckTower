@@ -1,15 +1,20 @@
-[gd_scene load_steps=15 format=3 uid="uid://bqdhn51mlvqmo"]
+[gd_scene load_steps=20 format=3 uid="uid://bqdhn51mlvqmo"]
 
 [ext_resource type="Script" path="res://Scenes/PauseMenu.cs" id="1_loknk"]
+[ext_resource type="AudioStream" uid="uid://yr334cvi1ks1" path="res://Assets/Audio/SFX/Menus/Pause.wav" id="2_3ft74"]
 [ext_resource type="Texture2D" uid="uid://cx2gq43fm64kl" path="res://Assets/UI/PausePanel.png" id="2_rwgf2"]
 [ext_resource type="Texture2D" uid="uid://b3qkyx3ssfhda" path="res://Assets/UI/Buttons/ResumeNormal.png" id="3_70smp"]
-[ext_resource type="Texture2D" uid="uid://dnbl0vxxivgux" path="res://Assets/UI/Buttons/QuitButton-Normal.png" id="3_nb3vr"]
-[ext_resource type="Texture2D" uid="uid://jhwot5r5wx77" path="res://Assets/UI/Buttons/QuitButton-Clicked.png" id="4_1yvb2"]
+[ext_resource type="AudioStream" uid="uid://b1i24m0t7geij" path="res://Assets/Audio/SFX/Menus/Unpause.wav" id="3_gfhax"]
 [ext_resource type="Texture2D" uid="uid://32x24qfqhhh4" path="res://Assets/UI/Buttons/ResumeClick.png" id="4_kqsge"]
-[ext_resource type="Texture2D" uid="uid://dtpj8scu18kno" path="res://Assets/UI/Buttons/QuitButton-Hover.png" id="5_46003"]
 [ext_resource type="Texture2D" uid="uid://lr4fbup66wp1" path="res://Assets/UI/Buttons/ResumeHover.png" id="5_wqhi4"]
+[ext_resource type="Script" path="res://Scenes/ButtonSounds.cs" id="8_dl0j1"]
 [ext_resource type="Texture2D" uid="uid://c0aeqmb48uart" path="res://Assets/UI/SavedText.png" id="9_5fwee"]
+[ext_resource type="Texture2D" uid="uid://cwwuf8h3r5qc6" path="res://Assets/UI/Buttons/MenuButton-Normal.png" id="9_pkoah"]
 [ext_resource type="Texture2D" uid="uid://cxlci0kw5laay" path="res://Assets/UI/Zelda_Logo.png" id="10_g7gua"]
+[ext_resource type="Texture2D" uid="uid://b4pdptcghfquc" path="res://Assets/UI/Buttons/MenuBotton-Clicked.png" id="10_jg55b"]
+[ext_resource type="Texture2D" uid="uid://lsxgtq04d5i4" path="res://Assets/UI/Buttons/MenuButton-Hover.png" id="11_4cbvs"]
+[ext_resource type="PackedScene" uid="uid://cvijir3e6ctww" path="res://Scenes/open_setting_button.tscn" id="14_0hfq7"]
+[ext_resource type="PackedScene" uid="uid://cn0lyy1o3x1p4" path="res://settings_and_info_window.tscn" id="15_6dmab"]
 
 [sub_resource type="Animation" id="Animation_4bkb3"]
 resource_name = "In"
@@ -105,6 +110,8 @@ anchor_bottom = 0.5
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_loknk")
+pausedSound = ExtResource("2_3ft74")
+playedSound = ExtResource("3_gfhax")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
@@ -157,13 +164,15 @@ focus_mode = 0
 texture_normal = ExtResource("3_70smp")
 texture_pressed = ExtResource("4_kqsge")
 texture_hover = ExtResource("5_wqhi4")
+script = ExtResource("8_dl0j1")
 
 [node name="QuitButton" type="TextureButton" parent="TextureRect/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-texture_normal = ExtResource("3_nb3vr")
-texture_pressed = ExtResource("4_1yvb2")
-texture_hover = ExtResource("5_46003")
+texture_normal = ExtResource("9_pkoah")
+texture_pressed = ExtResource("10_jg55b")
+texture_hover = ExtResource("11_4cbvs")
+script = ExtResource("8_dl0j1")
 
 [node name="TextureRect2" type="TextureRect" parent="TextureRect"]
 modulate = Color(0, 0, 0, 1)
@@ -190,7 +199,28 @@ offset_right = 280.0
 offset_bottom = 473.0
 texture = ExtResource("9_5fwee")
 
+[node name="OpenSettingButton" parent="TextureRect" instance=ExtResource("14_0hfq7")]
+layout_mode = 1
+offset_left = 132.0
+offset_top = 319.0
+offset_right = 196.0
+offset_bottom = 383.0
+
+[node name="SettingsWindow" parent="TextureRect/OpenSettingButton" instance=ExtResource("15_6dmab")]
+top_level = true
+layout_mode = 1
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+grow_vertical = 1
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_2fsfw")
 }
+autoplay = "RESET"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_3ft74")
+
+[node name="ButtonAudio" type="AudioStreamPlayer" parent="."]

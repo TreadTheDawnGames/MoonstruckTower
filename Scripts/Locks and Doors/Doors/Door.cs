@@ -10,10 +10,17 @@ public partial class Door : Node2D, IDoor
     public bool opened { get; set; } = false;
     [Export] public IDoor.GateType type { get; set; }
 
+    protected AudioPlayer audioPlayer { get; set; }
+    [Export]
+    protected AudioStream doorOpen, doorClose;
+    
+
+
     public override void _EnterTree()
     {
-        
         base._Ready();
+        audioPlayer = GetNodeOrNull<AudioPlayer>("AudioStreamPlayer2D");
+
         try
         {
             foreach(ILock locke in GetChildren().OfType<ILock>())

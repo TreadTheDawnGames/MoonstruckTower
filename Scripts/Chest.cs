@@ -9,6 +9,11 @@ public partial class Chest : AnimatedSprite2D
     public enum Treasure { Bow, Ladder };
 	Player link;
 	PackedScene tool;
+	AudioPlayer audioPlayer;
+
+	[Export]
+	AudioStream openSound, awardSound;
+
 
 	[Export] public Treasure treasure { get; private set; }
 
@@ -17,11 +22,12 @@ public partial class Chest : AnimatedSprite2D
 	public override void _Ready()
 	{
 		area = GetNode<Area2D>("Area2D");
+		audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
 		area.AreaEntered += (node)=> Open(node);
 		AnimationFinished += End;
 
 		//opened = PlayerPrefs.GetBool("Opened"+Name, false);
-		opened = PlayerPrefs.GetBool(Name + "Opened", false);
+		opened = PlayerPrefs.GetBool(this.Name + "Opened", false);
         Play( opened ? "Opened" : "Closed");
 
 	}
@@ -40,7 +46,6 @@ public partial class Chest : AnimatedSprite2D
 			if (Animation == "AwardLadder")
 			{
 				tool = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/ladder_spawner.tscn");
-				PlayerPrefs.SetBool("Ladder", true);
 			}
 			if (tool != null)
 			{
@@ -50,16 +55,19 @@ public partial class Chest : AnimatedSprite2D
 				link.toolBag.AddChild(addedTool);
 				link.UpdateToolbag();
 				Play("Opened");
-			}
-		}
+                audioPlayer.PlaySound(awardSound);
+
+            }
+        }
 
 	}
 	void Open(Node2D node)
 	{
 		if (!opened)
 		{
+            audioPlayer.PlaySound(openSound);
 
-			if (node.Owner is Player)
+            if (node.Owner is Player)
 			{
 				link = (Player)node.Owner;
 				area.QueueFree();

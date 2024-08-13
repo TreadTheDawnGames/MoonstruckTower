@@ -1,0 +1,185 @@
+[gd_scene load_steps=22 format=3 uid="uid://cn0lyy1o3x1p4"]
+
+[ext_resource type="Script" path="res://SettingsWindow.cs" id="1_crrb1"]
+[ext_resource type="Texture2D" uid="uid://csa3b8yacckjb" path="res://Assets/UI/LargePanelLeft.png" id="1_fa07u"]
+[ext_resource type="Texture2D" uid="uid://dx2d2hbn6688u" path="res://Assets/UI/Buttons/XButtonNormal.png" id="2_ev6n6"]
+[ext_resource type="Texture2D" uid="uid://dv72g5l7s5qwt" path="res://Assets/UI/Buttons/XButtonPressed.png" id="3_0clre"]
+[ext_resource type="Texture2D" uid="uid://7ge4gshalk44" path="res://Assets/UI/Buttons/XButtonHover.png" id="4_a5gm7"]
+[ext_resource type="Texture2D" uid="uid://d4e8iu1ugb0rw" path="res://Assets/UI/Buttons/MusicSlider.png" id="5_oiej2"]
+[ext_resource type="Texture2D" uid="uid://blcksnj1ls3cy" path="res://Assets/UI/Buttons/MasterSlider.png" id="6_o2elw"]
+[ext_resource type="StyleBox" uid="uid://c21ly68f38y2p" path="res://SliderBox.tres" id="7_3etc3"]
+[ext_resource type="StyleBox" uid="uid://biqskioq55nbg" path="res://SliderFiller.tres" id="8_hswp4"]
+[ext_resource type="Texture2D" uid="uid://dcd722q6mv68m" path="res://Assets/UI/ControlDiagram.png" id="9_88dpj"]
+[ext_resource type="Script" path="res://Scenes/ButtonSounds.cs" id="10_rqxcu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6ap4"]
+atlas = ExtResource("6_o2elw")
+region = Rect2(256, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r45pl"]
+atlas = ExtResource("6_o2elw")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="Theme" id="Theme_da31f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bgcdj"]
+atlas = ExtResource("5_oiej2")
+region = Rect2(256, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4l52"]
+atlas = ExtResource("5_oiej2")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h33lw"]
+texture = ExtResource("5_oiej2")
+texture_margin_top = 64.0
+region_rect = Rect2(0, 0, 256, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rp230"]
+content_margin_bottom = 4.0
+texture = ExtResource("5_oiej2")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(0, 64, 256, 64)
+
+[sub_resource type="Animation" id="Animation_gsahf"]
+resource_name = "In"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-640, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(68, -0.25, 0, 0.25, 0, 68, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+
+[sub_resource type="Animation" id="Animation_l8bt2"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-640, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(68, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1hw7x"]
+_data = {
+"In": SubResource("Animation_gsahf"),
+"RESET": SubResource("Animation_l8bt2")
+}
+
+[node name="SettingsWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+script = ExtResource("1_crrb1")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = 68.0
+offset_bottom = 580.0
+grow_vertical = 2
+mouse_filter = 0
+texture = ExtResource("1_fa07u")
+
+[node name="Master" type="HSlider" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -312.0
+offset_top = -224.0
+offset_right = -56.0
+offset_bottom = -156.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_icons/grabber = SubResource("AtlasTexture_v6ap4")
+theme_override_icons/grabber_highlight = SubResource("AtlasTexture_r45pl")
+theme_override_styles/slider = ExtResource("7_3etc3")
+theme_override_styles/grabber_area = ExtResource("8_hswp4")
+theme_override_styles/grabber_area_highlight = ExtResource("8_hswp4")
+min_value = -80.0
+max_value = 0.0
+
+[node name="Music" type="HSlider" parent="TextureRect"]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 101.0
+offset_right = 264.0
+offset_bottom = 165.0
+focus_mode = 0
+theme = SubResource("Theme_da31f")
+theme_override_icons/grabber = SubResource("AtlasTexture_bgcdj")
+theme_override_icons/grabber_highlight = SubResource("AtlasTexture_f4l52")
+theme_override_styles/slider = SubResource("StyleBoxTexture_h33lw")
+theme_override_styles/grabber_area = SubResource("StyleBoxTexture_rp230")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_rp230")
+min_value = -80.0
+max_value = 0.0
+
+[node name="Close" type="TextureButton" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -96.0
+offset_top = 32.0
+offset_right = -32.0
+offset_bottom = 96.0
+grow_horizontal = 0
+focus_mode = 0
+texture_normal = ExtResource("2_ev6n6")
+texture_pressed = ExtResource("3_0clre")
+texture_hover = ExtResource("4_a5gm7")
+script = ExtResource("10_rqxcu")
+
+[node name="ControlDiagram" type="Sprite2D" parent="TextureRect"]
+position = Vector2(279, 305)
+texture = ExtResource("9_88dpj")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1hw7x")
+}
+
+[node name="ButtonAudio" type="AudioStreamPlayer" parent="."]

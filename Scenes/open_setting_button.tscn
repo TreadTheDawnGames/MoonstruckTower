@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://cvijir3e6ctww"]
+
+[ext_resource type="Texture2D" uid="uid://g5vtkdtnqh4r" path="res://Assets/UI/Buttons/InfoButtonNormal.png" id="1_nmhfb"]
+[ext_resource type="Texture2D" uid="uid://xqi2qrrotnjo" path="res://Assets/UI/Buttons/InfoButtonClicked.png" id="2_b18r4"]
+[ext_resource type="Texture2D" uid="uid://dpqbdjepefkav" path="res://Assets/UI/Buttons/InfoButtonHover.png" id="3_pf5jv"]
+[ext_resource type="Script" path="res://SettingsButton.cs" id="4_haun0"]
+
+[node name="OpenSettingButton" type="TextureButton"]
+offset_right = 64.0
+offset_bottom = 64.0
+focus_mode = 0
+texture_normal = ExtResource("1_nmhfb")
+texture_pressed = ExtResource("2_b18r4")
+texture_hover = ExtResource("3_pf5jv")
+script = ExtResource("4_haun0")

@@ -41,9 +41,9 @@ public partial class BossDeathPuppet : CharacterBody2D
 		Rotate(Mathf.DegToRad(5));
 		GlobalPosition += position*10;
 
-		if (GlobalPosition > startPos)
+		/*if (GlobalPosition > startPos)
 		{
 			QueueFree();
-		}
+		}*/
 	}
 }

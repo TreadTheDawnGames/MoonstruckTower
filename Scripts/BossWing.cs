@@ -11,6 +11,9 @@ public partial class BossWing : Door, IDoor
 
     bool openedThisFrame = false;
 
+	[Signal]
+	public delegate void FlapEndedEventHandler();
+
 	public enum WingState { Healthy, Targetable, Dead}
 	public WingState state = WingState.Healthy;
 
@@ -45,7 +48,7 @@ public partial class BossWing : Door, IDoor
 		}
 		if (animator.Animation == "Flap" + myState)
 		{
-			
+			EmitSignal(SignalName.FlapEnded);
 			ShowBossEyes(true);
             animator.Play("Full"+ myState);
 		}

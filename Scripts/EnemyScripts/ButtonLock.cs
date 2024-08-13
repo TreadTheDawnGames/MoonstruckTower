@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 [Icon("res://Assets/Locks and Doors/Icons/ButtonIcon.png")]
-public partial class ButtonLock : Lock
+public partial class ButtonLock : Lock, ILock
 {
 
     protected Sprite2D sprite;
@@ -10,14 +10,15 @@ public partial class ButtonLock : Lock
     bool queued = false;
     [Export] bool inverted = false;
 
+    bool shouldPlaySound = false;
+    bool lastLock;
     // Called when the node enters the scene tree for the first time.
     public override void SetUp()
     {
-
+        audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
         sprite = GetNode<Sprite2D>("Sprite2D");
         //unpressTimer = GetNode<Timer>("Timer");
         unlocked = inverted;
-
         if (!inverted)
         {
             BodyEntered += UnlockMe;
@@ -42,13 +43,20 @@ public partial class ButtonLock : Lock
         if (!inverted)
         {
             sprite.Frame = 1;
+
         }
         else
         {
             sprite.Frame = 0;
+
         }
+        shouldPlaySound = (lastLock != unlocked);
 
-
+        if(shouldPlaySound)
+        {
+            audioPlayer.PlaySound(unlockedSound);
+        }
+        lastLock = unlocked;
 
 
     }
@@ -81,11 +89,18 @@ public partial class ButtonLock : Lock
         if (!inverted)
         {
             sprite.Frame = 0;
+
         }
         else
         {
             sprite.Frame = 1;
         }
+        shouldPlaySound = (lastLock != unlocked);
+        if (shouldPlaySound)
+        {
+            audioPlayer.PlaySound(lockedSound);
+        }
+        lastLock = unlocked;
     }
 
 }

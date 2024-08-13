@@ -32,7 +32,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
 process_mode = 1
-position = Vector2(166, -99)
+position = Vector2(186, -3749)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 process_mode = 1
@@ -43,7 +43,7 @@ process_mode = 3
 position = Vector2(-9, -2249)
 zoom = Vector2(4, 4)
 limit_left = -208
-limit_top = -7760
+limit_top = -7803
 limit_right = 208
 position_smoothing_speed = 200.0
 script = ExtResource("13_3xxo8")
@@ -66,5 +66,3 @@ process_mode = 1
 position = Vector2(0, -7131)
 
 [node name="SpawnChecker" parent="." instance=ExtResource("11_bwkbd")]
-
-[connection signal="FadedOut" from="CanvasLayer/Fader" to="CanvasLayer/PauseMenu" method="QuitApp"]

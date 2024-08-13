@@ -8,6 +8,7 @@ public partial class BossButtonSwitch : Lock, ILock/*ButtonLock*/
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
         timer = GetNode<Timer>("Timer");
         timer.Timeout += LockMe;
         BodyEntered += UnlockMe;

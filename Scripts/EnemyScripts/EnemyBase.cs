@@ -19,6 +19,8 @@ public partial class EnemyBase : CharacterBody2D
     public HitBox2D hitBox;
     public Area2D passiveHitBox;
 
+    public AudioPlayer audioPlayer;
+
     public bool isBusy = false;
     public bool isAlerted = false;
 
@@ -44,6 +46,8 @@ public partial class EnemyBase : CharacterBody2D
     public EnemySpawner spawner { protected get; set; }
     protected bool active = false;
 
+    [Export]
+    AudioStream spawnSound;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -56,13 +60,14 @@ public partial class EnemyBase : CharacterBody2D
         edgeDetectR = GetNode<RayCast2D>("EdgeDetectionR");
         edgeDetectL = GetNode<RayCast2D>("EdgeDetectionL");
         statusAnimator = GetNode<AnimatedSprite2D>("Animator/StatusAnimator");
-        
+        audioPlayer = GetNodeOrNull<AudioPlayer>("AudioStreamPlayer2D");
         
         hurtBox = GetNode<HurtBox2D>(flippables.GetPath() + "/HurtBox2D");
                 visionCast = GetNode<RayCast2D>("VisionCast");
                 hitBox = GetNode<HitBox2D>("Flippables/HitBox2D");
                 passiveHitBox = GetNode<Area2D>("Flippables/PassiveHitBox2D");
 
+        
        // hurtBox.SetEnabled(false);
         
 
@@ -83,6 +88,7 @@ public partial class EnemyBase : CharacterBody2D
             animator.Play("Spawn");
         }
 
+        audioPlayer.PlaySound(spawnSound);
         animator.AnimationFinished += Activate;
 
 

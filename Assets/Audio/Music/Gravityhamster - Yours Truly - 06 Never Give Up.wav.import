@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b4fd17gye0by1"
+path="res://.godot/imported/Gravityhamster - Yours Truly - 06 Never Give Up.wav-b30d9a7e707b4a079e7735bd29c9fef5.sample"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Gravityhamster - Yours Truly - 06 Never Give Up.wav"
+dest_files=["res://.godot/imported/Gravityhamster - Yours Truly - 06 Never Give Up.wav-b30d9a7e707b4a079e7735bd29c9fef5.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

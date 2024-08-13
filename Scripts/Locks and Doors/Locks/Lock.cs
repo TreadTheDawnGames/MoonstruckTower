@@ -8,10 +8,14 @@ public partial class Lock : Area2D, ILock
     public bool unlocked { get; set; } = false;
     public IDoor door { get; set; }
     public CollisionShape2D shape { get; set; }
+
+    protected AudioPlayer audioPlayer;
+    [Export]
+    protected AudioStream unlockedSound, lockedSound;
 	// Called when the node enters the scene tree for the first time.
 	public virtual void SetUp()
 	{
-		
+        audioPlayer = GetNodeOrNull<AudioPlayer>("AudioStreamPlayer2D");
 		//sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		AreaEntered += (node) => UnlockMe(node);
         shape = GetNode<CollisionShape2D>("CollisionShape2D");

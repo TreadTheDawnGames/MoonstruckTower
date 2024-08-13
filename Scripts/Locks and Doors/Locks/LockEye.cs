@@ -25,6 +25,7 @@ public partial class LockEye : Lock, ILock
 			base.UnlockMe(node);
 
 			sprite.Play("Close");
+			audioPlayer.PlaySound(unlockedSound);
 			door.AttemptToOpen();
 		}
 	}

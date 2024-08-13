@@ -1,11 +1,19 @@
-[gd_scene load_steps=28 format=3 uid="uid://djh07rnu37o72"]
+[gd_scene load_steps=36 format=3 uid="uid://djh07rnu37o72"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/BossLogic.cs" id="1_ou4oa"]
 [ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="1_uab8f"]
+[ext_resource type="AudioStream" uid="uid://86mwtslmyp88" path="res://Assets/Audio/SFX/Enemies/Boss/BassBonkFall.wav" id="2_8iblr"]
 [ext_resource type="PackedScene" uid="uid://dbju76t2vsmkj" path="res://Scenes/Enemies/Boss/boss_wing_l.tscn" id="2_w5073"]
 [ext_resource type="PackedScene" uid="uid://das7lejpkay7d" path="res://Scenes/Enemies/Boss/boss_wing_r.tscn" id="3_bb700"]
+[ext_resource type="AudioStream" uid="uid://5xc0q5qw02tf" path="res://Assets/Audio/SFX/Enemies/Boss/Blink3.wav" id="3_jp8gk"]
+[ext_resource type="AudioStream" uid="uid://dxjgg3ib5jr06" path="res://Assets/Audio/SFX/Enemies/Boss/BossLand.wav" id="4_dhca2"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HurtBox2D.cs" id="5_vly7l"]
+[ext_resource type="AudioStream" uid="uid://cqkya7o2sx6oh" path="res://Assets/Audio/SFX/Enemies/Boss/BossFlap.wav" id="5_ykqwd"]
+[ext_resource type="AudioStream" uid="uid://0euvgi7kc6b3" path="res://Assets/Audio/SFX/Enemies/Boss/BossEyeDead.wav" id="6_mc2t2"]
 [ext_resource type="Script" path="res://addons/hithurtboxes2d/HitBox2D.cs" id="6_ymn45"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="7_air35"]
+[ext_resource type="AudioStream" uid="uid://bbwbbc8afr4rs" path="res://Assets/Audio/SFX/Enemies/EnemyHit.wav" id="7_cifvy"]
+[ext_resource type="AudioStream" uid="uid://b0nhaj7u2l0iw" path="res://Assets/Audio/SFX/Enemies/EnemyDeath.wav" id="8_c0pky"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p6vl3"]
 atlas = ExtResource("1_uab8f")
@@ -193,7 +201,7 @@ size = Vector2(60, 20)
 size = Vector2(60, 1.33326)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v8042"]
-radius = 6.0
+radius = 9.33333
 height = 26.6667
 
 [node name="Boss" type="CharacterBody2D"]
@@ -204,12 +212,23 @@ collision_mask = 1537
 script = ExtResource("1_ou4oa")
 wakeUpTime = 2.0
 wakeUpHeight = 80
+minFlapTime = 1.0
+maxFlapTime = 4.0
+bonkSound = ExtResource("2_8iblr")
+blinkSound = ExtResource("3_jp8gk")
+landSound = ExtResource("4_dhca2")
+flapSound = ExtResource("5_ykqwd")
+deadSound = ExtResource("6_mc2t2")
+hitSound = ExtResource("7_cifvy")
+finalHitSound = ExtResource("8_c0pky")
 speed = 8.0
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1udlv")
-animation = &"Healthy"
+animation = &"WakeUpHealthy"
 autoplay = "DownedHealthy"
+frame = 4
+frame_progress = 1.0
 
 [node name="BossWingL" parent="." instance=ExtResource("2_w5073")]
 position = Vector2(-16, 0)
@@ -218,6 +237,7 @@ position = Vector2(-16, 0)
 position = Vector2(16, 0)
 
 [node name="HurtBox2D" type="Area2D" parent="."]
+visible = false
 collision_layer = 32
 collision_mask = 32
 script = ExtResource("5_vly7l")
@@ -229,6 +249,7 @@ rotation = -1.5708
 shape = SubResource("CapsuleShape2D_pcqk8")
 
 [node name="FinalHurtBox" type="Area2D" parent="."]
+visible = false
 collision_layer = 32
 collision_mask = 32
 script = ExtResource("5_vly7l")
@@ -293,3 +314,10 @@ disabled = true
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="ArrowBlocker"]
 position = Vector2(0, 3.33333)
 shape = SubResource("CapsuleShape2D_v8042")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("7_air35")
+
+[node name="Blinker" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_jp8gk")
+script = ExtResource("7_air35")

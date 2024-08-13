@@ -7,7 +7,8 @@ public partial class EnemyDamageState : EnemyState
 {
     [Export] float knockbackAmount = 75f;
     [Export] float damageWaitTime = 0.5f;
-
+    [Export] AudioStream damageSound, deathSound;
+    bool dying = false;
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
@@ -35,12 +36,21 @@ public partial class EnemyDamageState : EnemyState
         {
             logic.velocity.X = 0;
             animator.Play("Death");
+            if (!audioPlayer.Playing && !dying)
+            {
+                audioPlayer.PlaySound(deathSound);
+                dying = true;
+                logic.SetCollisionLayerValue(5, false);
+            }
+
         }
         else
         {
             var direction = Mathf.Sign(logic.GlobalPosition.X - caller.GlobalPosition.X);
 
             animator.Play("Damage");
+            audioPlayer.PlaySound(damageSound);
+
             var hitVelX = direction * knockbackAmount * 2;
             var hitVelY = GD.RandRange(6, 12);
             float jumpInPixels = -Mathf.Sqrt(2 * logic.gravity * hitVelY);
@@ -67,21 +77,21 @@ public partial class EnemyDamageState : EnemyState
     void Destroy()
     {
 
-            if (animator.Animation == "Death")
+        if (animator.Animation == "Death")
+        {
+            logic.Destroy();
+        }
+        else if (animator.Animation == "Damage")
+        {
+            if (!logic.canSee)
             {
-                logic.Destroy ();
-            }
-            else if (animator.Animation == "Damage")
-            {
-                if (!logic.canSee)
-                {
 
-                    machine.ChangeState("EnemyConfusedState", null);
-                }
-                else { machine.ChangeState("EnemyAlertState", null); }
+                machine.ChangeState("EnemyConfusedState", null);
             }
+            else { machine.ChangeState("EnemyAlertState", null); }
+        }
 
-        
+
     }
 
     public override void OnExit(string nextState)

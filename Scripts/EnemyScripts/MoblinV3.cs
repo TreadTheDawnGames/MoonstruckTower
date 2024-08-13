@@ -3,12 +3,14 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using static Godot.TextServer;
 
 public partial class MoblinV3 : EnemyBase
 {
-    
 
-    
+
+    bool walkStep1 = false;
+    [Export] AudioStream walk1, walk2;
 
     public override void Activate()
     {
@@ -98,7 +100,13 @@ public partial class MoblinV3 : EnemyBase
                 {
                     FlipDirection();
                     velocity.X = walkSpeed * walkDirection;
+                
+                if (velocity.X != 0 && !audioPlayer.Playing && IsOnFloor())
+                {
+                    walkStep1 = !walkStep1;
+                    audioPlayer.PlaySound(walkStep1 ? walk1 : walk2);
                 }
+            }
                 else
                 {
                     velocity.X = Mathf.MoveToward(Velocity.X, 0, walkSpeed);

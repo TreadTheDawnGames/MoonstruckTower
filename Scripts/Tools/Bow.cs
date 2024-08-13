@@ -17,12 +17,17 @@ public partial class Bow : Node, ITool
     Area2D spawnArea;
 	AnimatedSprite2D linkSprite;
     Player link;
-    AudioStreamPlayer2D audioPlayer;
+    AudioPlayer audioPlayer;
+    [Export]
+    AudioStream drawSound, shootSound;
+
+    bool shouldSound = true;
+
     public bool animating {  get; private set; } 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-        audioPlayer = GetNode<AudioStreamPlayer2D>("Audio");
+        audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
         projectile = GD.Load<PackedScene>("res://Scenes/Tools/Bow/arrow.tscn");
 		arrowSpawnPoint = GetNode<Marker2D>(new NodePath("BowSpawner"));
         spawnArea = GetNode<Area2D>("BowSpawner/Area2D");
@@ -30,6 +35,13 @@ public partial class Bow : Node, ITool
 
     void Charge()
     {
+        if (linkSprite.Animation.ToString().Contains("Draw") && shouldSound)
+        {
+            audioPlayer.PlaySound(drawSound);
+            shouldSound = false;
+        }
+
+
         if (linkSprite.Animation == "BowDraw" || linkSprite.Animation == "BowDrawWalk")
         {
             charged = true;
@@ -62,11 +74,11 @@ public partial class Bow : Node, ITool
             arrow.GlobalRotation = flipped ? Mathf.DegToRad(180f) : Mathf.DegToRad(0f);
             arrow.speed *= flipped ? 1 : -1;
 
-            GetTree().Root.AddChild(arrow);
+            GetTree().Root.GetChild<Node2D>(0).AddChild(arrow);
 
         }
-            //GD.Print("Used Bow");
-            link.usingTool = false;
+        //GD.Print("Used Bow");
+        link.usingTool = false;
             charged = false;
     }
     void ShootV()
@@ -103,7 +115,8 @@ public partial class Bow : Node, ITool
 
         if (charged)
         {
-
+                audioPlayer.PlaySound(shootSound);
+            shouldSound = true;
             if (linkSprite.Animation == "BowHoldVert" || linkSprite.Animation == "BowWalkVert")
             {
                 linkSprite.Play("BowShootVert");
@@ -121,6 +134,7 @@ public partial class Bow : Node, ITool
 
     public void PreUse(Vector2 direction)
     {
+
         bool isWalking = direction.X != 0 ? true : false;
         if (isWalking)
         {
@@ -186,6 +200,10 @@ public partial class Bow : Node, ITool
 
     }
 
-   
+    public void BecomeActiveTool()
+    {
+        shouldSound = true;
+    }
 
+  
 }

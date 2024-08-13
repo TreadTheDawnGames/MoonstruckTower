@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://g4nluld4ds37"]
+
+[ext_resource type="Script" path="res://Scenes/Ambience.cs" id="1_he6dl"]
+[ext_resource type="AudioStream" uid="uid://b4fd17gye0by1" path="res://Assets/Audio/Music/Gravityhamster - Yours Truly - 06 Never Give Up.wav" id="2_52kuw"]
+
+[node name="Ambient" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_he6dl")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_52kuw")
+autoplay = true
+bus = &"Music"
+
+[node name="Sounds" type="AudioStreamPlayer" parent="."]

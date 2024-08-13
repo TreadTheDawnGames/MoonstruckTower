@@ -13,11 +13,14 @@ public partial class Ladder : RigidBody2D
 	CollisionShape2D topFloor;
 	CollisionShape2D bottomFloor;
 
+	AudioPlayer audioPlayer;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
 		animator = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		climbableSurface = GetNode<Area2D>("ClimbableSurface");
+		audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
 		climbableSurface.BodyEntered += (node) => SetClimbing( node, true);
 		climbableSurface.BodyExited += (node) => SetClimbing( node, false);
 
@@ -103,6 +106,7 @@ public partial class Ladder : RigidBody2D
 		if (animate)
 		{
 			animator.Play("Despawn");
+			audioPlayer.Play();
 		}
 		else
 		{

@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://tbna7ntggt7w"]
+
+[ext_resource type="Script" path="res://EndScreen.cs" id="1_tgqxs"]
+[ext_resource type="PackedScene" uid="uid://df0cywkihjnw2" path="res://fader.tscn" id="2_q0snj"]
+[ext_resource type="Theme" uid="uid://vwtnef52s5lg" path="res://MenuTheme.tres" id="3_kcuj1"]
+
+[node name="EndScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tgqxs")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -22.0
+offset_right = 57.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_kcuj1")
+text = "End"
+fit_content = true
+
+[node name="Fader" parent="." instance=ExtResource("2_q0snj")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -648.0
+offset_top = -406.0
+offset_right = 648.0
+offset_bottom = 406.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="BlackoutTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true

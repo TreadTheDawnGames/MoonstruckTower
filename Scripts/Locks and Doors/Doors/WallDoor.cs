@@ -24,7 +24,7 @@ public partial class WallDoor : Door
         checkIfBodyOnTop = GetNode<Area2D>("CheckIfBodyOnTop");
         checkRightWall = GetNode<Area2D>("CheckRightWall");
         checkLeftWall = GetNode<Area2D>("CheckLeftWall");
-        
+
         //base._Ready();
         if (startOpen)
         {
@@ -154,6 +154,8 @@ public partial class WallDoor : Door
             {
                 if (animationOpen)
                 {
+                    audioPlayer.PlaySound(doorClose);
+
                     animator.PlayBackwards("Open");
                     animationOpen = false;
                 }
@@ -162,6 +164,8 @@ public partial class WallDoor : Door
             {
                 if (!animationOpen)
                 {
+                    audioPlayer.PlaySound(doorOpen);
+
                     animator.Play("Open");
                     animationOpen = true;
                 }
@@ -170,10 +174,13 @@ public partial class WallDoor : Door
         }
         else
         {
+
             if (opened)
             {
                 if (!animationOpen)
                 {
+                    audioPlayer.PlaySound(doorOpen);
+
                     animator?.Play("Open");
                     animationOpen = true;
                 }
@@ -182,12 +189,15 @@ public partial class WallDoor : Door
             {
                 if (animationOpen)
                 {
+                    audioPlayer.PlaySound(doorClose);
+
                     animator?.PlayBackwards("Open");
                     animationOpen = false;
                 }
             }
 
         }
+
 
 
     }
