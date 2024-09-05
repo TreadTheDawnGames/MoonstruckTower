@@ -35,7 +35,7 @@ public partial class DebugTools : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("Debug-Reload"))
+        /*if (Input.IsActionJustPressed("Debug-Reload"))
 		{
 			GetTree().ReloadCurrentScene();
 		}
@@ -51,7 +51,9 @@ public partial class DebugTools : Node2D
 		{
 			GD.Print("Deleted ALL PlayerPrefs");
 			PlayerPrefs.DeleteAll();
-		}
+		}*/
 
-	}
+        
+
+    }
 }

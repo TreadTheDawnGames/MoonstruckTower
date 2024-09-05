@@ -64,7 +64,6 @@ public partial class Player : CharacterBody2D
     public int ladderCount = 0;
     public bool onLadder = false;
     bool takingDamage = false;
-    int damageDirection = 0;
     public bool flippedSwitchThisAnimation = false;
 
     [Export] float camSmoothY = 0.07f;
@@ -465,16 +464,32 @@ public partial class Player : CharacterBody2D
                     animator.Play(new StringName("Idle"));
                 }
             }
-            else if (onLadder && direction.Y == 0 || onLadder && direction.Y != 0 && IsOnFloor())
-            {
-                animator.Play("LadderStay");
+            else if (onLadder)
+            {   
+                if (direction.X != 0)
+                {
+                    animator.Play("LadderClimbSide");
+                }
+                else if (direction.Y == 0 || onLadder && direction.Y != 0 && IsOnFloor())
+                {
+                    animator.Play("LadderStay");
+                }
+                
+                else if(direction.Y != 0)
+                {
+                    if (direction.Y > 0)
+                    {
+                        animator.Play("LadderClimbDown");
+                    }
+                    else
+                    {
+                        animator.Play("LadderClimb");
+                    }
+
+                }
             }
-            else if (onLadder && direction.Y != 0)
-            {
-                animator.Play("LadderClimb");
-            }
-            
-            else  
+
+            else
             {
                 animator.Play(new StringName("Jump"));
             }

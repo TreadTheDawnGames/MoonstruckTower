@@ -257,7 +257,7 @@ spawnSound = ExtResource("2_s5y16")
 
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_d3nvu")
-animation = &"Death"
+animation = &"Idle"
 autoplay = "Spawn"
 
 [node name="StatusAnimator" type="AnimatedSprite2D" parent="Animator"]

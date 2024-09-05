@@ -9,6 +9,7 @@ public partial class PauseMenu : Control
     bool quitting;
         TextureButton quitButton;
         TextureButton resumeButton;
+    SettingsWindow settingsWindow;
     AnimationPlayer animator;
 
     ColorRect backgroundFader;
@@ -23,11 +24,12 @@ public partial class PauseMenu : Control
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        quitButton = GetNode<TextureButton>("TextureRect/VBoxContainer/QuitButton");
-        resumeButton = GetNode<TextureButton>("TextureRect/VBoxContainer/ResumeButton");
+        quitButton = GetNode<TextureButton>("TextureRect/QuitButton");
+        resumeButton = GetNode<TextureButton>("TextureRect/ResumeButton");
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         backgroundFader = GetNode<ColorRect>("ColorRect");
         audioPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
+        settingsWindow = GetNode<SettingsWindow>("TextureRect/OpenSettingButton/SettingsWindow");
 
         quitButton.Pressed += QuitPressed;
         resumeButton.Pressed += HandlePause;
@@ -98,6 +100,10 @@ public partial class PauseMenu : Control
         else
         {
             GD.Print("Unpausing");
+            if(settingsWindow.windowOpen)
+            {
+                settingsWindow.Animate();
+            }
         }
 
     }

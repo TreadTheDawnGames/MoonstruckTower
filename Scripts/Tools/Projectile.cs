@@ -11,7 +11,7 @@ public partial class Projectile : CharacterBody2D
 	[Export] public float speed = 300;
 	[Export] public Vector2 shootDirection;
 	[Export] bool destroyOnContact = false;
-	Area2D collisionBox;
+	protected Area2D collisionBox;
     protected HitBox2D hitBox;
 	protected bool fallDown = false;
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -75,7 +75,7 @@ public partial class Projectile : CharacterBody2D
 	
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
 	{
 		var velo = shootDirection * speed;
 		if (fallDown)

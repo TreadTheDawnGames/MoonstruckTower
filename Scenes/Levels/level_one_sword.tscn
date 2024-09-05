@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://capr45d77pcrk"]
+[gd_scene load_steps=18 format=3 uid="uid://capr45d77pcrk"]
 
 [ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="1_yqb7c"]
 [ext_resource type="Texture2D" uid="uid://y0inudm8cfbp" path="res://Assets/WorldTiles/DoorOutline.png" id="2_ndd47"]
@@ -16,11 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://du27201h5i1fp" path="res://Scenes/Doors and Locks/Doors/door_hidden_directional_sign.tscn" id="13_htkoo"]
 [ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/Locks/lock_button.tscn" id="14_xcd7y"]
 [ext_resource type="PackedScene" uid="uid://cvm7cr6i0tmsg" path="res://Scenes/sign.tscn" id="16_rg4oi"]
-[ext_resource type="FontFile" uid="uid://c3jo3wds6rhfw" path="res://Assets/Fonts/tiny.ttf" id="17_pg7ln"]
-
-[sub_resource type="Theme" id="Theme_3qiyi"]
-default_font = ExtResource("17_pg7ln")
-default_font_size = 6
+[ext_resource type="Theme" uid="uid://b1l8by6tu623v" path="res://Scenes/SignsTextTheme.tres" id="17_yyfyu"]
 
 [node name="LevelOne-Sword" type="Node2D"]
 
@@ -326,7 +322,7 @@ scale = Vector2(1, 1)
 
 [node name="EnemySpawner7" parent="." instance=ExtResource("6_efgnk")]
 position = Vector2(-104, -1905)
-respawnTime = 10.0
+respawnTime = 5.0
 tilesToFallBeforeDeath = 7
 
 [node name="Door-ShortWall" parent="." instance=ExtResource("11_uq50v")]
@@ -362,35 +358,37 @@ position = Vector2(200, -12)
 rotation = -1.5708
 
 [node name="Sign" parent="." instance=ExtResource("16_rg4oi")]
-position = Vector2(8, -232)
+position = Vector2(24, -232)
 
 [node name="Panel" type="Panel" parent="Sign"]
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -22.0
-offset_right = 39.0
+anchor_bottom = 0.5
+offset_left = -34.5
+offset_top = -20.0
+offset_right = 34.5
 offset_bottom = -6.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Sign/Panel"]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 0.36
+anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -35.5
-offset_top = -3.76
-offset_right = 37.5
-offset_bottom = 6.0
+offset_left = -32.0
+offset_top = -6.0
+offset_right = 53.0
+offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_3qiyi")
+scale = Vector2(0.75, 0.75)
+theme = ExtResource("17_yyfyu")
 bbcode_enabled = true
-text = "Duck-Jump to pass through floors!"
+text = "Duck-jump to pass
+through floors!"
 fit_content = true

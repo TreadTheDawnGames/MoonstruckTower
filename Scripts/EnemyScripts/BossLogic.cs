@@ -26,7 +26,7 @@ public partial class BossLogic : CharacterBody2D
 
 	Area2D arrowDetector;
 	CollisionShape2D arrowBlocker;
-	CollisionShape2D bodyArrowBlocker;
+	CollisionShape2D bodyArrowBlocker, bodyArrowBlockerTop;
 
 	[Export] NodePath signalLockPath;
 	SignalLock signalLock;
@@ -93,6 +93,7 @@ public partial class BossLogic : CharacterBody2D
 		activationZone = GetNode<Area2D>("../ActivationZone");
 		arrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D");
 		bodyArrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D2");
+		bodyArrowBlockerTop = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D3");
 		arrowDetector = GetNode<Area2D>("ArrowDetectorArea");
 		audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
 		blinkAudioPlayer = GetNode<AudioPlayer>("Blinker");
@@ -149,6 +150,7 @@ public partial class BossLogic : CharacterBody2D
 		if(finalPhase)
 		{
 			bodyArrowBlocker.SetDeferred("disabled", false);
+            bodyArrowBlockerTop.SetDeferred("disabled", false);
 		}
 
 		audioPlayer.PlaySound(flapSound);
@@ -164,6 +166,7 @@ public partial class BossLogic : CharacterBody2D
 				if (finalPhase)
 				{
 					bodyArrowBlocker.SetDeferred("disabled", true);
+                    bodyArrowBlockerTop.SetDeferred("disabled", true);
 				}
 			}
 		}
@@ -365,6 +368,8 @@ public partial class BossLogic : CharacterBody2D
 		Velocity = velocity;
 
 		MoveAndSlide();
+
+
 	}
 
 	public void LoseWing(BodyState stateToShow = BodyState.Targetable, BossWing lostWing = null)
@@ -531,6 +536,7 @@ public partial class BossLogic : CharacterBody2D
         finalHurtBox.SetEnabled(true);
 		state = BodyState.Targetable;
 		bodyArrowBlocker.SetDeferred("disabled", true);
+        bodyArrowBlockerTop.SetDeferred("disabled", true);
 		activeWing.FlapEnded += EndFlap;
     }
 
@@ -539,6 +545,7 @@ public partial class BossLogic : CharacterBody2D
 		if (finalPhase)
 		{
 			bodyArrowBlocker.SetDeferred("disabled", true);
+            bodyArrowBlockerTop.SetDeferred("disabled", true);
 		}
 	}
 

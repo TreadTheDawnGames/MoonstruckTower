@@ -10,6 +10,7 @@ public partial class MainMenu : Control
     TextureButton quitButton;
 
 	SettingsWindow settingsWindow;
+	bool resumingGame = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -18,7 +19,20 @@ public partial class MainMenu : Control
 		startButton = GetNode<TextureButton>("VBoxContainer/TextureButton");
 		quitButton = GetNode<TextureButton>("VBoxContainer/TextureButton2");
 
-		startButton.Pressed += StartPressed;
+		resumingGame = PlayerPrefs.GetBool("resumingGame", false);
+
+		if (resumingGame)
+		{
+			startButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeClick.png");
+            startButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeHover.png");
+            startButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeNormal.png");
+        }
+
+		var mode = PlayerPrefs.GetBool("Fullscreen", true) ? DisplayServer.WindowMode.Fullscreen:DisplayServer.WindowMode.Windowed;
+        WindowSizer.Instance.ChangeWindowSize(mode);
+
+
+        startButton.Pressed += StartPressed;
 		quitButton.Pressed += QuitPressed;
         fader.MouseFilter = MouseFilterEnum.Ignore;
 		fader.FadedOut += QuitApp;
@@ -41,9 +55,8 @@ public partial class MainMenu : Control
 		}
 
     }
-	
 
-
+   
 
     public void StartPressed()
 	{
@@ -57,6 +70,12 @@ public partial class MainMenu : Control
 			settingsWindow.Animate();
 		}
 
+		if (!resumingGame)
+		{
+	        PlayerPrefs.SetBool("resumingGame", true);
+		}
+
+
         fader.MouseFilter = MouseFilterEnum.Stop;
 		fader.FadeOut();
 	}
@@ -66,7 +85,7 @@ public partial class MainMenu : Control
 		fader.FadeOut();
 		quitting = true;
         fader.MouseFilter = MouseFilterEnum.Stop;
-
+		GetTree().Root.GetNode<Ambience>("Ambient").fadeOut = true;
     }
 
     void QuitApp()

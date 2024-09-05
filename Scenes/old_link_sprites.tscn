@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ts26smwm1b2b"]
+
+[ext_resource type="SpriteFrames" uid="uid://csdqtie0dbgmc" path="res://Scenes/OldLinkSpriteAnimations.tres" id="1_ux7fe"]
+
+[node name="OldLinkSprites" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_ux7fe")
+animation = &"Walk"

@@ -20,11 +20,21 @@ public partial class EndScreen : Control
 		fader.FadedIn += ()=> timer.Start();
 		timer.Timeout += () => fader.FadeOut();
 		fader.FadedOut += () => blackoutTimer.Start();
-		PlayerPrefs.DeleteAll();
-	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	void Exit()
+		float masterVol = PlayerPrefs.GetFloat("MasterVolume", 3.5f);
+		float musicVol = PlayerPrefs.GetFloat("MusicVolume", 3.5f);
+		bool fullscreen = PlayerPrefs.GetBool("Fullscreen", true);
+
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetBool("resumingGame", false);
+		PlayerPrefs.SetFloat("MasterVolume", masterVol);
+		PlayerPrefs.SetFloat("MusicVolume", musicVol);
+        PlayerPrefs.SetBool("Fullscreen", fullscreen);
+
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    void Exit()
 	{
         if(readyToExit)
 		GetTree().ChangeSceneToFile("res://Scenes/main_menu.tscn");

@@ -16,8 +16,9 @@ public partial class SettingsWindow : Control
         music = GetNode<HSlider>("TextureRect/Music");
         xButton = GetNode<TextureButton>("TextureRect/Close");
 
-        master.Value = PlayerPrefs.GetValue("MasterVolume", 0f);
-        music.Value = PlayerPrefs.GetValue("MusicVolume", 0f);
+        
+        master.Value = Mathf.DbToLinear(PlayerPrefs.GetValue("MasterVolume", master.MaxValue));
+        music.Value = Mathf.DbToLinear(PlayerPrefs.GetValue("MusicVolume", music.MaxValue/2));
 
         master.ValueChanged += UpdateMasterVolume;
         master.DragEnded += SaveAudioSettings;
@@ -30,11 +31,19 @@ public partial class SettingsWindow : Control
 
     public void UpdateMasterVolume(double value)
     {
-        AudioServer.SetBusVolumeDb(0, (float)value);
+        //value / maxValue = wantedValue/maxWantedValue
+
+
+        var wantedVolume = Mathf.LinearToDb(value);
+
+
+        AudioServer.SetBusVolumeDb(0, (float)wantedVolume);
     }
     public void UpdateMusicVolume(double value)
     {
-        AudioServer.SetBusVolumeDb(1, (float)value);
+        var wantedVolume = Mathf.LinearToDb(value);
+
+        AudioServer.SetBusVolumeDb(1, (float)wantedVolume);
     }
 
     void SaveAudioSettings(bool isNewValue)
@@ -43,6 +52,9 @@ public partial class SettingsWindow : Control
         {
             PlayerPrefs.SetFloat("MasterVolume", AudioServer.GetBusVolumeDb(0));
             PlayerPrefs.SetFloat("MusicVolume", AudioServer.GetBusVolumeDb(1));
+
+            var masterLinearVolume = Mathf.LinearToDb(AudioServer.GetBusVolumeDb(0));
+            var musicLinearVolume = Mathf.LinearToDb(AudioServer.GetBusVolumeDb(1));
         }
     }
 

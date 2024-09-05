@@ -1,15 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://g4nluld4ds37"]
+[gd_scene load_steps=4 format=3 uid="uid://g4nluld4ds37"]
 
 [ext_resource type="Script" path="res://Scenes/Ambience.cs" id="1_he6dl"]
-[ext_resource type="AudioStream" uid="uid://b4fd17gye0by1" path="res://Assets/Audio/Music/Gravityhamster - Yours Truly - 06 Never Give Up.wav" id="2_52kuw"]
+[ext_resource type="AudioStream" uid="uid://66ghdo8eq3ml" path="res://Assets/Audio/Music/MoonSpireTuned.wav" id="2_v5xrt"]
+[ext_resource type="Script" path="res://Scripts/Menus/WindowSizer.cs" id="3_tytgy"]
 
 [node name="Ambient" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_he6dl")
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_52kuw")
+stream = ExtResource("2_v5xrt")
+volume_db = -5.0
 autoplay = true
 bus = &"Music"
 
 [node name="Sounds" type="AudioStreamPlayer" parent="."]
+
+[node name="WindowSizer" type="Node" parent="."]
+script = ExtResource("3_tytgy")

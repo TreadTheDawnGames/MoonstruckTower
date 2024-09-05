@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://b1l8by6tu623v"]
+
+[ext_resource type="FontFile" uid="uid://bosqjr55p4j6b" path="res://Assets/Fonts/TinyUnicodeEdit.ttf" id="1_6fsqq"]
+
+[resource]
+default_font = ExtResource("1_6fsqq")
+default_font_size = 8
