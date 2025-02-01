@@ -456,17 +456,17 @@ public partial class Player : CharacterBody2D
             selectedTool.WalkWhileUseAnim(direction);
         }
     }
-    /*
-        void SetClimb(bool setTo)
-        {
-            if (ladderCount > 0)
-            {
-                touchingLadder = true;
 
-            }
-            else
-                touchingLadder = false;
-        }*/
+    void SetClimb(bool setTo)
+    {
+        if (ladderCount > 0)
+        {
+            touchingLadder = true;
+
+        }
+        else
+            touchingLadder = false;
+    }
 
     public void TakeDamage(int amount, HitBox2D box)
     {

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bncq06ew8srgw"]
+
+[ext_resource type="Script" path="res://Scripts/SoftlockPrevention_UnlockIfInArea.cs" id="1_8jnqk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nej7v"]
+size = Vector2(64, 41)
+
+[node name="Area2D" type="Area2D" node_paths=PackedStringArray("theDoor")]
+position = Vector2(-81.981, -2032.67)
+collision_layer = 0
+collision_mask = 8192
+script = ExtResource("1_8jnqk")
+theDoor = NodePath("")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.98105, -3.8335)
+shape = SubResource("RectangleShape2D_nej7v")

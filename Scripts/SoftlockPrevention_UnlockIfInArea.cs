@@ -5,7 +5,7 @@ using System.Linq;
 public partial class SoftlockPrevention_UnlockIfInArea : Area2D
 {
 	[Export]
-	Door theDoor;
+	Door[] theDoors;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -18,10 +18,14 @@ public partial class SoftlockPrevention_UnlockIfInArea : Area2D
 	{
         if (GetOverlappingAreas().Where(a => a is SpawnChecker).Any())
         {
-			foreach (var l in theDoor.lockList)
-				l.UnlockMe(null);
-			theDoor.AttemptToOpen();
-            GD.Print("SpawnCheckerFound");
+			foreach (var theDoor in theDoors)
+			{
+
+				foreach (var l in theDoor.lockList)
+					l.UnlockMe(null);
+				theDoor.AttemptToOpen();
+				GD.Print("SpawnCheckerFound");
+			}
         }
         else
         {
