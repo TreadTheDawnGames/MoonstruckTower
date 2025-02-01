@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public partial class EnemyShootState : EnemyState
 {
-    OctorokV2 octorok;
+    ShootyPlant octorok;
     [Export]
     AudioStream shoot;
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
 
-        octorok = (OctorokV2)logic;
+        octorok = (ShootyPlant)logic;
 
     }
    

@@ -31,6 +31,12 @@ public partial class Arrow : Projectile
                 hitBox.SetCollisionLayerValue(8, false);
                 Modulate = new Color(1, 0, 0);
 
+                if(body.Owner is BossLogic)
+                {
+                    var boss = body.Owner as BossLogic;
+                    boss.HitWithArrow();
+                }
+
                 return;
 
             }

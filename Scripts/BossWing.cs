@@ -21,12 +21,26 @@ public partial class BossWing : Door, IDoor
 
 	[Export] public bool active = false;
 
+	[Export] public bool rightWing;
+	BossroomTorch torches;
+	BossroomTorch otherTorches;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-		
-		animator = GetNode<AnimatedSprite2D>("Animator");
+
+		if (rightWing)
+		{
+			torches = (BossroomTorch)GetTree().GetFirstNodeInGroup("RightTorches");
+			otherTorches = (BossroomTorch)GetTree().GetFirstNodeInGroup("LeftTorches");
+		}
+		else
+		{
+			torches = (BossroomTorch)GetTree().GetFirstNodeInGroup("LeftTorches");
+			otherTorches = (BossroomTorch)GetTree().GetFirstNodeInGroup("RightTorches");
+        }
+
+        animator = GetNode<AnimatedSprite2D>("Animator");
 		animator.AnimationFinished += AnimationFinished;
 		logic = (BossLogic)Owner;
 
@@ -110,7 +124,8 @@ public partial class BossWing : Door, IDoor
 		else
 		{
 	        animator.Play("Hit" +myState);
-
+			torches.LightUp(false);
+			otherTorches.LightUp(false);
 		}
 	}
 
@@ -163,5 +178,7 @@ public partial class BossWing : Door, IDoor
 		//GD.Print(Name + " is active wing");
 		active = true;
 		TryBecomeTarget();
+		torches.LightUp(true);
+		otherTorches.LightUp(false);
 	}
 }

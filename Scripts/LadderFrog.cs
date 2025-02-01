@@ -13,7 +13,7 @@ public partial class LadderFrog : Node2D
     [Export]
     AudioStream hitSound, pt1, pt2, smile;
 
-    Player link;
+    Player playerChar;
 
     PackedScene ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
     public override void _Ready()
@@ -22,7 +22,7 @@ public partial class LadderFrog : Node2D
         animator = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
         animator.AnimationFinished += AnimationEnd;
-        link = (Player)GetTree().GetFirstNodeInGroup("Player");  // (Player)hitBox.Owner;
+        playerChar = (Player)GetTree().GetFirstNodeInGroup("Player");  // (Player)hitBox.Owner;
 
     }
 
@@ -71,8 +71,8 @@ public partial class LadderFrog : Node2D
             try
             {
 
-                link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = true;
-                link.toolBag.GetNode<LadderSpawner>("LadderSpawner").ladderPlaced = true;
+                playerChar.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = true;
+                playerChar.toolBag.GetNode<LadderSpawner>("LadderSpawner").ladderPlaced = true;
             }
             catch { }
 
@@ -97,9 +97,9 @@ public partial class LadderFrog : Node2D
 	{
         
 
-        if (link.toolBag.GetNodeOrNull<LadderSpawner>("LadderSpawner") != null)
+        if (playerChar.toolBag.GetNodeOrNull<LadderSpawner>("LadderSpawner") != null)
         {
-            link.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = false;
+            playerChar.toolBag.GetNode<LadderSpawner>("LadderSpawner").canUse = false;
 
         }
         else

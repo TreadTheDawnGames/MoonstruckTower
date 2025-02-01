@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c6wel62w8vokb"]
 
 [ext_resource type="Script" path="res://Scripts/Ladder.cs" id="1_8em4r"]
-[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/WorldTiles/OoSPlatformerTilesSprites.png" id="1_ys68x"]
+[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/WorldSprites/WorldTiles.png" id="1_ys68x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kdox1"]
 size = Vector2(12, 48)

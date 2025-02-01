@@ -24,6 +24,15 @@ public partial class WindowSizer : Node
     {
         base._Ready();
         instance = this;
+        if (OS.IsRestartOnExitSet()) OS.SetRestartOnExit(false);
+    }
+
+    public void SetVsync(bool enabled)
+    {
+        DisplayServer.VSyncMode mode = enabled ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
+        DisplayServer.WindowSetVsyncMode(mode);
+
+        PlayerPrefs.SetBool("VsyncEnabled", enabled);
     }
 
     public override void _Process(double delta)

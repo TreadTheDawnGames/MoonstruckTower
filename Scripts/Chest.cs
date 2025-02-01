@@ -7,7 +7,7 @@ public partial class Chest : AnimatedSprite2D
 	Area2D area;
 	public bool opened { get; private set; } = false;
     public enum Treasure { Bow, Ladder };
-	Player link;
+	Player playerChar;
 	PackedScene tool;
 	AudioPlayer audioPlayer;
 
@@ -52,8 +52,8 @@ public partial class Chest : AnimatedSprite2D
 
 				opened = true;
 				var addedTool = tool.Instantiate();
-				link.toolBag.AddChild(addedTool);
-				link.UpdateToolbag();
+				playerChar.toolBag.AddChild(addedTool);
+				playerChar.UpdateToolbag();
 				Play("Opened");
                 audioPlayer.PlaySound(awardSound);
 
@@ -69,7 +69,7 @@ public partial class Chest : AnimatedSprite2D
 
             if (node.Owner is Player)
 			{
-				link = (Player)node.Owner;
+				playerChar = (Player)node.Owner;
 				area.QueueFree();
 
 				if (treasure == Treasure.Bow)

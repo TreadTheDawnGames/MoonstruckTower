@@ -45,7 +45,7 @@ public partial class WallDoor : Door
     {
         if(checkIfBodyOnTop.HasOverlappingBodies())
         {
-            Player link = null;
+            Player playerChar = null;
             bool exit = false ;
                 //GD.Print(checkIfBodyOnTop.GetOverlappingBodies().Count);
             
@@ -60,7 +60,7 @@ public partial class WallDoor : Door
             }
             foreach (var body in checkIfBodyOnTop.GetOverlappingBodies().OfType<Player>())
             {
-                link = body;
+                playerChar = body;
             }
 
             
@@ -85,7 +85,7 @@ public partial class WallDoor : Door
                 }
                 else
                 {
-                    direction = Mathf.Sign(link.GlobalPosition.X - GlobalPosition.X);
+                    direction = Mathf.Sign(playerChar.GlobalPosition.X - GlobalPosition.X);
                     if (direction == 0)
                         direction = 1;
                 }
@@ -97,7 +97,7 @@ public partial class WallDoor : Door
                     y = 0;
                 }
 
-                link.GlobalPosition += new Vector2(direction*2, y);
+                playerChar.GlobalPosition += new Vector2(direction*2, y);
 
 
                 //GD.Print(body.GetType().ToString() + " " + body.Name) ;

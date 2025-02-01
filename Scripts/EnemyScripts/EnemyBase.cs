@@ -9,7 +9,7 @@ public partial class EnemyBase : CharacterBody2D
     public AnimatedSprite2D statusAnimator;
     public EnemyStateMachine machine;
     public Node2D flippables;
-    public Player link;
+    public Player playerChar;
     protected private RayCast2D visionCast;
     public RayCast2D edgeDetectR;
     public RayCast2D edgeDetectL;
@@ -84,7 +84,7 @@ public partial class EnemyBase : CharacterBody2D
                 animator.FlipH = GD.Randi() % 2 == 1 ? true : false;
             Vector2 flipScale = new Vector2(animator.FlipH ? -1 : 1, 1);
             flippables.Scale = flipScale;
-                link = (Player)GetTree().GetFirstNodeInGroup("Player");
+                playerChar = (Player)GetTree().GetFirstNodeInGroup("Player");
             animator.Play("Spawn");
         }
 

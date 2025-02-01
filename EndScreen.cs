@@ -21,16 +21,7 @@ public partial class EndScreen : Control
 		timer.Timeout += () => fader.FadeOut();
 		fader.FadedOut += () => blackoutTimer.Start();
 
-		float masterVol = PlayerPrefs.GetFloat("MasterVolume", 3.5f);
-		float musicVol = PlayerPrefs.GetFloat("MusicVolume", 3.5f);
-		bool fullscreen = PlayerPrefs.GetBool("Fullscreen", true);
-
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.SetBool("resumingGame", false);
-		PlayerPrefs.SetFloat("MasterVolume", masterVol);
-		PlayerPrefs.SetFloat("MusicVolume", musicVol);
-        PlayerPrefs.SetBool("Fullscreen", fullscreen);
-
+		PauseMenu.ResetSaveData();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

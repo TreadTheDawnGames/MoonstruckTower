@@ -25,9 +25,6 @@ public partial class Lock : Area2D, ILock
 
     public virtual void UnlockMe(Node2D node)
     {
-
-            
-        
         if(unlocked == true)
         {
             return ;

@@ -1,22 +1,41 @@
-[gd_scene load_steps=7 format=3 uid="uid://cd408xyy5a1fc"]
+[gd_scene load_steps=9 format=3 uid="uid://cd408xyy5a1fc"]
 
-[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/WorldTiles/OoSPlatformerTilesSprites.png" id="1_3doit"]
+[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/WorldSprites/WorldTiles.png" id="1_2mbj1"]
 [ext_resource type="Script" path="res://Scripts/TorchLighting.cs" id="2_t851n"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_oidvh"]
+atlas = ExtResource("1_2mbj1")
+region = Rect2(320, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u3p32"]
+atlas = ExtResource("1_2mbj1")
+region = Rect2(320, 48, 48, 48)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7iec"]
-atlas = ExtResource("1_3doit")
+atlas = ExtResource("1_2mbj1")
 region = Rect2(320, 48, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m75ba"]
-atlas = ExtResource("1_3doit")
+atlas = ExtResource("1_2mbj1")
 region = Rect2(320, 96, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ydbbn"]
-atlas = ExtResource("1_3doit")
+atlas = ExtResource("1_2mbj1")
 region = Rect2(320, 144, 48, 48)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ecbhj"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oidvh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u3p32")
+}],
+"loop": false,
+"name": &"Unlit",
+"speed": 1.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_l7iec")
@@ -32,12 +51,11 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 6.0
+"speed": 4.0
 }]
 
 [node name="Torch" type="AnimatedSprite2D"]
 z_index = -10
 sprite_frames = SubResource("SpriteFrames_ecbhj")
-frame = 2
-frame_progress = 1.0
+autoplay = "default"
 script = ExtResource("2_t851n")

@@ -23,7 +23,7 @@ public partial class Player : CharacterBody2D
     HitBox2D attackHitboxAirR;
 
 
-    CollisionShape2D linkCollider;
+    CollisionShape2D playerCharCollider;
     Area2D floorCheck;
     RayCast2D floorScan;
     Timer damageTimer;
@@ -67,7 +67,7 @@ public partial class Player : CharacterBody2D
     public bool flippedSwitchThisAnimation = false;
 
     [Export] float camSmoothY = 0.07f;
-    
+
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
@@ -84,14 +84,14 @@ public partial class Player : CharacterBody2D
         animator = (AnimatedSprite2D)GetNode(new NodePath("AnimatedSprite2D"));
         coyoteTimer = (Timer)GetNode(new NodePath("CoyoteTimer"));
         coyoteTimer.WaitTime = coyoteFrames / 60.0;
-        
+
         attackHitboxL = (HitBox2D)GetNode(new NodePath("HitBoxL"));
         attackHitboxAirL = (HitBox2D)GetNode(new NodePath("HitBoxAirL"));
         attackHitboxR = (HitBox2D)GetNode(new NodePath("HitBoxR"));
         attackHitboxAirR = (HitBox2D)GetNode(new NodePath("HitBoxAirR"));
-       
-        
-        linkCollider = (CollisionShape2D)GetNode(new NodePath("LinkCollider"));
+
+
+        playerCharCollider = (CollisionShape2D)GetNode(new NodePath("RectangleCollider"));
         damageTimer = GetNode<Timer>("DamageTimer");
         toolBoxDisplay = (TextureRect)GetTree().GetFirstNodeInGroup("ToolBoxDisplay");
         cameraTrolley = GetNode<Marker2D>("CameraTrolley");
@@ -102,28 +102,23 @@ public partial class Player : CharacterBody2D
 
         cameraDefaultPosition = cameraTrolley.Position;
         cameraDownPosition = cameraTrolley.Position;
-        cameraDownPosition.Y += 96 ;
-//        cameraUpPosition.Y -= 72 ;
+        cameraDownPosition.Y += 96;
 
         damageTimer.Timeout += () => takingDamage = false;
         coyoteTimer.Timeout += () => CoyoteDone();
         animator.AnimationFinished += () => AnimationDone();
         damageTimer.Stop();
-            UpdateToolbag();
+        UpdateToolbag();
 
         lastY = (int)GlobalPosition.Y;
 
-
         ToolSaveSys();
-
     }
 
 
     void ToolSaveSys()
     {
         List<PackedScene> tools = new();
-
-        
 
         if (PlayerPrefs.GetBool("Bow"))
         {
@@ -136,14 +131,11 @@ public partial class Player : CharacterBody2D
         }
         foreach (PackedScene tool in tools)
         {
-
             var addedTool = tool.Instantiate();
             toolBag.AddChild(addedTool);
             UpdateToolbag();
         }
-
     }
-
 
     private void CoyoteDone()
     {
@@ -157,16 +149,11 @@ public partial class Player : CharacterBody2D
             attacking = false;
             flippedSwitchThisAnimation = false;
 
-                attackHitboxL.SetEnabled(false);
-                attackHitboxAirL.SetEnabled(false);
-                attackHitboxR.SetEnabled(false);
-                attackHitboxAirR.SetEnabled(false);
-
-            
+            attackHitboxL.SetEnabled(false);
+            attackHitboxAirL.SetEnabled(false);
+            attackHitboxR.SetEnabled(false);
+            attackHitboxAirR.SetEnabled(false);
         }
-        
-
-
     }
 
     bool jumpReleased = false;
@@ -181,27 +168,22 @@ public partial class Player : CharacterBody2D
             {
                 toolList.Add((ITool)tool);
             }
-
-        }//toolBagList;
+        }
         foreach (ITool tool in toolList)
         {
             tool.SetupTool(animator, this);
-            //GD.Print("Added " + tool.name + " to Toolbag");
         }
         toolBagList = toolList.ToArray();
         toolBagItemCount = toolList.Count;
         HandleToolSwap();
-        //GD.Print($"{toolBagItemCount} items in toolbag");
     }
 
     void HandleAttack(Vector2 direction)
     {
-
         bool flipped = animator.FlipH;
 
         if (Input.IsActionJustPressed("Attack") && !usingTool && !attacking)
         {
-
             audioPlayer.PlaySound(sounds["Attack"]);
             attacking = true;
             if (IsOnFloor() && direction.X != 0)
@@ -220,13 +202,10 @@ public partial class Player : CharacterBody2D
             {
                 animator.Play("Attack");
             }
-
-
         }
 
         if (attacking)
         {
-
             if (animator.Animation == new StringName("Attack") || animator.Animation == new StringName("AttackWalk"))
             {
                 if (flipped)
@@ -243,7 +222,7 @@ public partial class Player : CharacterBody2D
 
             if (animator.Animation == "AttackAir" || animator.Animation == "AttackLadder")
             {
-                if(flipped)
+                if (flipped)
                 {
                     attackHitboxAirL.SetEnabled(false);
                     attackHitboxAirR.SetEnabled(true);
@@ -253,14 +232,8 @@ public partial class Player : CharacterBody2D
                     attackHitboxAirR.SetEnabled(false);
                     attackHitboxAirL.SetEnabled(true);
                 }
-
-
             }
         }
-
-
-
-
     }
 
     void HandleTool(Vector2 direction)
@@ -281,13 +254,13 @@ public partial class Player : CharacterBody2D
             {
                 if (selectedTool.useRelease)
                 {
-                   // GD.Print("Used " + selectedTool.name);
+                    // GD.Print("Used " + selectedTool.name);
                     selectedTool.PreUse(direction);
                 }
                 else
                 {
                     selectedTool.Use(direction);
-                   // GD.Print("PreUse for " + selectedTool.name);
+                    // GD.Print("PreUse for " + selectedTool.name);
                 }
                 usingTool = true;
 
@@ -309,30 +282,25 @@ public partial class Player : CharacterBody2D
         }
     }
 
-    
     void HandleToolSwap()
     {
-        
-            if (usingTool)
-                usingTool = false;
+        if (usingTool)
+            usingTool = false;
 
-            if (toolBagList.Length != 0)
+        if (toolBagList.Length != 0)
+        {
+            if (++selectedToolIndex > toolBagList.Length)
             {
-
-                if (++selectedToolIndex > toolBagList.Length)
-                {
-                    selectedToolIndex = 1;
-                }
-
-                selectedTool = toolBagList[selectedToolIndex - 1];
-            if(toolBoxDisplay!=null)
-                toolBoxDisplay.Texture = selectedTool.displayTexture;
-            selectedTool.BecomeActiveTool();
-
-               // GD.Print("Selected " + selectedTool.name);
+                selectedToolIndex = 1;
             }
 
+            selectedTool = toolBagList[selectedToolIndex - 1];
+            if (toolBoxDisplay != null)
+                toolBoxDisplay.Texture = selectedTool.displayTexture;
+            selectedTool.BecomeActiveTool();
+        }
     }
+
     void HandleDropthrough(float direction)
     {
         if (direction > 0 && Input.IsActionJustPressed("Jump") && IsOnFloor() && !floorCheck.HasOverlappingBodies())
@@ -340,15 +308,13 @@ public partial class Player : CharacterBody2D
             audioPlayer.PlaySound(sounds["FallThru"]);
             jumping = true;
             GlobalPosition += new Vector2(0, 2);
-            //cameraPanDownCounter = 0;
         }
     }
 
     void HandleCamera(Vector2 direction)
     {
-       
         //if down control is held count up
-        if (direction.Y > 0 )
+        if (direction.Y > 0)
         {
             cameraPanDownCounter++;
         }
@@ -360,44 +326,33 @@ public partial class Player : CharacterBody2D
         }
 
         //if the counter is done move the camera down
-        if ( cameraPanDownCounter > 20)
+        if (cameraPanDownCounter > 20)
         {
             cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDownPosition, camSmoothY);
-
-            //cameraTrolley.Position = cameraDownPosition;
-            //cameraTrolley.Position = cameraDownPosition;
-           // camera.lerpSpeedY=camSmoothY;
         }
-        
+
         else
         {
-                cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDefaultPosition, camSmoothY);
-            
+            cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDefaultPosition, camSmoothY);
+
             //this makes it so the camera keeps up if you fall infinitely
-            if(Velocity.Y > 0)
+            if (Velocity.Y > 0)
             {
                 fallTimeCounter++;
 
             }
-            else 
+            else
             {
-                fallTimeCounter=0;
+                fallTimeCounter = 0;
             }
-
 
             if (camera.lerpSpeedY < 1f)
             {
                 camera.lerpSpeedY = Mathf.Lerp(camSmoothY, camSmoothY * 3f, fallTimeCounter / fallTimeMax);
             }
-           
-
-               
-
         }
-
-
     }
-    
+
     void HandleCoyoteTime()
     {
         if (IsOnFloor() && jumping)
@@ -411,7 +366,6 @@ public partial class Player : CharacterBody2D
             coyote = true;
             coyoteTimer.Start();
         }
-
         lastFloor = IsOnFloor();
     }
 
@@ -421,7 +375,7 @@ public partial class Player : CharacterBody2D
         if (direction.X != 0 && !audioPlayer.Playing && IsOnFloor())
         {
             walkStep1 = !walkStep1;
-                audioPlayer.PlaySound(walkStep1? sounds["Walk1"] : sounds["Walk2"]);
+            audioPlayer.PlaySound(walkStep1 ? sounds["Walk1"] : sounds["Walk2"]);
         }
 
         if (direction.X < 0)
@@ -432,8 +386,6 @@ public partial class Player : CharacterBody2D
         {
             animator.FlipH = true;
         }
-
-        bool flipped = animator.FlipH;
 
         if (IsOnFloor() && animator.Animation == "AttackAir")
         {
@@ -465,7 +417,7 @@ public partial class Player : CharacterBody2D
                 }
             }
             else if (onLadder)
-            {   
+            {
                 if (direction.X != 0)
                 {
                     animator.Play("LadderClimbSide");
@@ -474,8 +426,8 @@ public partial class Player : CharacterBody2D
                 {
                     animator.Play("LadderStay");
                 }
-                
-                else if(direction.Y != 0)
+
+                else if (direction.Y != 0)
                 {
                     if (direction.Y > 0)
                     {
@@ -485,7 +437,6 @@ public partial class Player : CharacterBody2D
                     {
                         animator.Play("LadderClimb");
                     }
-
                 }
             }
 
@@ -504,25 +455,23 @@ public partial class Player : CharacterBody2D
         {
             selectedTool.WalkWhileUseAnim(direction);
         }
-
-        
     }
-
-    void SetClimb(bool setTo)
-    {
-        if (ladderCount > 0)
+    /*
+        void SetClimb(bool setTo)
         {
-            touchingLadder = true;
+            if (ladderCount > 0)
+            {
+                touchingLadder = true;
 
-        }
-        else
-            touchingLadder = false;
-    }
+            }
+            else
+                touchingLadder = false;
+        }*/
 
     public void TakeDamage(int amount, HitBox2D box)
     {
 
-        if (audioPlayer.Stream==null||!audioPlayer.Stream.ResourceName.Contains("TakeDamage") )
+        if (audioPlayer.Stream == null || !audioPlayer.Stream.ResourceName.Contains("TakeDamage"))
         {
             int rand = (int)(GD.Randi() % 3);
             AudioStream stream = sounds["TakeDamage1"];
@@ -538,29 +487,26 @@ public partial class Player : CharacterBody2D
                 case 2:
                     stream = sounds["TakeDamage3"];
                     break;
-                    
+
             }
 
             audioPlayer.PlaySound(stream);
         }
-        var direction = Mathf.Sign(GlobalPosition.X-box.GlobalPosition.X);
+        var direction = Mathf.Sign(GlobalPosition.X - box.GlobalPosition.X);
         GD.Print("PLAYER TOOK DAMAGE");
-        
 
         var hitVelX = Velocity.X;
         var hitVelY = Velocity.Y;
 
-
-
         if (floorCheck.GetOverlappingBodies().Count == 0 && IsOnFloor())
         {
-            hitVelX = direction * Speed*2;
+            hitVelX = direction * Speed * 2;
             GlobalPosition += new Vector2(0, 2);
         }
         else
         {
-            hitVelX = direction * Speed*2;
-            hitVelY = GD.RandRange(6,12);
+            hitVelX = direction * Speed * 2;
+            hitVelY = GD.RandRange(6, 12);
             float jumpInPixels = -Mathf.Sqrt(2 * gravity * hitVelY);
 
             hitVelY = jumpInPixels;
@@ -569,8 +515,8 @@ public partial class Player : CharacterBody2D
         }
         takingDamage = true;
 
-        Velocity = new Vector2(hitVelX*1.25f, hitVelY)*amount;
-        
+        Velocity = new Vector2(hitVelX * 1.25f, hitVelY) * amount;
+
         damageTimer.WaitTime = damageWaitTime;
         damageTimer.Start();
 
@@ -585,12 +531,8 @@ public partial class Player : CharacterBody2D
         }
     }
 
-
     public override void _PhysicsProcess(double delta)
     {
-
-        
-
         Vector2 velocity = Velocity;
 
         // Add the gravity.
@@ -600,8 +542,8 @@ public partial class Player : CharacterBody2D
         }
         else
         {
-                lastY = (int)GlobalPosition.Y;
-            if (GlobalPosition.Y >= lastY+75)
+            lastY = (int)GlobalPosition.Y;
+            if (GlobalPosition.Y >= lastY + 75)
             {
                 audioPlayer.PlaySound(sounds["FallThud"]);
             }
@@ -626,10 +568,8 @@ public partial class Player : CharacterBody2D
         {
             onLadder = true;
         }
-        
 
-
-            if (!touchingLadder)
+        if (!touchingLadder)
         {
             onLadder = false;
         }
@@ -637,7 +577,6 @@ public partial class Player : CharacterBody2D
         {
             velocity.Y = 0;
         }
-
 
         //HandleLadder
         if (onLadder && direction.Y != 0f)
@@ -647,7 +586,7 @@ public partial class Player : CharacterBody2D
                 direction *= 1.01f;
             }
             GlobalPosition += direction;//new Vector2(direction.X, direction.Y * climbSpeed);
-           
+
             if (!audioPlayer.Playing && !IsOnFloor())
             {
                 walkStep1 = !walkStep1;
@@ -664,7 +603,6 @@ public partial class Player : CharacterBody2D
 
         }
 
-
         if (Input.IsActionJustReleased("Jump"))
         {
             if (velocity.Y < -75)
@@ -678,9 +616,6 @@ public partial class Player : CharacterBody2D
         {
             velocity.Y += -1000 * (float)delta;
         }*/
-
-
-
 
         if (direction != Vector2.Zero && damageTimer.TimeLeft <= 0)
         {
@@ -699,7 +634,6 @@ public partial class Player : CharacterBody2D
             }
 
         }
-        
         else
         {
             velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
@@ -707,9 +641,8 @@ public partial class Player : CharacterBody2D
 
         if ((usingTool || direction.Y > 0) && damageTimer.TimeLeft <= 0)
         {
-            velocity.X *=0.5f;
+            velocity.X *= 0.5f;
         }
-
 
         HandleAnimation(direction);
 
@@ -717,15 +650,10 @@ public partial class Player : CharacterBody2D
 
         velocity.X = velocity.X * (float)delta * 70;
 
-
         Velocity = velocity;
 
         MoveAndSlide();
 
         HandleCoyoteTime();
-
-        
     }
-
-
 }

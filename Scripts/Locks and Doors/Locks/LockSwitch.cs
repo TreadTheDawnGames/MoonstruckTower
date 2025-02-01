@@ -50,16 +50,15 @@ public partial class LockSwitch : Lock
                 }
                 else if (node.Owner is Player)
                 {
-
                     //get arrow owner script /detect if box was on projectile and if it was, delete it
-                    Player link = node.Owner.GetNode<Player>(node.Owner.GetPath());
+                    Player playerChar = node.Owner.GetNode<Player>(node.Owner.GetPath());
 
-                    if (link != null && link.flippedSwitchThisAnimation)
+                    if (playerChar != null && playerChar.flippedSwitchThisAnimation)
                     {
                         return;
                     }
 
-                    link.flippedSwitchThisAnimation = true;
+                    playerChar.flippedSwitchThisAnimation = true;
                 }
 
             }

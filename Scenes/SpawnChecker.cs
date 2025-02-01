@@ -4,7 +4,6 @@ using System.Linq;
 
 public partial class SpawnChecker : Area2D
 {
-
 	Player player;
 
 	// Called when the node enters the scene tree for the first time.
@@ -21,7 +20,6 @@ public partial class SpawnChecker : Area2D
 		{
 	        GlobalPosition = new Vector2(PlayerPrefs.GetInt("PositionX", 166), PlayerPrefs.GetInt("PositionY", -99)-1);
 		}
-
 
 		if (PlayerPrefs.GetBool("LadderPlaced", false))
 		{
@@ -48,13 +46,11 @@ public partial class SpawnChecker : Area2D
 	{
 		if (HasOverlappingBodies())
 		{
-			
 			GlobalPosition += new Vector2(0, 16);
 		}
 		else
 		{
 			player.GlobalPosition = GlobalPosition;
-
 			
             Camera2D camera = (Camera2D)GetTree().GetFirstNodeInGroup("Camera");
 			Vector2 camStartPos = GlobalPosition;
@@ -64,11 +60,8 @@ public partial class SpawnChecker : Area2D
 
 			DebugTools game = GetParent<DebugTools>();
 			//game.fader.FadeIn();
-
-
-
+			game.FinishSpawning();
 			QueueFree();
-		
 		}
 	}
 }

@@ -1,0 +1,80 @@
+[gd_scene load_steps=10 format=3 uid="uid://b0dmjggoj6op2"]
+
+[ext_resource type="Script" path="res://BossroomTorch.cs" id="1_6uhqk"]
+[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/WorldSprites/WorldTiles.png" id="2_lfv15"]
+[ext_resource type="Script" path="res://Scripts/TorchLighting.cs" id="3_1yt1o"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7xcu"]
+atlas = ExtResource("2_lfv15")
+region = Rect2(320, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w2rwc"]
+atlas = ExtResource("2_lfv15")
+region = Rect2(320, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enn2u"]
+atlas = ExtResource("2_lfv15")
+region = Rect2(368, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k443b"]
+atlas = ExtResource("2_lfv15")
+region = Rect2(368, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3bhg"]
+atlas = ExtResource("2_lfv15")
+region = Rect2(368, 144, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o6acr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7xcu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w2rwc")
+}],
+"loop": false,
+"name": &"Unlit",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enn2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k443b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3bhg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k443b")
+}],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]
+
+[node name="BossroomTorches" type="Node2D"]
+z_index = -10
+script = ExtResource("1_6uhqk")
+
+[node name="BossroomTorch" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -160)
+sprite_frames = SubResource("SpriteFrames_o6acr")
+animation = &"Unlit"
+autoplay = "Unlit"
+script = ExtResource("3_1yt1o")
+
+[node name="BossroomTorch2" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -320)
+sprite_frames = SubResource("SpriteFrames_o6acr")
+animation = &"Unlit"
+autoplay = "Unlit"
+script = ExtResource("3_1yt1o")
+
+[node name="BossroomTorch3" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_o6acr")
+animation = &"Unlit"
+autoplay = "Unlit"
+script = ExtResource("3_1yt1o")

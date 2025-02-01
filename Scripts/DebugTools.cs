@@ -11,6 +11,9 @@ public partial class DebugTools : Node2D
 
 	Player player;
 
+	[Signal]
+	public delegate void SpawnFinishedEventHandler();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -23,10 +26,17 @@ public partial class DebugTools : Node2D
 		//fader?.FadeIn();
     }
 
-	void Spawn()
+    public override void _Notification(int what)
+    {
+        base._Notification(what);
+		if (what == NotificationWMCloseRequest)
+		{
+			pauseMenu.SaveGame();
+		}
+    }
+    public void FinishSpawning()
 	{
-
-
+		EmitSignal(SignalName.SpawnFinished);
 	}
 	
 

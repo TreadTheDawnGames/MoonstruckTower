@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://3ifvwp0filvt"]
 
-[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="1_ltcv2"]
+[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/KingMoth.png" id="1_ltcv2"]
 [ext_resource type="Script" path="res://Scripts/BossDeathPuppet.cs" id="1_oc7gt"]
 [ext_resource type="AudioStream" uid="uid://fkjrfi2gpi4k" path="res://Assets/Audio/SFX/Enemies/Boss/BossDeadExtended.wav" id="3_o60hg"]
 

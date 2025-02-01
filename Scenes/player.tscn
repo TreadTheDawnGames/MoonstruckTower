@@ -66,11 +66,9 @@ script = ExtResource("16_pcdn5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("14_qn30x")
-animation = &"Attack"
-frame = 3
-frame_progress = 1.0
+animation = &"Walk"
 
-[node name="LinkCollider" type="CollisionShape2D" parent="."]
+[node name="RectangleCollider" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_qbe5h")
 debug_color = Color(0, 1, 0, 0.419608)

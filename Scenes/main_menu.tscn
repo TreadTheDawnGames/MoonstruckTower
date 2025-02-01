@@ -2,17 +2,17 @@
 
 [ext_resource type="Script" path="res://Scripts/Menus/MainMenu.cs" id="1_tff0p"]
 [ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="2_sohcc"]
-[ext_resource type="PackedScene" uid="uid://b0tvtkbou8srx" path="res://Scenes/Enemies/moblin_v3.tscn" id="3_5imvj"]
+[ext_resource type="PackedScene" uid="uid://b0tvtkbou8srx" path="res://Scenes/Enemies/dino_v3.tscn" id="3_5imvj"]
 [ext_resource type="Texture2D" uid="uid://cr4jm848hnudh" path="res://Assets/UI/BlackAlpha127.png" id="4_v4721"]
 [ext_resource type="Texture2D" uid="uid://bpxo0quugow3r" path="res://Assets/UI/Buttons/StartButton-Normal.png" id="5_fafmo"]
 [ext_resource type="Texture2D" uid="uid://dfdbn28ojgt7d" path="res://Assets/UI/Buttons/StartButton-Clicked.png" id="6_b70k3"]
-[ext_resource type="Texture2D" uid="uid://be7ro3na7mxqb" path="res://Assets/UI/Buttons/StartButton-Hoverl.png" id="7_6c6hy"]
+[ext_resource type="Texture2D" uid="uid://be7ro3na7mxqb" path="res://Assets/UI/Buttons/StartButton-Hover.png" id="7_6c6hy"]
 [ext_resource type="Texture2D" uid="uid://dnbl0vxxivgux" path="res://Assets/UI/Buttons/QuitButton-Normal.png" id="8_20r2c"]
 [ext_resource type="Script" path="res://Scenes/ButtonSounds.cs" id="8_wekny"]
 [ext_resource type="Texture2D" uid="uid://jhwot5r5wx77" path="res://Assets/UI/Buttons/QuitButton-Clicked.png" id="9_qkdma"]
 [ext_resource type="Texture2D" uid="uid://dtpj8scu18kno" path="res://Assets/UI/Buttons/QuitButton-Hover.png" id="10_wmie1"]
 [ext_resource type="PackedScene" uid="uid://cvijir3e6ctww" path="res://Scenes/open_setting_button.tscn" id="12_bxrdw"]
-[ext_resource type="Script" path="res://ZeldaLogo.cs" id="12_pvxb0"]
+[ext_resource type="Script" path="res://AnimatedLogo.cs" id="12_pvxb0"]
 [ext_resource type="PackedScene" uid="uid://cn0lyy1o3x1p4" path="res://settings_and_info_window.tscn" id="13_2ug1s"]
 [ext_resource type="PackedScene" uid="uid://df0cywkihjnw2" path="res://fader.tscn" id="13_yw46t"]
 [ext_resource type="Texture2D" uid="uid://cetml3s6jq3jr" path="res://Assets/UI/Logo/SheenLogoPacked.png" id="14_dwxb8"]
@@ -235,7 +235,7 @@ offset_right = -576.0
 offset_bottom = -508.255
 grow_horizontal = 2
 
-[node name="ZeldaLogo" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedLogo" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(576, 164.305)
 scale = Vector2(4, 4)
@@ -244,10 +244,11 @@ frame = 18
 frame_progress = 1.0
 script = ExtResource("12_pvxb0")
 
-[node name="Timer" type="Timer" parent="ZeldaLogo"]
+[node name="Timer" type="Timer" parent="AnimatedLogo"]
 one_shot = true
 
 [node name="Fader" parent="." instance=ExtResource("13_yw46t")]
+visible = false
 z_index = 10
 layout_mode = 0
 offset_left = -50.0

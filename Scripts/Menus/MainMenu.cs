@@ -10,23 +10,20 @@ public partial class MainMenu : Control
     TextureButton quitButton;
 
 	SettingsWindow settingsWindow;
-	bool resumingGame = false;
+
+	public static MainMenu instance;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		instance = this;
+
 		fader = GetNode<Fader>("Fader");
 		startButton = GetNode<TextureButton>("VBoxContainer/TextureButton");
 		quitButton = GetNode<TextureButton>("VBoxContainer/TextureButton2");
 
-		resumingGame = PlayerPrefs.GetBool("resumingGame", false);
 
-		if (resumingGame)
-		{
-			startButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeClick.png");
-            startButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeHover.png");
-            startButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeNormal.png");
-        }
+		SetPlayButtonTextures();
 
 		var mode = PlayerPrefs.GetBool("Fullscreen", true) ? DisplayServer.WindowMode.Fullscreen:DisplayServer.WindowMode.Windowed;
         WindowSizer.Instance.ChangeWindowSize(mode);
@@ -37,6 +34,8 @@ public partial class MainMenu : Control
         fader.MouseFilter = MouseFilterEnum.Ignore;
 		fader.FadedOut += QuitApp;
 		//fader.FadeIn();
+
+
 
 		settingsWindow = GetNodeOrNull<SettingsWindow>("VBoxContainer/OpenSettingButton/SettingsWindow");
 
@@ -56,7 +55,21 @@ public partial class MainMenu : Control
 
     }
 
-   
+   public void SetPlayButtonTextures()
+	{
+        if (PlayerPrefs.GetBool("resumingGame", false))
+        {
+            startButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeClick.png");
+            startButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeHover.png");
+            startButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeNormal.png");
+        }
+		else
+        {
+            startButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/StartButton-Clicked.png");
+            startButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/StartButton-Hover.png");
+            startButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/StartButton-Normal.png");
+        }
+    }
 
     public void StartPressed()
 	{
@@ -70,10 +83,7 @@ public partial class MainMenu : Control
 			settingsWindow.Animate();
 		}
 
-		if (!resumingGame)
-		{
-	        PlayerPrefs.SetBool("resumingGame", true);
-		}
+		
 
 
         fader.MouseFilter = MouseFilterEnum.Stop;

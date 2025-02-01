@@ -89,20 +89,14 @@ public partial class Ladder : RigidBody2D
 	{
 		if (node is Player)
 		{
-
-
-
-			Player link = (Player)node;
-			link.ladderCount += isClimbing ? 1 : -1;
+			Player playerChar = (Player)node;
+			playerChar.ladderCount += isClimbing ? 1 : -1;
 			node.Call("SetClimb", isClimbing);
-
-
 		}
 	}
 
 	public void Despawn(bool animate)
 	{
-
 		if (animate)
 		{
 			animator.Play("Despawn");

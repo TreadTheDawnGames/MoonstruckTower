@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://r8w78lw4f5fm"]
+
+[ext_resource type="SpriteFrames" uid="uid://cjye8uy1dkhcq" path="res://UpdatesLinkSpriteAnimations.tres" id="1_2xt3u"]
+
+[node name="LinkAnimationTester" type="AnimatedSprite2D"]
+position = Vector2(-1, 0)
+sprite_frames = ExtResource("1_2xt3u")
+animation = &"Jump"

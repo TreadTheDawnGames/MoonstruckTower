@@ -1,7 +1,7 @@
 [gd_scene load_steps=21 format=3 uid="uid://dbju76t2vsmkj"]
 
 [ext_resource type="Script" path="res://Scripts/BossWing.cs" id="1_3kvdo"]
-[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="1_h4gia"]
+[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/KingMoth.png" id="1_h4gia"]
 [ext_resource type="PackedScene" uid="uid://df51jpjla8u7e" path="res://Scenes/Enemies/Boss/boss_eye.tscn" id="2_0emjf"]
 [ext_resource type="PackedScene" uid="uid://coh86i6gt3bkd" path="res://Scenes/Enemies/Boss/boss_eye_mini.tscn" id="3_kikwv"]
 

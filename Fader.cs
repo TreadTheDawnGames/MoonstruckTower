@@ -16,6 +16,7 @@ public partial class Fader : ColorRect
         base._Ready();
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         animator.AnimationFinished += (finishedAnimation) => AnimationFinished(finishedAnimation);
+        Show();
         //FadeIn();
     }
 

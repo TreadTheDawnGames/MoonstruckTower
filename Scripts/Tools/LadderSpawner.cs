@@ -17,8 +17,8 @@ public partial class LadderSpawner : Node2D, ITool
     [Export]
     public Texture2D displayTexture { get; private set; }
 
-    AnimatedSprite2D linkSprite;
-    Player link;
+    AnimatedSprite2D salmonBoySprite;
+    Player PlayerChar;
     Area2D ladderGrabber;
     Area2D roofSpawnCheck;
     Area2D wallSpawnCheck;
@@ -53,10 +53,10 @@ public partial class LadderSpawner : Node2D, ITool
 
     void AnimationFinished()
     {
-        if(linkSprite.Animation == "LadderPlace")
+        if(salmonBoySprite.Animation == "LadderPlace")
         {
             animating = false;
-            link.usingTool = false;
+            PlayerChar.usingTool = false;
         }
     }
 
@@ -70,29 +70,29 @@ public partial class LadderSpawner : Node2D, ITool
     {
 
             animating = true;
-            linkSprite.Play("LadderPlace");
+            salmonBoySprite.Play("LadderPlace");
 
         if (canUse)
             HandleLadder();
 
             
         
-            link.usingTool = false;
+            PlayerChar.usingTool = false;
         
     }
 
 
-    public void SetupTool(AnimatedSprite2D character, Player playerLink)
+    public void SetupTool(AnimatedSprite2D character, Player playerChar)
     {
-        if(link == null)
+        if(PlayerChar == null)
         {
-            link = playerLink;
+            PlayerChar = playerChar;
         }
-        if (linkSprite == null)
+        if (salmonBoySprite == null)
         {
             //GD.Print("Ladder Animator Setup");
-            linkSprite = character;
-            linkSprite.AnimationFinished += () => AnimationFinished();
+            salmonBoySprite = character;
+            salmonBoySprite.AnimationFinished += () => AnimationFinished();
         }
         ladderPlaced = false;
     }

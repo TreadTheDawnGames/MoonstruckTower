@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://capr45d77pcrk"]
 
 [ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="1_yqb7c"]
-[ext_resource type="Texture2D" uid="uid://y0inudm8cfbp" path="res://Assets/WorldTiles/DoorOutline.png" id="2_ndd47"]
+[ext_resource type="Texture2D" uid="uid://y0inudm8cfbp" path="res://Assets/WorldSprites/DoorOutline.png" id="2_ndd47"]
 [ext_resource type="PackedScene" uid="uid://b6ku5ta6gbmki" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_3.tscn" id="3_5yaut"]
 [ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="4_10ado"]
 [ext_resource type="PackedScene" uid="uid://bboflql1rehit" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_4.tscn" id="5_cjoy7"]

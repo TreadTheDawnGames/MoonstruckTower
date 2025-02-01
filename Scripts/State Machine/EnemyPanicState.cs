@@ -32,7 +32,7 @@ public partial class EnemyPanicState : EnemyState
         animator.Play("PanicAttack", 1.5f);
         timer.Timeout += StopPanicking;
 
-        StartPanic(/*Mathf.Sign(  logic.link.GlobalPosition.X-logic.GlobalPosition.X)*/);
+        StartPanic();
         logic.hitBox.SetEnabled(true);
         logic.isBusy = true;
     }

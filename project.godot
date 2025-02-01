@@ -11,8 +11,10 @@ config_version=5
 [application]
 
 config/name="Tower"
+config/tags=PackedStringArray("platformer")
 run/main_scene="res://Scenes/main_menu.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
+run/max_fps=60
 config/icon="res://icon.svg"
 run/defaults/default_clear_color=Color(0.525736, 0.646145, 0.716511, 1)
 
@@ -23,6 +25,7 @@ window/size/resizable=false
 window/size/window_width_override=1152
 window/size/window_height_override=648
 window/stretch/mode="viewport"
+window/vsync/vsync_mode=0
 
 [dotnet]
 
@@ -120,14 +123,14 @@ ToggleFullscreen={
 2d_physics/layer_11="Boss"
 2d_physics/layer_12="LadderFloor"
 2d_physics/layer_13="ArrowBlocker"
+2d_physics/layer_14="SpawnChecker"
 
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 2d/stretch/mode="disabled"
-2d/size/resizable=false
-2d/stretch/scale=1.0
 2d/stretch/aspect="keep"
 2d/size/viewport_height=648
 2d/size/viewport_width=1152
+2d/size/resizable=false

@@ -15,8 +15,8 @@ public partial class Bow : Node, ITool
 	PackedScene projectile;
 	Marker2D arrowSpawnPoint;
     Area2D spawnArea;
-	AnimatedSprite2D linkSprite;
-    Player link;
+	AnimatedSprite2D salmonBoySprite;
+    Player PlayerChar;
     AudioPlayer audioPlayer;
     [Export]
     AudioStream drawSound, shootSound;
@@ -35,24 +35,24 @@ public partial class Bow : Node, ITool
 
     void Charge()
     {
-        if (linkSprite.Animation.ToString().Contains("Draw") && shouldSound)
+        if (salmonBoySprite.Animation.ToString().Contains("Draw") && shouldSound)
         {
             audioPlayer.PlaySound(drawSound);
             shouldSound = false;
         }
 
 
-        if (linkSprite.Animation == "BowDraw" || linkSprite.Animation == "BowDrawWalk")
+        if (salmonBoySprite.Animation == "BowDraw" || salmonBoySprite.Animation == "BowDrawWalk")
         {
             charged = true;
-            linkSprite.Play("BowHold");
+            salmonBoySprite.Play("BowHold");
         }
-        else if (linkSprite.Animation == "BowDrawVert" || linkSprite.Animation == "BowDrawWalkVert")
+        else if (salmonBoySprite.Animation == "BowDrawVert" || salmonBoySprite.Animation == "BowDrawWalkVert")
         {
             charged = true;
-            linkSprite.Play("BowHoldVert");
+            salmonBoySprite.Play("BowHoldVert");
         }
-        else if (linkSprite.Animation == "BowHold" || linkSprite.Animation == "BowHoldVert")
+        else if (salmonBoySprite.Animation == "BowHold" || salmonBoySprite.Animation == "BowHoldVert")
         {
             animating = false;
         }
@@ -62,7 +62,7 @@ public partial class Bow : Node, ITool
     {
         if (spawnArea.GetOverlappingBodies().Count == 0)
         {
-            bool flipped = linkSprite.FlipH;
+            bool flipped = salmonBoySprite.FlipH;
 
 
             arrowSpawnPoint.Set("position", new Vector2(-6, 0));
@@ -77,8 +77,9 @@ public partial class Bow : Node, ITool
             GetTree().Root.GetChild<Node2D>(0).AddChild(arrow);
 
         }
-        //GD.Print("Used Bow");
-        link.usingTool = false;
+        //GD.Print("Used
+        //");
+        PlayerChar.usingTool = false;
             charged = false;
     }
     void ShootV()
@@ -95,7 +96,7 @@ public partial class Bow : Node, ITool
             GetTree().Root.AddChild(arrow);
 
         
-            link.usingTool = false;
+            PlayerChar.usingTool = false;
             charged = false;
     }
 	
@@ -117,14 +118,14 @@ public partial class Bow : Node, ITool
         {
                 audioPlayer.PlaySound(shootSound);
             shouldSound = true;
-            if (linkSprite.Animation == "BowHoldVert" || linkSprite.Animation == "BowWalkVert")
+            if (salmonBoySprite.Animation == "BowHoldVert" || salmonBoySprite.Animation == "BowWalkVert")
             {
-                linkSprite.Play("BowShootVert");
+                salmonBoySprite.Play("BowShootVert");
                 ShootV();
             }
-            else if (linkSprite.Animation == "BowHold" || linkSprite.Animation == "BowWalk")
+            else if (salmonBoySprite.Animation == "BowHold" || salmonBoySprite.Animation == "BowWalk")
             {
-                linkSprite.Play("BowShoot");
+                salmonBoySprite.Play("BowShoot");
                 ShootH();
             }
 
@@ -140,20 +141,20 @@ public partial class Bow : Node, ITool
         {
             if (direction.Y < 0)
             {
-                linkSprite.Play("BowDrawWalkVert");
+                salmonBoySprite.Play("BowDrawWalkVert");
             }
             else
             {
-                linkSprite.Play("BowDrawWalk");
+                salmonBoySprite.Play("BowDrawWalk");
             }
         }
         else if (direction.Y < 0)
         {
-            linkSprite.Play("BowDrawVert");
+            salmonBoySprite.Play("BowDrawVert");
         }
         else
         {
-            linkSprite.Play("BowDraw");
+            salmonBoySprite.Play("BowDraw");
         }
             animating = true;
     }
@@ -162,11 +163,11 @@ public partial class Bow : Node, ITool
     {
         if(direction.Y < 0)
         {
-            linkSprite.Play("BowWalkVert");
+            salmonBoySprite.Play("BowWalkVert");
         }
         else
         {
-            linkSprite.Play("BowWalk");
+            salmonBoySprite.Play("BowWalk");
         }
     }
 
@@ -174,27 +175,27 @@ public partial class Bow : Node, ITool
     {
         if (direction.Y < 0 && direction.X == 0)
         {
-            linkSprite.Play("BowHoldVert");
+            salmonBoySprite.Play("BowHoldVert");
         }
         else if (direction.Y >= 0 && direction.X == 0)
         {
-            linkSprite.Play("BowHold");
+            salmonBoySprite.Play("BowHold");
         }
         
 
     }
 
-    public void SetupTool(AnimatedSprite2D character, Player playerLink)
+    public void SetupTool(AnimatedSprite2D character, Player playerChar)
     {
-        if (link == null)
+        if (PlayerChar == null)
         {
-            link = playerLink;
+            PlayerChar = playerChar;
         }
-        if (linkSprite == null)
+        if (salmonBoySprite == null)
         {
             //GD.Print("Bow Animator Setup");
-            linkSprite = character;
-            linkSprite.AnimationFinished += () => Charge();
+            salmonBoySprite = character;
+            salmonBoySprite.AnimationFinished += () => Charge();
 
         }
 

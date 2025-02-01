@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dx2jlctrirqip"]
+[gd_scene load_steps=14 format=3 uid="uid://i5eximdgtk8g"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_11jo3"]
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
@@ -13,7 +13,10 @@
 [ext_resource type="PackedScene" uid="uid://csmrvs8ntqtpn" path="res://Scenes/chest.tscn" id="12_l4vu2"]
 [ext_resource type="Script" path="res://Scripts/CameraSmoother.cs" id="13_3xxo8"]
 
-[node name="Game" type="Node2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_b1hn0"]
+radius = 5.0
+
+[node name="LevelScene" type="Node2D" groups=["Game"]]
 process_mode = 3
 script = ExtResource("1_bm7da")
 
@@ -33,20 +36,25 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
 process_mode = 1
-position = Vector2(84, -7386)
+position = Vector2(305, -7841)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 process_mode = 1
 position = Vector2(0, -44)
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CameraTrolley"]
+shape = SubResource("CircleShape2D_b1hn0")
+
 [node name="Camera2D" type="Camera2D" parent="." groups=["Camera"]]
 process_mode = 3
-position = Vector2(-9, -2249)
+texture_filter = 1
+position = Vector2(157, -131)
 zoom = Vector2(4, 4)
 limit_left = -208
 limit_top = -7803
-limit_right = 208
+limit_right = 224
 position_smoothing_speed = 200.0
+editor_draw_limits = true
 script = ExtResource("13_3xxo8")
 TargetNodepath = NodePath("../Player/CameraTrolley")
 
@@ -67,6 +75,7 @@ process_mode = 1
 position = Vector2(0, -7131)
 
 [node name="SpawnChecker" parent="." instance=ExtResource("11_bwkbd")]
+collision_layer = 8192
 
 [node name="Chest" parent="." instance=ExtResource("12_l4vu2")]
 position = Vector2(242, -7794)

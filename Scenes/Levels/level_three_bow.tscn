@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dhyskgn22y6xq"]
+[gd_scene load_steps=24 format=3 uid="uid://dhyskgn22y6xq"]
 
 [ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="1_swoaw"]
 [ext_resource type="PackedScene" uid="uid://csmrvs8ntqtpn" path="res://Scenes/chest.tscn" id="2_4jfhl"]
@@ -16,11 +16,15 @@
 [ext_resource type="PackedScene" uid="uid://dril5bi3h5s0p" path="res://Scenes/Doors and Locks/Locks/lock_switch.tscn" id="14_cttjq"]
 [ext_resource type="PackedScene" uid="uid://du27201h5i1fp" path="res://Scenes/Doors and Locks/Doors/door_hidden_directional_sign.tscn" id="15_g7m0h"]
 [ext_resource type="PackedScene" uid="uid://dbouqh4xt26sm" path="res://Scenes/Doors and Locks/Doors/door_jump_thru_4.tscn" id="16_n0650"]
+[ext_resource type="Script" path="res://Scripts/SoftlockPrevention_UnlockIfInArea.cs" id="17_0evet"]
 [ext_resource type="PackedScene" uid="uid://dfh0lphdv50c5" path="res://Scenes/Doors and Locks/Doors/door_jump_thru_2.tscn" id="17_rv5w5"]
 [ext_resource type="PackedScene" uid="uid://cc8d3bhmb8sns" path="res://Scenes/Doors and Locks/Doors/door_fall_thru_2.tscn" id="18_lkidd"]
 [ext_resource type="PackedScene" uid="uid://bxlaf62hmy5nv" path="res://Scenes/Doors and Locks/Locks/lock_button.tscn" id="19_s81fr"]
 [ext_resource type="PackedScene" uid="uid://cvm7cr6i0tmsg" path="res://Scenes/sign.tscn" id="20_nachi"]
 [ext_resource type="Theme" uid="uid://b1l8by6tu623v" path="res://Scenes/SignsTextTheme.tres" id="21_qxwu0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nej7v"]
+size = Vector2(64, 41)
 
 [node name="LevelThree-Bow" type="Node2D"]
 
@@ -290,6 +294,17 @@ position = Vector2(-72, -2204)
 [node name="EnemySpawner11" parent="Door-FallThru15" instance=ExtResource("8_lp6p3")]
 position = Vector2(73, -4)
 enemy = 1
+
+[node name="Area2D" type="Area2D" parent="." node_paths=PackedStringArray("theDoor")]
+position = Vector2(-81.981, -2032.67)
+collision_layer = 0
+collision_mask = 8192
+script = ExtResource("17_0evet")
+theDoor = NodePath("../MultiDoor6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(1.98105, -3.8335)
+shape = SubResource("RectangleShape2D_nej7v")
 
 [node name="MultiDoor6" parent="." instance=ExtResource("3_onhdk")]
 position = Vector2(-105, -2011)

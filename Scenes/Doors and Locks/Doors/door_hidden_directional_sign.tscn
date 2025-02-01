@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://du27201h5i1fp"]
 
 [ext_resource type="Script" path="res://DirectionalSignDoor.cs" id="1_ob5j2"]
-[ext_resource type="Texture2D" uid="uid://dchrnbghg8rxp" path="res://Assets/WorldTiles/SignsArize.png" id="2_hwmt4"]
+[ext_resource type="Texture2D" uid="uid://dchrnbghg8rxp" path="res://Assets/WorldSprites/SignsArize.png" id="2_hwmt4"]
 
 [sub_resource type="Animation" id="Animation_lt3vq"]
 length = 0.001

@@ -76,6 +76,7 @@ public partial class BossLogic : CharacterBody2D
 	AudioPlayer audioPlayer;
 	AudioPlayer blinkAudioPlayer;
 
+	CharacterBody2D arrowBlockerBody;
 
 	bool secondPhase = false;
 
@@ -91,6 +92,7 @@ public partial class BossLogic : CharacterBody2D
 		finalHurtBox = GetNode<HurtBox2D>("FinalHurtBox");
 		deathZoneDetector = GetNode<Area2D>("DeathZoneDetector");
 		activationZone = GetNode<Area2D>("../ActivationZone");
+		arrowBlockerBody = GetNode<CharacterBody2D>("ArrowBlocker");
 		arrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D");
 		bodyArrowBlocker = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D2");
 		bodyArrowBlockerTop = GetNode<CollisionShape2D>("ArrowBlocker/CollisionShape2D3");
@@ -205,7 +207,8 @@ public partial class BossLogic : CharacterBody2D
 			{
 				if(bodyHits > Mathf.CeilToInt(hitsToFinalTakeDown * 0.5f))
 					bodyHits = Mathf.CeilToInt(hitsToFinalTakeDown * 0.5f);
-			}
+                
+            }
 			if (deathZoneDetector.HasOverlappingAreas())
 			{
 
@@ -237,7 +240,14 @@ public partial class BossLogic : CharacterBody2D
 					}
 				}
 			}
-            wakeUpTimer.WaitTime = wakeUpTime;
+			var waitingTime = wakeUpTime*(wingCount/originalWingCount);
+
+			if(waitingTime == 0)
+			{
+				waitingTime = wakeUpTime / 2;
+			}
+
+			wakeUpTimer.WaitTime = waitingTime;
 
         }
         else if (animator.Animation == "Hit" + state.ToString() && !downed)
@@ -256,6 +266,12 @@ public partial class BossLogic : CharacterBody2D
             {
                 EnterFinalPhase();
             }
+
+            if (finalPhase)
+            {
+                finalHurtBox.SetEnabled(true);
+            }
+
             animator.Play(state.ToString());
 			Flap();
 			
@@ -369,8 +385,8 @@ public partial class BossLogic : CharacterBody2D
 
 		MoveAndSlide();
 
-
-	}
+		
+    }
 
 	public void LoseWing(BodyState stateToShow = BodyState.Targetable, BossWing lostWing = null)
 	{
@@ -389,7 +405,13 @@ public partial class BossLogic : CharacterBody2D
 		queueTimer = true;
 		hitBox.SetEnabled(false);
 		hurtBox.SetEnabled(true);
-		downed = true;
+
+		if (finalPhase)
+		{
+			finalHurtBox.SetEnabled(false);
+		}
+
+        downed = true;
 		flappable = false;
 	}
 
@@ -444,7 +466,8 @@ public partial class BossLogic : CharacterBody2D
 		audioPlayer.PlaySound(bonkSound);
 		wakeUpTimer.WaitTime = 0.001f;
 		state = BodyState.Healthy;
-		LoseWing(BodyState.Healthy);
+		
+        LoseWing(BodyState.Healthy);
 	}
 			
 	void FinalDeath()
@@ -478,6 +501,8 @@ public partial class BossLogic : CharacterBody2D
 
         driftDirection = -MathF.Sign(Position.X);
 		hurtBox.SetEnabled(false);
+
+		
 		
 		animator.Play("WakeUp" + state.ToString());
 		blinkAudioPlayer.Play();
@@ -567,5 +592,10 @@ public partial class BossLogic : CharacterBody2D
             }*/
         }
     }
+
+	public void HitWithArrow()
+	{
+		Flap();
+	}
 
 }

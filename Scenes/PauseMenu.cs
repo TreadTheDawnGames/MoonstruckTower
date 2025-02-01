@@ -85,7 +85,7 @@ public partial class PauseMenu : Control
 
     void HandlePause()
     {
-        
+	        PlayerPrefs.SetBool("resumingGame", true);
         paused = !paused;
         ToggleBackground();
         PopOut();
@@ -108,13 +108,29 @@ public partial class PauseMenu : Control
 
     }
 
-    private void SaveGame()
+    public void SaveGame()
     {
         GD.Print("--SAVING--");
         SavePlayerPosition();
         SaveLadderPosition();
         SaveToolsAndChests();
         GD.Print("--END--");
+    }
+
+    public static void ResetSaveData()
+    {
+        float masterVol = PlayerPrefs.GetFloat("MasterVolume", 3.5f);
+        float musicVol = PlayerPrefs.GetFloat("MusicVolume", 3.5f);
+        bool fullscreen = PlayerPrefs.GetBool("Fullscreen", true);
+        bool vsync = PlayerPrefs.GetBool("VsyncEnabled", true);
+
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetBool("resumingGame", false);
+        PlayerPrefs.SetFloat("MasterVolume", masterVol);
+        PlayerPrefs.SetFloat("MusicVolume", musicVol);
+        PlayerPrefs.SetBool("Fullscreen", fullscreen);
+        PlayerPrefs.SetBool("VsyncEnabled", vsync);
+
     }
 
     private void SaveToolsAndChests()
@@ -202,7 +218,5 @@ public partial class PauseMenu : Control
         {
             GetTree().ChangeSceneToFile("res://Scenes/main_menu.tscn");
         }
-
-
     }
 }

@@ -1,7 +1,7 @@
 [gd_scene load_steps=37 format=3 uid="uid://djh07rnu37o72"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyScripts/BossLogic.cs" id="1_ou4oa"]
-[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="1_uab8f"]
+[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/KingMoth.png" id="1_uab8f"]
 [ext_resource type="AudioStream" uid="uid://86mwtslmyp88" path="res://Assets/Audio/SFX/Enemies/Boss/BassBonkFall.wav" id="2_8iblr"]
 [ext_resource type="PackedScene" uid="uid://dbju76t2vsmkj" path="res://Scenes/Enemies/Boss/boss_wing_l.tscn" id="2_w5073"]
 [ext_resource type="PackedScene" uid="uid://das7lejpkay7d" path="res://Scenes/Enemies/Boss/boss_wing_r.tscn" id="3_bb700"]
@@ -238,7 +238,6 @@ position = Vector2(-16, 0)
 position = Vector2(16, 0)
 
 [node name="HurtBox2D" type="Area2D" parent="."]
-visible = false
 collision_layer = 32
 collision_mask = 32
 script = ExtResource("5_vly7l")
@@ -250,7 +249,6 @@ rotation = -1.5708
 shape = SubResource("CapsuleShape2D_pcqk8")
 
 [node name="FinalHurtBox" type="Area2D" parent="."]
-visible = false
 collision_layer = 32
 collision_mask = 32
 script = ExtResource("5_vly7l")
@@ -268,7 +266,6 @@ wait_time = 3.0
 one_shot = true
 
 [node name="HitBox2D" type="Area2D" parent="."]
-visible = false
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("6_ymn45")
@@ -276,7 +273,6 @@ damage = 2
 layers = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox2D"]
-visible = false
 position = Vector2(0, -0.5)
 shape = SubResource("CircleShape2D_6k2gu")
 
@@ -285,12 +281,10 @@ visible = false
 shape = SubResource("RectangleShape2D_lpvga")
 
 [node name="DeathZoneDetector" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 collision_mask = 512
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DeathZoneDetector"]
-visible = false
 position = Vector2(-3.5, 0)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_pcqk8")
@@ -305,7 +299,7 @@ shape = SubResource("RectangleShape2D_r7y3w")
 
 [node name="ArrowBlocker" type="CharacterBody2D" parent="."]
 collision_layer = 4096
-collision_mask = 4096
+collision_mask = 4224
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ArrowBlocker"]
 position = Vector2(1.43051e-06, 15.3334)

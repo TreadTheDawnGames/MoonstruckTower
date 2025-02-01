@@ -29,10 +29,10 @@ public partial class EnemySpawner : Node2D, ILock
 		switch (enemy)
 		{
 			case Enemy.Moblin:
-				path = "res://Scenes/Enemies/moblin_v3.tscn";
+				path = "res://Scenes/Enemies/dino_v3.tscn";
                     break;
 			case Enemy.Octorok:
-				path = "res://Scenes/Enemies/octorok_v2.tscn";
+				path = "res://Scenes/Enemies/shooty_plant.tscn";
                     break;
 		}
 

@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://cn0lyy1o3x1p4"]
+[gd_scene load_steps=30 format=3 uid="uid://cn0lyy1o3x1p4"]
 
 [ext_resource type="Script" path="res://SettingsWindow.cs" id="1_crrb1"]
 [ext_resource type="Texture2D" uid="uid://csa3b8yacckjb" path="res://Assets/UI/LargePanelLeft.png" id="1_fa07u"]
 [ext_resource type="Texture2D" uid="uid://dx2d2hbn6688u" path="res://Assets/UI/Buttons/XButtonNormal.png" id="2_ev6n6"]
 [ext_resource type="Texture2D" uid="uid://dv72g5l7s5qwt" path="res://Assets/UI/Buttons/XButtonPressed.png" id="3_0clre"]
+[ext_resource type="PackedScene" uid="uid://b5dq254bxttuf" path="res://Scenes/input_absorber.tscn" id="3_8dltx"]
 [ext_resource type="Texture2D" uid="uid://7ge4gshalk44" path="res://Assets/UI/Buttons/XButtonHover.png" id="4_a5gm7"]
 [ext_resource type="Texture2D" uid="uid://d4e8iu1ugb0rw" path="res://Assets/UI/Buttons/MusicSlider.png" id="5_oiej2"]
 [ext_resource type="Texture2D" uid="uid://blcksnj1ls3cy" path="res://Assets/UI/Buttons/MasterSlider.png" id="6_o2elw"]
@@ -11,6 +12,13 @@
 [ext_resource type="StyleBox" uid="uid://biqskioq55nbg" path="res://SliderFiller.tres" id="8_hswp4"]
 [ext_resource type="Texture2D" uid="uid://dcd722q6mv68m" path="res://Assets/UI/ControlDiagram.png" id="9_88dpj"]
 [ext_resource type="Script" path="res://Scenes/ButtonSounds.cs" id="10_rqxcu"]
+[ext_resource type="Texture2D" uid="uid://fi4xksg3fqud" path="res://Assets/UI/Buttons/ResetDataNormal.png" id="12_q5o27"]
+[ext_resource type="Texture2D" uid="uid://diljl15c4r1wh" path="res://Assets/UI/Buttons/ResetDataPressed.png" id="13_xvk8b"]
+[ext_resource type="Texture2D" uid="uid://botxeexwi8mi6" path="res://Assets/UI/Buttons/ResetDataHoveredl.png" id="14_86i4a"]
+[ext_resource type="Texture2D" uid="uid://bbifo22dyfbfy" path="res://Assets/UI/Buttons/ResetDisabled.png" id="16_3ykyx"]
+[ext_resource type="Texture2D" uid="uid://bqp8arpv2mtkk" path="res://Assets/UI/Buttons/VSyncDisabledNormal.png" id="23_1v827"]
+[ext_resource type="Texture2D" uid="uid://5rynchqubnjf" path="res://Assets/UI/Buttons/VSyncDisabledClick.png" id="24_obt1c"]
+[ext_resource type="Texture2D" uid="uid://dddvv2frqy8pn" path="res://Assets/UI/Buttons/VSyncDisabledHover.png" id="25_byd14"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v6ap4"]
 atlas = ExtResource("6_o2elw")
@@ -119,6 +127,18 @@ grow_vertical = 2
 mouse_filter = 0
 texture = ExtResource("1_fa07u")
 
+[node name="InputAbsorber" parent="TextureRect" instance=ExtResource("3_8dltx")]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = -816.0
+offset_top = -937.0
+offset_right = 2513.0
+offset_bottom = 1359.0
+grow_horizontal = 1
+
 [node name="Master" type="HSlider" parent="TextureRect"]
 layout_mode = 1
 anchors_preset = 8
@@ -177,6 +197,31 @@ script = ExtResource("10_rqxcu")
 [node name="ControlDiagram" type="Sprite2D" parent="TextureRect"]
 position = Vector2(279, 305)
 texture = ExtResource("9_88dpj")
+
+[node name="ResetButton" type="TextureButton" parent="TextureRect"]
+layout_mode = 0
+offset_left = 308.0
+offset_top = 32.0
+offset_right = 496.0
+offset_bottom = 96.0
+focus_mode = 0
+texture_normal = ExtResource("12_q5o27")
+texture_pressed = ExtResource("13_xvk8b")
+texture_hover = ExtResource("14_86i4a")
+texture_disabled = ExtResource("16_3ykyx")
+script = ExtResource("10_rqxcu")
+
+[node name="Vsync" type="TextureButton" parent="TextureRect"]
+layout_mode = 0
+offset_left = 308.0
+offset_top = 96.0
+offset_right = 496.0
+offset_bottom = 160.0
+focus_mode = 0
+texture_normal = ExtResource("23_1v827")
+texture_pressed = ExtResource("24_obt1c")
+texture_hover = ExtResource("25_byd14")
+script = ExtResource("10_rqxcu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
