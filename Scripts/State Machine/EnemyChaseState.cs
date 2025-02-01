@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class EnemyChaseState : EnemyState
 {
-    Player link;
+    Player playerChar;
     Area2D rangeArea;
     Timer repathTimer;
     private Vector2 lastLocation;
@@ -17,7 +17,7 @@ public partial class EnemyChaseState : EnemyState
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
-        link = logic.link;
+        playerChar = logic.playerChar;
         repathTimer = GetNode<Timer>("Timer");
         //repathTimer.Timeout += () => UpdateChaseLocation(logic.lastSighting);
 
@@ -33,7 +33,6 @@ public partial class EnemyChaseState : EnemyState
         repathTimer.Start();
 
 
-        GD.Print(logic.Name + " is Chasing to " + lastLocation);
 
     }
 
@@ -43,7 +42,6 @@ public partial class EnemyChaseState : EnemyState
     void EndChase()
     {
 
-        GD.Print("End Chase");
         if (logic.canSee)
         {
             machine.ChangeState("EnemyChaseState", null);

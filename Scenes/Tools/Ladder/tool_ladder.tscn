@@ -1,10 +1,67 @@
-[gd_scene load_steps=10 format=3 uid="uid://bw0h53cp0em5y"]
+[gd_scene load_steps=20 format=3 uid="uid://bw0h53cp0em5y"]
 
 [ext_resource type="Script" path="res://Scripts/Ladder.cs" id="1_oqf3g"]
-[ext_resource type="Texture2D" uid="uid://bhxc5ok0aroan" path="res://Assets/WorldTiles/OoSPlatformerTilesSprites.png" id="2_cgrqo"]
+[ext_resource type="Texture2D" uid="uid://dypun32o7itq2" path="res://Assets/Ladder.png" id="2_dgesi"]
+[ext_resource type="AudioStream" uid="uid://cf117ktb1c3k3" path="res://Assets/Audio/SFX/Tools/LadderSpawner/LadderDespawn.wav" id="3_302if"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="3_rjnyr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6hjrf"]
+atlas = ExtResource("2_dgesi")
+region = Rect2(16, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yg6ru"]
+atlas = ExtResource("2_dgesi")
+region = Rect2(32, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53jmq"]
+atlas = ExtResource("2_dgesi")
+region = Rect2(48, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4qeye"]
+atlas = ExtResource("2_dgesi")
+region = Rect2(64, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k264e"]
+atlas = ExtResource("2_dgesi")
+region = Rect2(80, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t7t8f"]
+atlas = ExtResource("2_dgesi")
+region = Rect2(0, 0, 16, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sx6sj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6hjrf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yg6ru")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53jmq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4qeye")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k264e")
+}],
+"loop": false,
+"name": &"Despawn",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t7t8f")
+}],
+"loop": false,
+"name": &"Idle",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kdox1"]
-size = Vector2(12, 48)
+size = Vector2(12, 50)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r3bv5"]
 size = Vector2(12, 1)
@@ -13,10 +70,10 @@ size = Vector2(12, 1)
 size = Vector2(34.9925, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jclux"]
-size = Vector2(17, 11)
+size = Vector2(26, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bl384"]
-size = Vector2(12, 42)
+size = Vector2(16, 42)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l6uvb"]
 size = Vector2(17, 7)
@@ -24,28 +81,21 @@ size = Vector2(17, 7)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b1ymp"]
 size = Vector2(12, 48)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nf3is"]
+size = Vector2(6, 5)
+
 [node name="ToolLadder" type="RigidBody2D"]
+process_mode = 1
+z_index = 2
 collision_layer = 4
 collision_mask = 65
 script = ExtResource("1_oqf3g")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -40)
-texture = ExtResource("2_cgrqo")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="Sprite2D2" type="Sprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -24)
-texture = ExtResource("2_cgrqo")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="Sprite2D3" type="Sprite2D" parent="."]
-position = Vector2(0, -8)
-texture = ExtResource("2_cgrqo")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
+sprite_frames = SubResource("SpriteFrames_sx6sj")
+animation = &"Idle"
+autoplay = "Idle"
 
 [node name="ClimbableSurface" type="Area2D" parent="."]
 collision_layer = 4
@@ -55,13 +105,21 @@ collision_mask = 4
 position = Vector2(0, -24)
 shape = SubResource("RectangleShape2D_kdox1")
 
-[node name="Lid" type="StaticBody2D" parent="."]
-collision_layer = 5
-collision_mask = 4
+[node name="EndCaps" type="CharacterBody2D" parent="."]
+collision_layer = 2048
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Lid"]
-position = Vector2(0, -47.7)
+[node name="TopFloor" type="CollisionShape2D" parent="EndCaps"]
+position = Vector2(0, -48.5)
 shape = SubResource("RectangleShape2D_r3bv5")
+disabled = true
+one_way_collision = true
+
+[node name="BottomFloor" type="CollisionShape2D" parent="EndCaps"]
+position = Vector2(7.54979e-08, 0.5)
+rotation = -3.14159
+shape = SubResource("RectangleShape2D_r3bv5")
+disabled = true
 one_way_collision = true
 
 [node name="PickupArea" type="Area2D" parent="."]
@@ -84,10 +142,31 @@ shape = SubResource("RectangleShape2D_bl384")
 debug_color = Color(0.782052, 0.435604, 1.73271e-06, 0.42)
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="PickupArea"]
-position = Vector2(0, 3.5)
+position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_l6uvb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(-6.82121e-13, -24)
 rotation = -3.14159
 shape = SubResource("RectangleShape2D_b1ymp")
+
+[node name="UpCast" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 65
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpCast"]
+position = Vector2(0, -51)
+shape = SubResource("RectangleShape2D_nf3is")
+
+[node name="DownCast" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 65
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DownCast"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_nf3is")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_302if")
+script = ExtResource("3_rjnyr")

@@ -4,19 +4,22 @@ using System.Collections.Generic;
 
 public partial class EnemyBase : CharacterBody2D
 {
+    [Export] protected bool display = false;
     public AnimatedSprite2D animator;
     public AnimatedSprite2D statusAnimator;
     public EnemyStateMachine machine;
     public Node2D flippables;
-    public Player link;
+    public Player playerChar;
     protected private RayCast2D visionCast;
     public RayCast2D edgeDetectR;
     public RayCast2D edgeDetectL;
     public bool canSee = false;
-    public CollisionShape2D hurtBox;
+    public HurtBox2D hurtBox;
     public CollisionShape2D collisionBox;
     public HitBox2D hitBox;
     public Area2D passiveHitBox;
+
+    public AudioPlayer audioPlayer;
 
     public bool isBusy = false;
     public bool isAlerted = false;
@@ -43,29 +46,63 @@ public partial class EnemyBase : CharacterBody2D
     public EnemySpawner spawner { protected get; set; }
     protected bool active = false;
 
+    [Export]
+    AudioStream spawnSound;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         hitPoints = maxHP;
         collisionBox = GetNode<CollisionShape2D>(GetPath() + "/CollisionBox");
         animator = GetNode<AnimatedSprite2D>("Animator");
-        statusAnimator = GetNode<AnimatedSprite2D>("Animator/StatusAnimator");
-        machine = GetNode<EnemyStateMachine>("StateMachine");
         flippables = GetNode<Node2D>("Flippables");
-        hurtBox = GetNode<CollisionShape2D>(flippables.GetPath() + "/HurtBox2D/HurtShape");
-        visionCast = GetNode<RayCast2D>("VisionCast");
+        machine = GetNode<EnemyStateMachine>("StateMachine");
         edgeDetectR = GetNode<RayCast2D>("EdgeDetectionR");
         edgeDetectL = GetNode<RayCast2D>("EdgeDetectionL");
-        hitBox = GetNode<HitBox2D>("Flippables/HitBox2D");
-        passiveHitBox = GetNode<Area2D>("Flippables/PassiveHitBox2D");
+        statusAnimator = GetNode<AnimatedSprite2D>("Animator/StatusAnimator");
+        audioPlayer = GetNodeOrNull<AudioPlayer>("AudioStreamPlayer2D");
+        
+        hurtBox = GetNode<HurtBox2D>(flippables.GetPath() + "/HurtBox2D");
+                visionCast = GetNode<RayCast2D>("VisionCast");
+                hitBox = GetNode<HitBox2D>("Flippables/HitBox2D");
+                passiveHitBox = GetNode<Area2D>("Flippables/PassiveHitBox2D");
 
-        startingPosition = GlobalPosition;
-        animator.FlipH = GD.Randi() % 2 == 1 ? true : false;
-        link = (Player)GetTree().GetFirstNodeInGroup("Player");
+        
+       // hurtBox.SetEnabled(false);
+        
+
+        if (display)
+        {
+            
+            animator.Play("Idle");
+            machine.SetUp();
+            active = true;
+        }
+        else
+        {
+                startingPosition = GlobalPosition;
+                animator.FlipH = GD.Randi() % 2 == 1 ? true : false;
+            Vector2 flipScale = new Vector2(animator.FlipH ? -1 : 1, 1);
+            flippables.Scale = flipScale;
+                playerChar = (Player)GetTree().GetFirstNodeInGroup("Player");
+            animator.Play("Spawn");
+        }
+
+        audioPlayer.PlaySound(spawnSound);
+        animator.AnimationFinished += Activate;
 
 
 
-        animator.Play("Spawn");
+    }
+    public virtual void Activate()
+    {
+        if (animator.Animation == "Spawn")
+        {
+            active = true;
+            machine.SetUp();
+            hurtBox.SetEnabled(true);
+        }
+
     }
     protected void FlipDirection()
     {
@@ -95,10 +132,27 @@ public partial class EnemyBase : CharacterBody2D
         }
 
     }
-    public void Destroy()
+    public virtual void Destroy()
     {
         spawner.StartRespawnTimer();
+        spawner.UnlockMe(null);
         QueueFree();
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+        if (spawner != null)
+        {
+            if (GlobalPosition.Y > startingPosition.Y + (16 * spawner.tilesToFallBeforeDeath))
+            {
+                hitPoints = 0;
+                machine.ChangeState("EnemyDamageState", new Dictionary<string, object> { { "damage", 0 }, { "hitBox", null } });
+            }
+        }
+
+        
+        
     }
 
     public void TakeDamage(int damage, HitBox2D box)

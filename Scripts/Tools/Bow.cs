@@ -15,14 +15,19 @@ public partial class Bow : Node, ITool
 	PackedScene projectile;
 	Marker2D arrowSpawnPoint;
     Area2D spawnArea;
-	AnimatedSprite2D linkSprite;
-    Player link;
-    AudioStreamPlayer2D audioPlayer;
+	AnimatedSprite2D salmonBoySprite;
+    Player PlayerChar;
+    AudioPlayer audioPlayer;
+    [Export]
+    AudioStream drawSound, shootSound;
+
+    bool shouldSound = true;
+
     public bool animating {  get; private set; } 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-        audioPlayer = GetNode<AudioStreamPlayer2D>("Audio");
+        audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
         projectile = GD.Load<PackedScene>("res://Scenes/Tools/Bow/arrow.tscn");
 		arrowSpawnPoint = GetNode<Marker2D>(new NodePath("BowSpawner"));
         spawnArea = GetNode<Area2D>("BowSpawner/Area2D");
@@ -30,17 +35,24 @@ public partial class Bow : Node, ITool
 
     void Charge()
     {
-        if (linkSprite.Animation == "BowDraw" || linkSprite.Animation == "BowDrawWalk")
+        if (salmonBoySprite.Animation.ToString().Contains("Draw") && shouldSound)
+        {
+            audioPlayer.PlaySound(drawSound);
+            shouldSound = false;
+        }
+
+
+        if (salmonBoySprite.Animation == "BowDraw" || salmonBoySprite.Animation == "BowDrawWalk")
         {
             charged = true;
-            linkSprite.Play("BowHold");
+            salmonBoySprite.Play("BowHold");
         }
-        else if (linkSprite.Animation == "BowDrawVert" || linkSprite.Animation == "BowDrawWalkVert")
+        else if (salmonBoySprite.Animation == "BowDrawVert" || salmonBoySprite.Animation == "BowDrawWalkVert")
         {
             charged = true;
-            linkSprite.Play("BowHoldVert");
+            salmonBoySprite.Play("BowHoldVert");
         }
-        else if (linkSprite.Animation == "BowHold" || linkSprite.Animation == "BowHoldVert")
+        else if (salmonBoySprite.Animation == "BowHold" || salmonBoySprite.Animation == "BowHoldVert")
         {
             animating = false;
         }
@@ -50,7 +62,7 @@ public partial class Bow : Node, ITool
     {
         if (spawnArea.GetOverlappingBodies().Count == 0)
         {
-            bool flipped = linkSprite.FlipH;
+            bool flipped = salmonBoySprite.FlipH;
 
 
             arrowSpawnPoint.Set("position", new Vector2(-6, 0));
@@ -62,11 +74,12 @@ public partial class Bow : Node, ITool
             arrow.GlobalRotation = flipped ? Mathf.DegToRad(180f) : Mathf.DegToRad(0f);
             arrow.speed *= flipped ? 1 : -1;
 
-            GetTree().Root.AddChild(arrow);
+            GetTree().Root.GetChild<Node2D>(0).AddChild(arrow);
 
         }
-            GD.Print("Used Bow");
-            link.usingTool = false;
+        //GD.Print("Used
+        //");
+        PlayerChar.usingTool = false;
             charged = false;
     }
     void ShootV()
@@ -83,14 +96,14 @@ public partial class Bow : Node, ITool
             GetTree().Root.AddChild(arrow);
 
         
-            link.usingTool = false;
+            PlayerChar.usingTool = false;
             charged = false;
     }
 	
 
 	public bool Identify()
 	{
-		GD.Print("I am Bow");
+		//GD.Print("I am Bow");
 		return true;
 	}
 
@@ -103,15 +116,16 @@ public partial class Bow : Node, ITool
 
         if (charged)
         {
-
-            if (linkSprite.Animation == "BowHoldVert" || linkSprite.Animation == "BowWalkVert")
+                audioPlayer.PlaySound(shootSound);
+            shouldSound = true;
+            if (salmonBoySprite.Animation == "BowHoldVert" || salmonBoySprite.Animation == "BowWalkVert")
             {
-                linkSprite.Play("BowShootVert");
+                salmonBoySprite.Play("BowShootVert");
                 ShootV();
             }
-            else if (linkSprite.Animation == "BowHold" || linkSprite.Animation == "BowWalk")
+            else if (salmonBoySprite.Animation == "BowHold" || salmonBoySprite.Animation == "BowWalk")
             {
-                linkSprite.Play("BowShoot");
+                salmonBoySprite.Play("BowShoot");
                 ShootH();
             }
 
@@ -121,25 +135,26 @@ public partial class Bow : Node, ITool
 
     public void PreUse(Vector2 direction)
     {
+
         bool isWalking = direction.X != 0 ? true : false;
         if (isWalking)
         {
             if (direction.Y < 0)
             {
-                linkSprite.Play("BowDrawWalkVert");
+                salmonBoySprite.Play("BowDrawWalkVert");
             }
             else
             {
-                linkSprite.Play("BowDrawWalk");
+                salmonBoySprite.Play("BowDrawWalk");
             }
         }
         else if (direction.Y < 0)
         {
-            linkSprite.Play("BowDrawVert");
+            salmonBoySprite.Play("BowDrawVert");
         }
         else
         {
-            linkSprite.Play("BowDraw");
+            salmonBoySprite.Play("BowDraw");
         }
             animating = true;
     }
@@ -148,11 +163,11 @@ public partial class Bow : Node, ITool
     {
         if(direction.Y < 0)
         {
-            linkSprite.Play("BowWalkVert");
+            salmonBoySprite.Play("BowWalkVert");
         }
         else
         {
-            linkSprite.Play("BowWalk");
+            salmonBoySprite.Play("BowWalk");
         }
     }
 
@@ -160,32 +175,36 @@ public partial class Bow : Node, ITool
     {
         if (direction.Y < 0 && direction.X == 0)
         {
-            linkSprite.Play("BowHoldVert");
+            salmonBoySprite.Play("BowHoldVert");
         }
         else if (direction.Y >= 0 && direction.X == 0)
         {
-            linkSprite.Play("BowHold");
+            salmonBoySprite.Play("BowHold");
         }
         
 
     }
 
-    public void SetupTool(AnimatedSprite2D character, Player playerLink)
+    public void SetupTool(AnimatedSprite2D character, Player playerChar)
     {
-        if (link == null)
+        if (PlayerChar == null)
         {
-            link = playerLink;
+            PlayerChar = playerChar;
         }
-        if (linkSprite == null)
+        if (salmonBoySprite == null)
         {
-            GD.Print("Bow Animator Setup");
-            linkSprite = character;
-            linkSprite.AnimationFinished += () => Charge();
+            //GD.Print("Bow Animator Setup");
+            salmonBoySprite = character;
+            salmonBoySprite.AnimationFinished += () => Charge();
 
         }
 
     }
 
-   
+    public void BecomeActiveTool()
+    {
+        shouldSound = true;
+    }
 
+  
 }

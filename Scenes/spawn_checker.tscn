@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpt5mwxsqqgoi"]
+
+[ext_resource type="Script" path="res://Scenes/SpawnChecker.cs" id="1_u05nv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6k2aw"]
+size = Vector2(7, 14)
+
+[node name="SpawnChecker" type="Area2D"]
+collision_layer = 0
+script = ExtResource("1_u05nv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_6k2aw")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, -44)

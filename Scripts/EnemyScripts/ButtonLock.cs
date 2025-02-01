@@ -1,7 +1,8 @@
 using Godot;
 using System;
 
-public partial class ButtonLock : Lock
+[Icon("res://Assets/Locks and Doors/Icons/ButtonIcon.png")]
+public partial class ButtonLock : Lock, ILock
 {
 
     protected Sprite2D sprite;
@@ -9,13 +10,15 @@ public partial class ButtonLock : Lock
     bool queued = false;
     [Export] bool inverted = false;
 
+    bool shouldPlaySound = false;
+    bool lastLock;
     // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    public override void SetUp()
     {
+        audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");
         sprite = GetNode<Sprite2D>("Sprite2D");
-        unpressTimer = GetNode<Timer>("Timer");
+        //unpressTimer = GetNode<Timer>("Timer");
         unlocked = inverted;
-
         if (!inverted)
         {
             BodyEntered += UnlockMe;
@@ -31,25 +34,29 @@ public partial class ButtonLock : Lock
 
 
     }
-    protected override void UnlockMe(Node2D node)
+    public override void UnlockMe(Node2D node)
     {
         if (HasOverlappingBodies() && inverted)
             return;
         base.UnlockMe(node);
-        GD.Print("Unlocked");
 
         if (!inverted)
         {
-            GD.Print("Sprite 1");
             sprite.Frame = 1;
+
         }
         else
         {
-            GD.Print("Sprite 0");
             sprite.Frame = 0;
+
         }
+        shouldPlaySound = (lastLock != unlocked);
 
-
+        if(shouldPlaySound)
+        {
+            audioPlayer.PlaySound(unlockedSound);
+        }
+        lastLock = unlocked;
 
 
     }
@@ -59,7 +66,6 @@ public partial class ButtonLock : Lock
         base._PhysicsProcess(delta);
         if (queued)
         {
-                GD.Print("Locked");
                 Lock();
             queued = false;
         }
@@ -82,14 +88,19 @@ public partial class ButtonLock : Lock
         base.LockMe();
         if (!inverted)
         {
-            GD.Print("Sprite 0");
             sprite.Frame = 0;
+
         }
         else
         {
-            GD.Print("Sprite 1");
             sprite.Frame = 1;
         }
+        shouldPlaySound = (lastLock != unlocked);
+        if (shouldPlaySound)
+        {
+            audioPlayer.PlaySound(lockedSound);
+        }
+        lastLock = unlocked;
     }
 
 }

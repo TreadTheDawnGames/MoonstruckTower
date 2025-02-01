@@ -1,18 +1,37 @@
-[gd_scene load_steps=4 format=3 uid="uid://detdm2r8imhmx"]
+[gd_scene load_steps=11 format=3 uid="uid://detdm2r8imhmx"]
 
 [ext_resource type="Script" path="res://Scripts/Tools/LadderSpawner.cs" id="1_4abiq"]
+[ext_resource type="AudioStream" uid="uid://blxpummxcqqec" path="res://Assets/Audio/SFX/Tools/LadderSpawner/LadderPlace.wav" id="2_2p2bn"]
 [ext_resource type="Texture2D" uid="uid://cui216mcafe57" path="res://Assets/UI/Tool Icons/ToolIcon-Ladder.png" id="2_bl1gr"]
+[ext_resource type="AudioStream" uid="uid://hwtfu3b45ahk" path="res://Assets/Audio/SFX/Tools/LadderSpawner/LadderPickUp.wav" id="3_4g13j"]
+[ext_resource type="AudioStream" uid="uid://bs1tywo7qp0kq" path="res://Assets/Audio/SFX/Tools/LadderSpawner/LadderBlocked.wav" id="4_kivoy"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="5_7i4se"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n086x"]
 radius = 4.0
 height = 15.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uowra"]
+size = Vector2(12, 44)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f0wyg"]
+size = Vector2(2, 44)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r25h6"]
+radius = 2.0
+
 [node name="LadderSpawner" type="Node2D"]
 script = ExtResource("1_4abiq")
+placeSound = ExtResource("2_2p2bn")
+takeSound = ExtResource("3_4g13j")
+blockedSound = ExtResource("4_kivoy")
 displayTexture = ExtResource("2_bl1gr")
 
-[node name="LadderSpawnpoint" type="Marker2D" parent="."]
+[node name="FarSpawn" type="Marker2D" parent="."]
 position = Vector2(-7, 8)
+
+[node name="NearSpawn" type="Marker2D" parent="."]
+position = Vector2(2, 8)
 
 [node name="LadderGrabber" type="Area2D" parent="."]
 collision_layer = 4
@@ -21,3 +40,29 @@ collision_mask = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LadderGrabber"]
 position = Vector2(0, 0.5)
 shape = SubResource("CapsuleShape2D_n086x")
+
+[node name="WallCheck" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallCheck"]
+position = Vector2(-7, -16)
+shape = SubResource("RectangleShape2D_uowra")
+
+[node name="RoofCheck" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofCheck"]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_f0wyg")
+
+[node name="EdgeCheck" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 65
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EdgeCheck"]
+position = Vector2(-10, 8)
+shape = SubResource("CircleShape2D_r25h6")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+max_distance = 200.0
+script = ExtResource("5_7i4se")

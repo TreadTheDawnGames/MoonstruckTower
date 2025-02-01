@@ -1,0 +1,11 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://c21ly68f38y2p"]
+
+[ext_resource type="Texture2D" uid="uid://d4e8iu1ugb0rw" path="res://Assets/UI/Buttons/MusicSlider.png" id="1_tnv24"]
+
+[resource]
+content_margin_bottom = 4.0
+texture = ExtResource("1_tnv24")
+texture_margin_top = 64.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(0, 0, 256, 64)

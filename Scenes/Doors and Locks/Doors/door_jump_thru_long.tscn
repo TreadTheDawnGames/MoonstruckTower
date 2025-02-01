@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7n174kp7rlhf"]
+[gd_scene load_steps=5 format=3 uid="uid://c7n174kp7rlhf"]
 
 [ext_resource type="Texture2D" uid="uid://bgwoqgve6ih03" path="res://Assets/Locks and Doors/JumpThruDoor.png" id="1_8a330"]
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Doors/JumpThruDoor.cs" id="1_tgkg1"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="3_opihk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_evebc"]
 size = Vector2(96, 7)
@@ -16,7 +17,12 @@ region_enabled = true
 region_rect = Rect2(96, 0, 192, 16)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 64
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(0, -4.5)
 shape = SubResource("RectangleShape2D_evebc")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("3_opihk")

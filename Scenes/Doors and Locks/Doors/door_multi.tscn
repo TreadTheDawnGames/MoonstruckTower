@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5j6pvr4kowjw"]
+
+[ext_resource type="Script" path="res://Scripts/Locks and Doors/Doors/MultiDoor.cs" id="1_jwbhc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f4fll"]
+radius = 7.0
+
+[node name="MultiDoor" type="StaticBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_jwbhc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_f4fll")
+disabled = true

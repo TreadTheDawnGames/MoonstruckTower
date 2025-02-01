@@ -1,48 +1,60 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 
+[Icon("res://Assets/Locks and Doors/Icons/MultiDoorIcon.png")]
 public partial class MultiDoor : Door
 {
-
-    List<Door> doors = new();
+    [Export] bool forced = false;
+    List<IDoor> doors = new();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        foreach (Door door in GetChildren().OfType<Door>())
+        foreach (IDoor door in GetChildren().OfType<IDoor>())
         {
             doors.Add(door);
+        }
+        //base._Ready();
+        foreach (IDoor door in doors)
+        {
+            door.lockList = lockList;
         }
     }
 
     public override bool AttemptToOpen()
     {
-        if (!base.AttemptToOpen())
+        foreach (IDoor door in doors)
         {
-            return false;
-        }
+            if (forced)
+            {
+                door.type = IDoor.GateType.FORCED;
+            }
 
-        foreach (Door door in doors)
-        {
-            door.opened = true;
-            door.AttemptToOpen();
+            /*if (!base.AttemptToOpen())
+            {*/
+               door.AttemptToOpen();
+            //}
+            /*else
+            {
+                door.Close();
+            }*/
         }
         return true;
     }
 
-    public override bool AttemptToClose()
+    /*public override bool Close()
     {
         
 
         foreach (var door in doors)
         {
-            door.opened = false;
-            door.AttemptToClose();
+            door.AttemptToOpen();
         }
         return true;
-    }
+    }*/
 
    
 }

@@ -1,37 +1,85 @@
-[gd_scene load_steps=6 format=3 uid="uid://dx2jlctrirqip"]
+[gd_scene load_steps=14 format=3 uid="uid://i5eximdgtk8g"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_11jo3"]
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
-[ext_resource type="TileSet" uid="uid://f27jbpai41uw" path="res://MapTiles.tres" id="2_fyd2j"]
+[ext_resource type="PackedScene" uid="uid://df0cywkihjnw2" path="res://fader.tscn" id="2_lt3m5"]
+[ext_resource type="PackedScene" uid="uid://bqdhn51mlvqmo" path="res://Scenes/pause_menu.tscn" id="4_ktqft"]
+[ext_resource type="PackedScene" uid="uid://capr45d77pcrk" path="res://Scenes/Levels/level_one_sword.tscn" id="6_5ryyd"]
+[ext_resource type="PackedScene" uid="uid://wjono21bxe4e" path="res://Scenes/Levels/level_two_ladder.tscn" id="7_xw2rh"]
+[ext_resource type="PackedScene" uid="uid://dhyskgn22y6xq" path="res://Scenes/Levels/level_three_bow.tscn" id="8_0nq8m"]
 [ext_resource type="PackedScene" uid="uid://cri412adhg20a" path="res://Scenes/tool_box.tscn" id="8_3ja6y"]
-[ext_resource type="Script" path="res://Scenes/CameraSmoother.cs" id="13_3xxo8"]
+[ext_resource type="PackedScene" uid="uid://dymlnt6sg3m7u" path="res://Scenes/Levels/boss_room.tscn" id="9_ug76d"]
+[ext_resource type="PackedScene" uid="uid://bpt5mwxsqqgoi" path="res://Scenes/spawn_checker.tscn" id="11_bwkbd"]
+[ext_resource type="PackedScene" uid="uid://csmrvs8ntqtpn" path="res://Scenes/chest.tscn" id="12_l4vu2"]
+[ext_resource type="Script" path="res://Scripts/CameraSmoother.cs" id="13_3xxo8"]
 
-[node name="Game" type="Node2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_b1hn0"]
+radius = 5.0
+
+[node name="LevelScene" type="Node2D" groups=["Game"]]
+process_mode = 3
 script = ExtResource("1_bm7da")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" parent="CanvasLayer" instance=ExtResource("8_3ja6y")]
+metadata/_edit_use_anchors_ = true
 
-[node name="TileMap" type="TileMap" parent="."]
-z_index = 2
-z_as_relative = false
-tile_set = ExtResource("2_fyd2j")
-format = 2
-layer_0/z_index = -1
-layer_0/tile_data = PackedInt32Array(-11, 589824, 0, -10, 589824, 0, -9, 589824, 0, -8, 589824, 0, -7, 589824, 0, -6, 589824, 0, -5, 589824, 0, -4, 589824, 0, -3, 589824, 0, -2, 589824, 0, -1, 589824, 0, -65536, 589824, 0, -65535, 589824, 0, -65534, 589824, 0, -65533, 589824, 0, -65532, 589824, 0, -65531, 589824, 0, -65530, 589824, 0, -65529, 589824, 0, -65528, 589824, 0, -65527, 589824, 0, -65526, 589824, 0, -65525, 589824, 0, -65524, 589824, 0, -65523, 589824, 0)
+[node name="PauseMenu" parent="CanvasLayer" node_paths=PackedStringArray("fader") instance=ExtResource("4_ktqft")]
+process_mode = 3
+fader = NodePath("../Fader")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(90, -31)
-zoom = Vector2(4, 4)
-script = ExtResource("13_3xxo8")
-TargetNodepath = NodePath("../Player/CameraTrolley")
-lerpSpeedX = 0.06
-lerpSpeedY = 0.07
+[node name="Fader" parent="CanvasLayer" instance=ExtResource("2_lt3m5")]
+offset_top = -20.0
+offset_bottom = 701.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
-position = Vector2(-78, -623)
-camSmoothY = 0.05
+process_mode = 1
+position = Vector2(305, -7841)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
-position = Vector2(0, -28)
+process_mode = 1
+position = Vector2(0, -44)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CameraTrolley"]
+shape = SubResource("CircleShape2D_b1hn0")
+
+[node name="Camera2D" type="Camera2D" parent="." groups=["Camera"]]
+process_mode = 3
+texture_filter = 1
+position = Vector2(157, -131)
+zoom = Vector2(4, 4)
+limit_left = -208
+limit_top = -7803
+limit_right = 224
+position_smoothing_speed = 200.0
+editor_draw_limits = true
+script = ExtResource("13_3xxo8")
+TargetNodepath = NodePath("../Player/CameraTrolley")
+
+[node name="LevelOne-Sword" parent="." instance=ExtResource("6_5ryyd")]
+process_mode = 1
+position = Vector2(0, -75)
+
+[node name="LevelTwo-Ladder" parent="." instance=ExtResource("7_xw2rh")]
+process_mode = 1
+position = Vector2(0, -2154.97)
+
+[node name="LevelThree-Bow" parent="." instance=ExtResource("8_0nq8m")]
+process_mode = 1
+position = Vector2(0, -4299)
+
+[node name="BossRoom" parent="." instance=ExtResource("9_ug76d")]
+process_mode = 1
+position = Vector2(0, -7131)
+
+[node name="SpawnChecker" parent="." instance=ExtResource("11_bwkbd")]
+collision_layer = 8192
+
+[node name="Chest" parent="." instance=ExtResource("12_l4vu2")]
+position = Vector2(242, -7794)
+
+[node name="Chest2" parent="." instance=ExtResource("12_l4vu2")]
+position = Vector2(270, -7794)
+treasure = 1

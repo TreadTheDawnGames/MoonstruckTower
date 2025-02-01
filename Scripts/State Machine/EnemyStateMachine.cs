@@ -14,15 +14,16 @@ public partial class EnemyStateMachine : StateMachine
 	{
 
 		body = Owner.GetNode<EnemyBase>(Owner.GetPath());
-		foreach (EnemyState enemyState in States)
-		{
+        foreach (EnemyState enemyState in States)
+        {
             enemyState.SetUp(new Dictionary<string, object>() {
                 {"Machine", this },
                 {"Animator", body.animator },
                 {"StatusAnimator", body.statusAnimator },
-                {"Body", body } });
-			
-		}
+                {"Body", body },
+                {"AudioPlayer", body.audioPlayer } });
+
+        }
 		ChangeState("EnemyIdleState", null);
         
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://ddlioytlb0yyv"]
 
-[ext_resource type="Script" path="res://BossDeathPuppet.cs" id="1_4iryv"]
-[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/ALttPMothula.png" id="2_r0y8j"]
+[ext_resource type="Script" path="res://Scripts/BossDeathPuppet.cs" id="1_4iryv"]
+[ext_resource type="Texture2D" uid="uid://ckx055lunty7w" path="res://Assets/Enemy Sprites/Boss/KingMoth.png" id="2_r0y8j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c11q7"]
 

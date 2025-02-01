@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://b572ef6jxv3tx"]
+[gd_scene load_steps=10 format=3 uid="uid://b572ef6jxv3tx"]
 
 [ext_resource type="Texture2D" uid="uid://boncxsm37ulxy" path="res://Assets/Locks and Doors/EyeLockLR.png" id="1_wji6r"]
+[ext_resource type="AudioStream" uid="uid://cgvvwtj8vtyx6" path="res://Assets/Audio/SFX/Switches/EyeSwitchOn.wav" id="2_g2pqm"]
 [ext_resource type="Script" path="res://Scripts/Locks and Doors/Locks/LockEye.cs" id="2_uj4du"]
+[ext_resource type="Script" path="res://Scenes/AudioPlayer.cs" id="4_efyel"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e8ctn"]
 atlas = ExtResource("1_wji6r")
@@ -38,17 +40,21 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g5ndy"]
-size = Vector2(13, 12)
+size = Vector2(4, 8)
 
 [node name="EyeLock" type="Area2D"]
 z_index = 5
 collision_mask = 128
 script = ExtResource("2_uj4du")
+unlockedSound = ExtResource("2_g2pqm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jx463")
 animation = &"Open"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1.5, 0)
+position = Vector2(6, 0)
 shape = SubResource("RectangleShape2D_g5ndy")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+script = ExtResource("4_efyel")

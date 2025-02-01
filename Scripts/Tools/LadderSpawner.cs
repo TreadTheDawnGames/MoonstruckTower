@@ -10,69 +10,91 @@ public partial class LadderSpawner : Node2D, ITool
 
     public bool animating { get; private set; } = false;
 
+    AudioPlayer audioPlayer;
+
+    [Export] AudioStream placeSound, takeSound, blockedSound;
+
     [Export]
     public Texture2D displayTexture { get; private set; }
 
-    AnimatedSprite2D linkSprite;
-    Player link;
+    AnimatedSprite2D salmonBoySprite;
+    Player PlayerChar;
     Area2D ladderGrabber;
-    PackedScene ladderScene;
-    Marker2D ladderSpawnpoint;
+    Area2D roofSpawnCheck;
+    Area2D wallSpawnCheck;
+    Area2D edgeSpawnCheck;
 
-    bool ladderPlaced = false;
+    PackedScene ladderScene;
+    Marker2D farLadderSpawnpoint;
+    Marker2D nearLadderSpawnpoint;
+
+    public bool canUse = true;
+
+    public bool ladderPlaced = true;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
         ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
         ladderGrabber = GetNode<Area2D>("LadderGrabber");
-        ladderSpawnpoint = GetNode<Marker2D>("LadderSpawnpoint");
+        farLadderSpawnpoint = GetNode<Marker2D>("FarSpawn");
+        nearLadderSpawnpoint = GetNode<Marker2D>("NearSpawn");
+        roofSpawnCheck = GetNode<Area2D>("RoofCheck");
+        wallSpawnCheck = GetNode<Area2D>("WallCheck");
+        edgeSpawnCheck = GetNode<Area2D>("EdgeCheck");
+        audioPlayer = GetNode<AudioPlayer>("AudioStreamPlayer2D");   
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
+
+    public void BecomeActiveTool() { }
+
+
+
 
     void AnimationFinished()
     {
-        if(linkSprite.Animation == "LadderPlace")
+        if(salmonBoySprite.Animation == "LadderPlace")
         {
             animating = false;
-            link.usingTool = false;
+            PlayerChar.usingTool = false;
         }
     }
 
     public bool Identify()
     {
-        GD.Print("I am LadderSpawner");
+       // GD.Print("I am LadderSpawner");
         return true;
     }
 
     public void Use(Vector2 direction)
     {
-        
 
             animating = true;
-            linkSprite.Play("LadderPlace");
+            salmonBoySprite.Play("LadderPlace");
+
+        if (canUse)
             HandleLadder();
+
+            
         
-            link.usingTool = false;
+            PlayerChar.usingTool = false;
+        
     }
 
 
-    public void SetupTool(AnimatedSprite2D character, Player playerLink)
+    public void SetupTool(AnimatedSprite2D character, Player playerChar)
     {
-        if(link == null)
+        if(PlayerChar == null)
         {
-            link = playerLink;
+            PlayerChar = playerChar;
         }
-        if (linkSprite == null)
+        if (salmonBoySprite == null)
         {
-            GD.Print("Ladder Animator Setup");
-            linkSprite = character;
-            linkSprite.AnimationFinished += () => AnimationFinished();
+            //GD.Print("Ladder Animator Setup");
+            salmonBoySprite = character;
+            salmonBoySprite.AnimationFinished += () => AnimationFinished();
         }
+        ladderPlaced = false;
     }
 
     
@@ -84,37 +106,75 @@ public partial class LadderSpawner : Node2D, ITool
 
             foreach (Area2D area in ladderGrabber.GetOverlappingAreas())
             {
-                if (area.Owner.Name == "ToolLadder")
+                if (area.Owner is Ladder)
                 {
+                audioPlayer.PlaySound(takeSound);
                     PickupLadder((Ladder)area.Owner);
                     return;
                 }
+                
             }
+            
+                {
+                        audioPlayer.PlaySound(blockedSound);
+
+                }
         }
         else
         {
-            PlaceLadder();
+            if (!roofSpawnCheck.HasOverlappingBodies())
+            {
+                //GD.Print("Placing");
+                audioPlayer.PlaySound(placeSound);
+                PlaceLadder();
 
+            }
+            else
+            {
+                audioPlayer.PlaySound(blockedSound);
+            }
+            
         }
     }
     private void PickupLadder(Ladder ladder)
     {
-        GD.Print("Picked up Ladder");
-        ladder.Despawn();
+        ladder.Despawn(false);
         ladderPlaced = false;
     }
 
     private void PlaceLadder()
     {
-        GD.Print("Placed Ladder");
 
 
         Ladder ladder = ladderScene.Instantiate<Ladder>();
 
-        ladder.GlobalPosition = ladderSpawnpoint.GlobalPosition;
+
+        if (edgeSpawnCheck.HasOverlappingBodies())
+        {
+
+            if (!wallSpawnCheck.HasOverlappingBodies())
+            {
+                ladder.GlobalPosition = farLadderSpawnpoint.GlobalPosition;
+            }
+            else
+            {
+                ladder.GlobalPosition = nearLadderSpawnpoint.GlobalPosition;
+
+            }
+        }
+        else
+        {
+            ladder.GlobalPosition = nearLadderSpawnpoint.GlobalPosition;
+
+        }
+
+        //maybe add: if roof hit try placing rotated 90. if not, don't spawn.
+
         ladderPlaced = true;
 
-        GetTree().Root.GetNode("Game").AddChild(ladder);
+        ladder.AddToGroup("Ladders");
+
+        GetTree().Root.GetChild<Node2D>(0).AddChild(ladder);
 
     }
 }

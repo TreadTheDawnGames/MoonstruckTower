@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public partial class EnemyAlertState : EnemyState
 {
     Timer timer;
+    [Export]
+    AudioStream surprised, jump;
+
     public override void SetUp(Dictionary<string, object> message)
     {
         base.SetUp(message);
@@ -15,6 +18,8 @@ public partial class EnemyAlertState : EnemyState
     {
         base.OnStart(message);
         statusAnimator.Play("!");
+        animator.Play("Idle");
+        audioPlayer.PlaySound(surprised);
         logic.isAlerted = true;
         timer.Timeout += SetAlertTimeout;
         timer.Start();
@@ -33,6 +38,7 @@ public partial class EnemyAlertState : EnemyState
             float jumpInPixels = -Mathf.Sqrt(2 * logic.gravity * logic.jumpHeightPix);
 
             logic.velocity.Y = jumpInPixels;
+            audioPlayer.PlaySound(jump);
 
         }
     }

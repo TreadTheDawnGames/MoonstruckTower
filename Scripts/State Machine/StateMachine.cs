@@ -64,7 +64,6 @@ public partial class StateMachine : Node
 
     public override void _PhysicsProcess(double delta)
     {
-		
 		if (state != null)
 		{
             state.UpdateState((float)delta);

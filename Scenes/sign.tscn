@@ -1,15 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvm7cr6i0tmsg"]
+[gd_scene load_steps=4 format=3 uid="uid://cvm7cr6i0tmsg"]
 
-[ext_resource type="Texture2D" uid="uid://dr2tm1iuukxfa" path="res://Assets/WorldTiles/Signs.png" id="1_7w7uf"]
+[ext_resource type="Texture2D" uid="uid://dr2tm1iuukxfa" path="res://Assets/WorldSprites/Signs.png" id="1_7w7uf"]
 [ext_resource type="Script" path="res://Scripts/Sign.cs" id="1_tlkv4"]
-[ext_resource type="FontFile" uid="uid://c3jo3wds6rhfw" path="res://Assets/Fonts/tiny.ttf" id="3_qpihg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_accg2"]
 size = Vector2(30, 13)
-
-[sub_resource type="Theme" id="Theme_s6pus"]
-default_font = ExtResource("3_qpihg")
-default_font_size = 6
 
 [node name="Sign" type="Area2D"]
 collision_layer = 0
@@ -25,34 +20,3 @@ frame = 7
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_accg2")
-
-[node name="Panel" type="Panel" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -50.0
-offset_top = -56.0
-offset_right = 50.0
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -46.5
-offset_top = -22.5
-offset_right = 46.5
-offset_bottom = 22.5
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_s6pus")
-bbcode_enabled = true
-text = "Welcome to the ZONE"
-fit_content = true

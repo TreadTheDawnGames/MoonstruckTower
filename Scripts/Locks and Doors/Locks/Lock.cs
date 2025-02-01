@@ -1,36 +1,43 @@
 using Godot;
 using System;
 
-public partial class Lock : Area2D
+[Icon("res://Assets/Locks and Doors/Icons/LockIcon.png")]
+public partial class Lock : Area2D, ILock
 {
     [Export]
-    public bool unlocked = false;
-    public Door door;
-	//protected AnimatedSprite2D sprite;
-    protected CollisionShape2D shape;
+    public bool unlocked { get; set; } = false;
+    public IDoor door { get; set; }
+    public CollisionShape2D shape { get; set; }
+
+    protected AudioPlayer audioPlayer;
+    [Export]
+    protected AudioStream unlockedSound, lockedSound;
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public virtual void SetUp()
 	{
-		base._Ready();
+        audioPlayer = GetNodeOrNull<AudioPlayer>("AudioStreamPlayer2D");
 		//sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		AreaEntered += (node) => UnlockMe(node);
         shape = GetNode<CollisionShape2D>("CollisionShape2D");
 	}
 
     
-    
 
-    protected virtual void UnlockMe(Node2D node)
+    public virtual void UnlockMe(Node2D node)
     {
-
-            
-        
         if(unlocked == true)
         {
             return ;
         }
         unlocked = true;
-        door.AttemptToOpen();
+        try
+        {
+            door.AttemptToOpen();
+        }
+        catch
+        {
+            GD.PrintErr(Name + " does not have an assigned door");
+        }
     }
     
     public virtual void LockMe()
@@ -41,7 +48,14 @@ public partial class Lock : Area2D
             return ;
         }
         unlocked = false;
-        door.AttemptToClose();
+        try
+        {
+            door.AttemptToOpen();
+        }
+        catch
+        {
+            GD.PrintErr(Name + " does not have an assigned door");
+        }
     }
     
     public void SetActive(bool active)
