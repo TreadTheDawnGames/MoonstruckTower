@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://i5eximdgtk8g"]
+[gd_scene load_steps=13 format=3 uid="uid://i5eximdgtk8g"]
 
 [ext_resource type="PackedScene" uid="uid://cu3dkujga8gcn" path="res://Scenes/player.tscn" id="1_11jo3"]
 [ext_resource type="Script" path="res://Scripts/DebugTools.cs" id="1_bm7da"]
@@ -12,9 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://bpt5mwxsqqgoi" path="res://Scenes/spawn_checker.tscn" id="11_bwkbd"]
 [ext_resource type="PackedScene" uid="uid://csmrvs8ntqtpn" path="res://Scenes/chest.tscn" id="12_l4vu2"]
 [ext_resource type="Script" path="res://Scripts/CameraSmoother.cs" id="13_3xxo8"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_b1hn0"]
-radius = 5.0
 
 [node name="LevelScene" type="Node2D" groups=["Game"]]
 process_mode = 3
@@ -36,14 +33,11 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
 process_mode = 1
-position = Vector2(305, -7841)
+position = Vector2(49, -5405)
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 process_mode = 1
 position = Vector2(0, -44)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CameraTrolley"]
-shape = SubResource("CircleShape2D_b1hn0")
 
 [node name="Camera2D" type="Camera2D" parent="." groups=["Camera"]]
 process_mode = 3
