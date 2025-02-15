@@ -82,7 +82,7 @@ public partial class GraphPoint : Sprite2D
 		}
         catch (Exception e) 
 		{
-			GD.Print(e.Message);
+			//GD.Print(e.Message);
 		}
 	}
 }

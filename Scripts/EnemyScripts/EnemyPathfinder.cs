@@ -121,7 +121,7 @@ public partial class EnemyPathfinder : Pathfinder
             if((_pathFind2D.GetCellSourceId(0, _pathFind2D.ConvertPointPositionToMapPosition(where)) != -1 && whereTileInfo != null && whereTileInfo.IsDropthroughTile))
             
             {
-                GD.Print("valid because dropthrough");
+                //GD.Print("valid because dropthrough");
             }
 
             CreateAndGoToPath(where);
@@ -134,7 +134,7 @@ public partial class EnemyPathfinder : Pathfinder
             {
                 if ((bool)tileData.GetCustomData("DropThroughTiles"))
                 {
-                    GD.Print("This is a dropthrough tile");
+                    //GD.Print("This is a dropthrough tile");
                     whereTile = new Vector2I(whereTile.X, whereTile.Y - 1);
                     //make end point the tile above selected tile
                     CreateAndGoToPath(where);//DoPathFinding(whereTile);
@@ -143,7 +143,7 @@ public partial class EnemyPathfinder : Pathfinder
             }
             else
             {
-                GD.Print("Data is null");
+                //GD.Print("Data is null");
             }
             ///if tile is on dropthrough layer
             ///return true

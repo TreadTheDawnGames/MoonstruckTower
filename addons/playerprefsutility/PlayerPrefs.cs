@@ -45,12 +45,12 @@ public static class PlayerPrefs
             _currentUser = Registry.CurrentUser.OpenSubKey(registyPath, true);
         } catch
         {
-            GD.Print("Creating Registry.CurrentUser...");
+            //GD.Print("Creating Registry.CurrentUser...");
             try
             {
                 _currentUser = Registry.CurrentUser.CreateSubKey(registyPath, true);
                 _currentUser.SetValue(AppName, true);
-                GD.Print("Created Registry.CurrentUser");
+                //GD.Print("Created Registry.CurrentUser");
             } catch (Exception e)
             {
                 useFileSystemFallback = true;
@@ -144,10 +144,10 @@ public static class PlayerPrefs
 #pragma warning disable CA1416
                 val = CurrentUser.GetValue(key);
 #pragma warning restore CA1416
+            }
 #else
                 val = GetLocal(key);
 #endif
-            }
 
             if (val == null)
             {
@@ -167,7 +167,8 @@ public static class PlayerPrefs
             }
 
 
-        } catch (Exception e)
+        } 
+        catch (Exception e)
         {
             GD.PrintErr(e);
             return defaultValue;

@@ -30,7 +30,7 @@ public partial class Sign : Area2D
 
 void HideText(Node2D node)
 	{
-		GD.Print("Hidden");
+		//GD.Print("Hidden");
             panel.Hide();
 
     }

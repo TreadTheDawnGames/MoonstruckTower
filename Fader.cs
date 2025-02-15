@@ -43,7 +43,7 @@ public partial class Fader : ColorRect
 
     public void FadeIn()
     {
-        GD.Print("Fading in");
+        //GD.Print("Fading in");
         animator.Play("FadeIn");
         
     }

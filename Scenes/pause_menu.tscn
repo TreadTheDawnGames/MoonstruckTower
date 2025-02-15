@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bqdhn51mlvqmo"]
+[gd_scene load_steps=23 format=3 uid="uid://bqdhn51mlvqmo"]
 
 [ext_resource type="Script" path="res://Scenes/PauseMenu.cs" id="1_loknk"]
 [ext_resource type="AudioStream" uid="uid://yr334cvi1ks1" path="res://Assets/Audio/SFX/Menus/Pause.wav" id="2_3ft74"]
@@ -10,11 +10,14 @@
 [ext_resource type="Texture2D" uid="uid://lr4fbup66wp1" path="res://Assets/UI/Buttons/ResumeHover.png" id="5_wqhi4"]
 [ext_resource type="Script" path="res://Scenes/ButtonSounds.cs" id="8_dl0j1"]
 [ext_resource type="Texture2D" uid="uid://c0aeqmb48uart" path="res://Assets/UI/SavedText.png" id="9_5fwee"]
+[ext_resource type="Texture2D" uid="uid://bjtofdx37osct" path="res://Assets/UI/Buttons/ResumeFocused.png" id="9_dtkrk"]
 [ext_resource type="Texture2D" uid="uid://cwwuf8h3r5qc6" path="res://Assets/UI/Buttons/MenuButton-Normal.png" id="9_pkoah"]
 [ext_resource type="Texture2D" uid="uid://b4pdptcghfquc" path="res://Assets/UI/Buttons/MenuBotton-Clicked.png" id="10_jg55b"]
 [ext_resource type="Texture2D" uid="uid://lsxgtq04d5i4" path="res://Assets/UI/Buttons/MenuButton-Hover.png" id="11_4cbvs"]
 [ext_resource type="PackedScene" uid="uid://cvijir3e6ctww" path="res://Scenes/open_setting_button.tscn" id="14_0hfq7"]
+[ext_resource type="Texture2D" uid="uid://cjdsgsw1d7qlx" path="res://Assets/UI/Buttons/MenuButtonFocus.png" id="14_gke3f"]
 [ext_resource type="PackedScene" uid="uid://cn0lyy1o3x1p4" path="res://settings_and_info_window.tscn" id="15_6dmab"]
+[ext_resource type="Texture2D" uid="uid://cnp0sv326k8e6" path="res://Assets/UI/Buttons/InfoButtonFocusedV2ng.png" id="15_hfalm"]
 
 [sub_resource type="Animation" id="Animation_4bkb3"]
 resource_name = "In"
@@ -154,10 +157,12 @@ offset_top = 213.0
 offset_right = 256.0
 offset_bottom = 277.0
 size_flags_horizontal = 4
-focus_mode = 0
+focus_neighbor_top = NodePath("../OpenSettingButton")
+focus_neighbor_bottom = NodePath("../QuitButton")
 texture_normal = ExtResource("3_70smp")
 texture_pressed = ExtResource("4_kqsge")
 texture_hover = ExtResource("5_wqhi4")
+texture_focused = ExtResource("9_dtkrk")
 script = ExtResource("8_dl0j1")
 
 [node name="QuitButton" type="TextureButton" parent="TextureRect"]
@@ -167,9 +172,13 @@ offset_top = 281.0
 offset_right = 256.0
 offset_bottom = 345.0
 size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../ResumeButton")
+focus_neighbor_bottom = NodePath("../OpenSettingButton")
+focus_mode = 1
 texture_normal = ExtResource("9_pkoah")
 texture_pressed = ExtResource("10_jg55b")
 texture_hover = ExtResource("11_4cbvs")
+texture_focused = ExtResource("14_gke3f")
 script = ExtResource("8_dl0j1")
 
 [node name="TextureRect3" type="TextureRect" parent="TextureRect"]
@@ -186,6 +195,10 @@ offset_left = 132.0
 offset_top = 347.0
 offset_right = 196.0
 offset_bottom = 411.0
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../ResumeButton")
+focus_mode = 1
+texture_focused = ExtResource("15_hfalm")
 
 [node name="SettingsWindow" parent="TextureRect/OpenSettingButton" instance=ExtResource("15_6dmab")]
 top_level = true

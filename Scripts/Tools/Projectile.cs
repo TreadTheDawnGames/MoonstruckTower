@@ -36,8 +36,8 @@ public partial class Projectile : CharacterBody2D
     protected virtual void HitWorld(Node2D node)
 	{
 
-		GD.Print(node.GetType());
-		GD.Print();
+		//GD.Print(node.GetType());
+		//GD.Print();
 
         /*if (node.GetType() == typeof(HurtBox2D))
 		{

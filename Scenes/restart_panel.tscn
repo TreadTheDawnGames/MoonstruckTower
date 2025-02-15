@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cxu2mghrh38c2"]
+[gd_scene load_steps=13 format=3 uid="uid://cxu2mghrh38c2"]
 
 [ext_resource type="Texture2D" uid="uid://byx40wlcqiavp" path="res://Assets/UI/RestartForVSyncPanel.png" id="1_db7u1"]
 [ext_resource type="Script" path="res://RestartForVsyncPanel.cs" id="2_qfavg"]
@@ -7,11 +7,13 @@
 [ext_resource type="Texture2D" uid="uid://ba58x7etoqfre" path="res://Assets/UI/Buttons/YesClick.png" id="4_rsmjd"]
 [ext_resource type="Texture2D" uid="uid://cy6ccbfpcobko" path="res://Assets/UI/Buttons/YesHoverl.png" id="5_6dqpm"]
 [ext_resource type="Script" path="res://Scenes/ButtonSounds.cs" id="6_ye0rh"]
+[ext_resource type="Texture2D" uid="uid://duhgd8trhjlkw" path="res://Assets/UI/Buttons/YesHoverlFocust.png" id="7_52dvc"]
 [ext_resource type="Texture2D" uid="uid://wcwmpk2lu275" path="res://Assets/UI/Buttons/NoNormal.png" id="7_bwgp1"]
 [ext_resource type="Texture2D" uid="uid://bb0i0yhjknn1f" path="res://Assets/UI/Buttons/NoClick.png" id="8_i4hj5"]
 [ext_resource type="Texture2D" uid="uid://2xujb5btu8s7" path="res://Assets/UI/Buttons/NoHover.png" id="9_labgo"]
+[ext_resource type="Texture2D" uid="uid://cogwp6iuh2g0v" path="res://Assets/UI/Buttons/NoHoverFocus.png" id="12_wk0nd"]
 
-[node name="RestartPanel" type="TextureRect"]
+[node name="RestartPanel" type="TextureRect" groups=["YNDialog"]]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -38,6 +40,7 @@ offset_bottom = 220.0
 texture_normal = ExtResource("3_d7lb0")
 texture_pressed = ExtResource("4_rsmjd")
 texture_hover = ExtResource("5_6dqpm")
+texture_focused = ExtResource("7_52dvc")
 script = ExtResource("6_ye0rh")
 
 [node name="No" type="TextureButton" parent="."]
@@ -49,6 +52,7 @@ offset_bottom = 220.0
 texture_normal = ExtResource("7_bwgp1")
 texture_pressed = ExtResource("8_i4hj5")
 texture_hover = ExtResource("9_labgo")
+texture_focused = ExtResource("12_wk0nd")
 script = ExtResource("6_ye0rh")
 
 [node name="ButtonAudio" type="AudioStreamPlayer" parent="."]

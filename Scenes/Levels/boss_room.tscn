@@ -66,21 +66,21 @@ type = 2
 [node name="Door_FallThrough2" parent="MultiDoor" instance=ExtResource("6_uys8w")]
 visible = false
 z_index = -4
-position = Vector2(-144, -268)
+position = Vector2(-144, -284)
 visible = false
 type = 2
 
 [node name="Door_FallThrough3" parent="MultiDoor" instance=ExtResource("6_uys8w")]
 visible = false
 z_index = -4
-position = Vector2(-144, -300)
+position = Vector2(-144, -316)
 visible = false
 type = 2
 
 [node name="Door_FallThrough4" parent="MultiDoor" instance=ExtResource("6_uys8w")]
 visible = false
 z_index = -4
-position = Vector2(-144, -332)
+position = Vector2(-144, -348)
 visible = false
 type = 2
 

@@ -54,12 +54,12 @@ public partial class DebugTools : Node2D
 		{
 			slowTimeToggle = !slowTimeToggle;
 			Engine.TimeScale = slowTimeToggle ? 0.5f : 1f;
-			GD.Print("Time slowed = " + slowTimeToggle);
+			//GD.Print("Time slowed = " + slowTimeToggle);
 		}
 
 		if (Input.IsActionJustPressed("Debug-ResetPrefs"))
 		{
-			GD.Print("Deleted ALL PlayerPrefs");
+			//GD.Print("Deleted ALL PlayerPrefs");
 			PlayerPrefs.DeleteAll();
 		}*/
 

@@ -120,7 +120,7 @@ public partial class TileMapPathFind : TileMap
 		var newInfoPoint = new PointInfo(-10000, position);     // Create a new PointInfo with the position
 		newInfoPoint.IsPositionPoint = true;                    // Mark it as a position point
 		var tile = LocalToMap(position);                        // Get the tile position		
-																//GD.Print(tile);
+																////GD.Print(tile);
 
 		// If a tile is found below
 		if (GetCellSourceId(COLLISION_LAYER, new Vector2I(tile.X, tile.Y + 1)) != CELL_IS_EMPTY)
@@ -191,7 +191,7 @@ public partial class TileMapPathFind : TileMap
 					if (point.Position.DistanceTo(startPos) < leftPoint.DistanceTo(startPos))
 					{
 						leftPoint = point.Position;
-						//GD.Print(debugName + "Distance L " + leftPoint.DistanceTo(position));
+						////GD.Print(debugName + "Distance L " + leftPoint.DistanceTo(position));
 					}
 				}
 				//position is same height and to the right
@@ -238,12 +238,12 @@ public partial class TileMapPathFind : TileMap
 
 				//Result for closest point raycast
 				Vector2I nearestPosition = (Vector2I)nearestResult["position"];
-				GD.Print("ClosestPoint has obstruction: ");
+				//GD.Print("ClosestPoint has obstruction: ");
 				foreach (var raycastCollisionResult in nearestResult)
 				{
-					GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
+					//GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
 				}
-				GD.Print();
+				//GD.Print();
 				AddVisualPoint(LocalToMap(nearestPosition), new Color(0.86f, 0.56f, 0.25f, 1), scale: 0.35f);
 				drawClosestPointLines = true;
 
@@ -256,10 +256,10 @@ public partial class TileMapPathFind : TileMap
 				{
 					//result for closest point raycast
 					Vector2I closerPosition = (Vector2I)closerResult["position"];
-					GD.Print("CloserPoint has obstruction: " + closerPosition);
+					//GD.Print("CloserPoint has obstruction: " + closerPosition);
                     foreach (var raycastCollisionResult in closerResult)
                     {
-                        GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
+                        //GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
                     }
                     AddVisualPoint(LocalToMap(closerPosition), new Color(1f, 0.25f, 0.6f, 1), scale: 0.25f);
 
@@ -270,10 +270,10 @@ public partial class TileMapPathFind : TileMap
 					{
 						//result for further point
 						Vector2I furtherPosition = (Vector2I)furtherResult["position"];
-						GD.Print("FurtherPoint has obstruction: " + furtherPosition);
+						//GD.Print("FurtherPoint has obstruction: " + furtherPosition);
                         foreach (var raycastCollisionResult in furtherResult)
                         {
-                            GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
+                            //GD.Print(raycastCollisionResult.Key + " = " + raycastCollisionResult.ToString());
                         }
 
                         AddVisualPoint(LocalToMap(furtherPosition), new Color(0.1f, 1f, 0.26f, 1), scale: 0.15f);
@@ -369,7 +369,7 @@ public partial class TileMapPathFind : TileMap
 
 				if (endPoint == currPoint)
 				{
-					//GD.Print("LAST POINT == CURRPOINT");
+					////GD.Print("LAST POINT == CURRPOINT");
 					continue;
 				}
 
@@ -992,13 +992,13 @@ public partial class TileMapPathFind : TileMap
 
 		if (rightTile != null)
 		{
-			/*GD.Print("Got point info");
-			GD.Print(LocalToMap(rightTile.Position));
+			/*//GD.Print("Got point info");
+			//GD.Print(LocalToMap(rightTile.Position));
 			rightTile.PrintInfo();*/
 
 			if (GetCellSourceId(COLLISION_LAYER, LocalToMap(rightTile.Position)) != CELL_IS_EMPTY && rightTile.IsDropthroughTile)
 			{
-				//GD.Print("YOU FOUND SOMETHING");
+				////GD.Print("YOU FOUND SOMETHING");
 				var tileAbove = new Vector2I(tile.X, tile.Y - 1);
 
 				long existingPointId = TileAlreadyExistInGraph(tileAbove);
@@ -1086,7 +1086,7 @@ public partial class TileMapPathFind : TileMap
 			visualPoint.Position = MapToLocal(tile);
 
 
-			//GD.Print("Placed Visual Point at " + LocalToMap(visualPoint.Position));
+			////GD.Print("Placed Visual Point at " + LocalToMap(visualPoint.Position));
 
 			AddChild(visualPoint);
 			if (timer > 0)
@@ -1138,7 +1138,7 @@ public partial class TileMapPathFind : TileMap
 			}
 			else
 			{
-				GD.Print("No tile info for this location");
+				//GD.Print("No tile info for this location");
 			}
 
 		}

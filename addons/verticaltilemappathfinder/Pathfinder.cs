@@ -44,12 +44,12 @@ public partial class Pathfinder : CharacterBody2D
         {
             if ((_target.Position.X + 2 > globalLocalMapPosision.X && _target.Position.X - 2 < globalLocalMapPosision.X) && (_target.Position.Y + 2 > globalLocalMapPosision.Y && _target.Position.Y - 2 < globalLocalMapPosision.Y))
             {
-                GD.Print("Reached point " + _target.Position);
+                //GD.Print("Reached point " + _target.Position);
                 EmitSignal(SignalName.ReachedPoint);
             }
             if ((_target.Position.X + 2 > globalLocalMapPosision.X && _target.Position.X - 2 < globalLocalMapPosision.X) && !(_target.Position.Y + 2 > globalLocalMapPosision.Y && _target.Position.Y - 2 < globalLocalMapPosision.Y))
             {
-                GD.Print("Under or Over point " + _target.Position);
+                //GD.Print("Under or Over point " + _target.Position);
                 EmitSignal(SignalName.UnableToReachPoint);
                
                 //when under or over target path queue repath.
@@ -64,7 +64,7 @@ public partial class Pathfinder : CharacterBody2D
         // If there's no points in the path
         if (_path.Count <= 0)
         {
-            //GD.Print("\n");
+            ////GD.Print("\n");
             EmitSignal(SignalName.PathfindEnd);
             _prevTarget = null; // Set previous target to null
             _target = null;     // Set target to null
@@ -73,7 +73,7 @@ public partial class Pathfinder : CharacterBody2D
         
         _prevTarget = _target;  // Set the previous target to the current target
         _target = _path.Dequeue();  // Set the target node to the next target in the stack
-                                    // GD.Print("Going to " + _target.Position);
+                                    // //GD.Print("Going to " + _target.Position);
 
             
         if (_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition) == _target.Position)
@@ -81,7 +81,7 @@ public partial class Pathfinder : CharacterBody2D
 
         if (_prevTarget != null)
         {
-            //GD.Print("Going to " + _target.Position);
+            ////GD.Print("Going to " + _target.Position);
             _pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(1, 0, 0, 1f), scale: 0.75f, this);
         }
     }
@@ -189,7 +189,7 @@ public partial class Pathfinder : CharacterBody2D
             //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_prevTarget.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
             //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(0.5f, 0.5f, 0.5f), scale: 2);
 
-           // GD.Print("Used Dropthrough becuase lower");
+           // //GD.Print("Used Dropthrough becuase lower");
             return true;    // Return true, perform the fall
         }
         return false;
@@ -201,7 +201,7 @@ public partial class Pathfinder : CharacterBody2D
          && _target.Position.X == _prevTarget.Position.X
          && IsOnFloor())
         {
-         //   GD.Print("Used Dropthrough because dropthrough");
+         //   //GD.Print("Used Dropthrough because dropthrough");
             return true;    // Return true, perform the fall
         }
         return false;       // return false, don't perform the jump
@@ -215,7 +215,7 @@ public partial class Pathfinder : CharacterBody2D
         )
         {
 
-            // GD.Print("Jump because Right to Left");
+            // //GD.Print("Jump because Right to Left");
             return true;    // Return true, perform the jump
         }
         return false;       // return false, don't perform the jump
@@ -228,7 +228,7 @@ public partial class Pathfinder : CharacterBody2D
         && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).X > _target.Position.X  // And the previous target is to the right of the target
         )
         {
-            // GD.Print("Jump because Left To Right");
+            // //GD.Print("Jump because Left To Right");
             return true;    // Return true, perform the jump
         }
         return false;       // return false, don't perform the jump
@@ -241,7 +241,7 @@ public partial class Pathfinder : CharacterBody2D
         && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y >= _target.Position.Y // And the previous target is above the target tile
         && _pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).X == _target.Position.X) // And the previous target is to the right of the target
         {
-            // GD.Print("Jump because Dropthrough");
+            // //GD.Print("Jump because Dropthrough");
             return true;    // Return true, perform the jump
         }
         return false;       // return false, don't perform the jump
@@ -251,7 +251,7 @@ public partial class Pathfinder : CharacterBody2D
     {
         if (_pathFind2D.ConvertPositionToLocalMapPosition(GlobalPosition).Y - 8 > _target.Position.Y)
         {
-            //   GD.Print("Jump because Too Low");
+            //   //GD.Print("Jump because Too Low");
             return true;
         }
         return false;

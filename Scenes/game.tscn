@@ -33,7 +33,11 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
 process_mode = 1
-position = Vector2(49, -5405)
+position = Vector2(12, -2261)
+MAX_LERP_SPEED_Y = 60.0
+fallTimeMax = 10.0
+camSmoothY = 4.0
+CamSmoothMultiplier = 8.0
 
 [node name="CameraTrolley" type="Marker2D" parent="Player"]
 process_mode = 1
@@ -42,7 +46,7 @@ position = Vector2(0, -44)
 [node name="Camera2D" type="Camera2D" parent="." groups=["Camera"]]
 process_mode = 3
 texture_filter = 1
-position = Vector2(157, -131)
+position = Vector2(-468, -2298)
 zoom = Vector2(4, 4)
 limit_left = -208
 limit_top = -7803

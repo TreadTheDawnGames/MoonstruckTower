@@ -1,6 +1,7 @@
 
 using Godot;
 using System;
+using System.Linq;
 
 public partial class MainMenu : Control
 {
@@ -8,6 +9,7 @@ public partial class MainMenu : Control
 	bool quitting;
     TextureButton startButton;
     TextureButton quitButton;
+    TextureButton iButton;
 
 	SettingsWindow settingsWindow;
 
@@ -21,6 +23,7 @@ public partial class MainMenu : Control
 		fader = GetNode<Fader>("Fader");
 		startButton = GetNode<TextureButton>("VBoxContainer/TextureButton");
 		quitButton = GetNode<TextureButton>("VBoxContainer/TextureButton2");
+		iButton = GetNode<TextureButton>("VBoxContainer/OpenSettingButton");
 
 
 		SetPlayButtonTextures();
@@ -34,8 +37,6 @@ public partial class MainMenu : Control
         fader.MouseFilter = MouseFilterEnum.Ignore;
 		fader.FadedOut += QuitApp;
 		//fader.FadeIn();
-
-
 
 		settingsWindow = GetNodeOrNull<SettingsWindow>("VBoxContainer/OpenSettingButton/SettingsWindow");
 
@@ -52,22 +53,35 @@ public partial class MainMenu : Control
 			Node2D scene = ambient.Instantiate<Node2D>();
 			GetTree().Root.CallDeferred("add_child", scene);
 		}
-
+		PauseMenu.SetCursorVisible(true);
     }
 
-   public void SetPlayButtonTextures()
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        base._UnhandledInput(@event);
+
+		if(!settingsWindow.windowOpen) 
+		if(@event is InputEventJoypadButton && !startButton.HasFocus() && !quitButton.HasFocus() && !iButton.HasFocus())
+		{
+			startButton.GrabFocus();
+		}
+    }
+
+    public void SetPlayButtonTextures()
 	{
         if (PlayerPrefs.GetBool("resumingGame", false))
         {
             startButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeClick.png");
             startButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeHover.png");
             startButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeNormal.png");
+            startButton.TextureFocused = GD.Load<Texture2D>("res://Assets/UI/Buttons/ResumeFocusedBlack.png");
         }
 		else
         {
             startButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/StartButton-Clicked.png");
             startButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/StartButton-Hover.png");
             startButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/StartButton-Normal.png");
+            startButton.TextureFocused = GD.Load<Texture2D>("res://Assets/UI/Buttons/StartButtonFocused.png");
         }
     }
 
@@ -83,8 +97,7 @@ public partial class MainMenu : Control
 			settingsWindow.Animate();
 		}
 
-		
-
+		PauseMenu.SetCursorVisible(false);
 
         fader.MouseFilter = MouseFilterEnum.Stop;
 		fader.FadeOut();

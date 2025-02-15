@@ -285,7 +285,7 @@ public partial class BossLogic : CharacterBody2D
 	{
 		if(!active) return;
 
-		//GD.Print(flapTimer.TimeLeft);
+		////GD.Print(flapTimer.TimeLeft);
 		//body hits starts halfway
 
 
@@ -399,7 +399,7 @@ public partial class BossLogic : CharacterBody2D
 		if (lostWing != null)
 			lostWing.state = BossWing.WingState.Dead;
 
-		//GD.Print(state.ToString());
+		////GD.Print(state.ToString());
 		state = stateToShow;
 		animator.Play("Hit" + state.ToString());// Targetable");
 		queueTimer = true;
@@ -497,7 +497,7 @@ public partial class BossLogic : CharacterBody2D
 
 		
 
-		//GD.Print(wingCount + " / " + originalWingCount);
+		////GD.Print(wingCount + " / " + originalWingCount);
 
         driftDirection = -MathF.Sign(Position.X);
 		hurtBox.SetEnabled(false);

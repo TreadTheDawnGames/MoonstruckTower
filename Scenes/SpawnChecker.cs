@@ -28,7 +28,7 @@ public partial class SpawnChecker : Area2D
                 ls.ladderPlaced = true;
             }
 
-            GD.Print("Placing Ladder");
+            //GD.Print("Placing Ladder");
 			PackedScene ladderScene = GD.Load<PackedScene>("res://Scenes/Tools/Ladder/tool_ladder.tscn");
 			var ladder = ladderScene.Instantiate<Ladder>();
 

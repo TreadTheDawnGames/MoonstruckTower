@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class SettingsWindow : Control
 {
@@ -28,6 +29,11 @@ public partial class SettingsWindow : Control
         inputAbsorber = GetNode<Panel>("TextureRect/InputAbsorber");
         inputAbsorber.Hide();
 
+        xButton.FocusMode = FocusModeEnum.None;
+        VsyncButton.FocusMode = FocusModeEnum.None;
+        ResetButton.FocusMode = FocusModeEnum.None;
+        master.FocusMode = FocusModeEnum.None;
+        music.FocusMode = FocusModeEnum.None;
 
         master.Value = Mathf.DbToLinear(PlayerPrefs.GetValue("MasterVolume", master.MaxValue));
         music.Value = Mathf.DbToLinear(PlayerPrefs.GetValue("MusicVolume", music.MaxValue / 2));
@@ -39,12 +45,14 @@ public partial class SettingsWindow : Control
             VsyncButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncDisabledClick.png");
             VsyncButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncDisabledHover.png");
             VsyncButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncDisabledNormal.png");
+            VsyncButton.TextureFocused = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncDisabledFocus.png");
         }
         else
         {
             VsyncButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledClick.png");
             VsyncButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledHover.png");
             VsyncButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledNormal.png");
+            VsyncButton.TextureFocused = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledFocus.png");
         }
 
 
@@ -64,7 +72,38 @@ public partial class SettingsWindow : Control
         {
             ResetButton.Disabled = true;
         }
+
     }
+
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        base._UnhandledInput(@event);
+
+        if (windowOpen)
+        {
+            if (@event is InputEventJoypadButton && !master.HasFocus() && !music.HasFocus() && !xButton.HasFocus() && !VsyncButton.HasFocus() && !ResetButton.HasFocus() && !GetTree().HasGroup("YNDialog"))
+            {
+                xButton.GrabFocus();
+                GetViewport().SetInputAsHandled();
+
+            }
+
+            if (@event.IsActionPressed("ui_back"))
+            {
+                var focusedControl = GetTree().Root.GetViewport().GuiGetFocusOwner();
+                if (focusedControl.Equals(xButton))
+                    Animate();
+                else if (!TexturePanel_YesNoDialog.Shown)
+                    xButton.GrabFocus();
+
+                GetViewport().SetInputAsHandled();
+
+            }
+
+        }
+    }
+
     void DoResetButton()
     {
         var thePanel = ResetPlayerPrefsPanel.Instantiate<TexturePanel_YesNoDialog>();
@@ -82,6 +121,7 @@ public partial class SettingsWindow : Control
             VsyncButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledClick.png");
             VsyncButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledHover.png");
             VsyncButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledNormal.png");
+            VsyncButton.TextureFocused = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncEnabledFocus.png");
 
         }
         else
@@ -96,18 +136,12 @@ public partial class SettingsWindow : Control
     }
     public void UpdateMasterVolume(double value)
     {
-        //value / maxValue = wantedValue/maxWantedValue
-
-
         var wantedVolume = Mathf.LinearToDb(value);
-
-
         AudioServer.SetBusVolumeDb(0, (float)wantedVolume);
     }
     public void UpdateMusicVolume(double value)
     {
         var wantedVolume = Mathf.LinearToDb(value);
-
         AudioServer.SetBusVolumeDb(1, (float)wantedVolume);
     }
 
@@ -117,9 +151,6 @@ public partial class SettingsWindow : Control
         {
             PlayerPrefs.SetFloat("MasterVolume", AudioServer.GetBusVolumeDb(0));
             PlayerPrefs.SetFloat("MusicVolume", AudioServer.GetBusVolumeDb(1));
-
-            //var masterLinearVolume = Mathf.LinearToDb(AudioServer.GetBusVolumeDb(0));
-            //var musicLinearVolume = Mathf.LinearToDb(AudioServer.GetBusVolumeDb(1));
         }
     }
 
@@ -134,24 +165,44 @@ public partial class SettingsWindow : Control
         {
             animator.SpeedScale = 1;
 
-
             if (windowOpen)
             {
                 animator.PlayBackwards("In");
-
             }
             else
             {
                 animator.Play("In");
-
             }
         }
         windowOpen = !windowOpen;
 
-        if (windowOpen) 
-            inputAbsorber.Show();
-        else 
-            inputAbsorber.Hide();
+        DoFocusModeChange(windowOpen);
     }
 
+    private void DoFocusModeChange(bool windowOpen)
+    {
+        if (windowOpen)
+        {
+            xButton.FocusMode = FocusModeEnum.All;
+            VsyncButton.FocusMode = FocusModeEnum.All;
+            if (!ResetButton.Disabled)
+                ResetButton.FocusMode = FocusModeEnum.All;
+            master.FocusMode = FocusModeEnum.All;
+            music.FocusMode = FocusModeEnum.All;
+            xButton.GrabFocus();
+            inputAbsorber.Show();
+        }
+        else
+        {
+            xButton.FocusMode = FocusModeEnum.None;
+            VsyncButton.FocusMode = FocusModeEnum.None;
+            if (!ResetButton.Disabled)
+                ResetButton.FocusMode = FocusModeEnum.None;
+            master.FocusMode = FocusModeEnum.None;
+            music.FocusMode = FocusModeEnum.None;
+
+            GetParent<Control>().GrabFocus();
+            inputAbsorber.Hide();
+        }
+    }
 }

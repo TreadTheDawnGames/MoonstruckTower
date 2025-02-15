@@ -14,6 +14,7 @@ public partial class ButtonSounds : TextureButton
 		clicked = GD.Load<AudioStream>("res://Assets/Audio/SFX/Menus/ButtonClick.wav");
 		audioPlayer = Owner.GetNode<AudioStreamPlayer>("ButtonAudio");
 		MouseEntered += Hovered;
+		FocusEntered += Hovered;
 		Pressed += Clicked;
 	}
 

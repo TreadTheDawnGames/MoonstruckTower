@@ -224,7 +224,7 @@ flapSound = ExtResource("5_ykqwd")
 deadSound = ExtResource("6_mc2t2")
 hitSound = ExtResource("7_cifvy")
 finalHitSound = ExtResource("8_c0pky")
-speed = 8.0
+speed = 7.0
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1udlv")

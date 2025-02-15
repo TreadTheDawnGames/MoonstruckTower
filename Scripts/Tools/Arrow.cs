@@ -9,7 +9,7 @@ public partial class Arrow : Projectile
     protected override void HitWorld(Node2D node)
     {
 
-        GD.Print("HitWorld Called");
+        //GD.Print("HitWorld Called");
 
         
 
@@ -20,7 +20,7 @@ public partial class Arrow : Projectile
             if (body.GetCollisionLayerValue(13))
             {
 
-                //GD.Print("Got 13");
+                ////GD.Print("Got 13");
                 fallDown = false;
                 shootDirection *= -0.75f;
                 var scale = Scale;
@@ -47,7 +47,7 @@ public partial class Arrow : Projectile
             //Tilemap.get_coords_for_body_rid(KinematicCollision2D.get_collider_rid())
             if(body.Name=="MetalTileMap")
             {
-                //GD.Print("Got 13");
+                ////GD.Print("Got 13");
                 fallDown = false;
                 shootDirection *= -0.75f;
                 var scale = Scale;

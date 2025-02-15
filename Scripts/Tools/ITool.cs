@@ -21,4 +21,5 @@ public interface ITool
 	public void SetupTool(AnimatedSprite2D character, Player playerChar) { }
 
 	public void BecomeActiveTool() { }
+
 }

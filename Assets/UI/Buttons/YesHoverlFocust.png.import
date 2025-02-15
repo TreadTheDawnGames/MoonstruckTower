@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxlci0kw5laay"
-path="res://.godot/imported/Zelda_Logo.png-299b248beabee6c9c88a2bf8f6fb5806.ctex"
+uid="uid://duhgd8trhjlkw"
+path="res://.godot/imported/YesHoverlFocust.png-125c93b3b52f75813ae2c4500117a525.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI/Zelda_Logo.png"
-dest_files=["res://.godot/imported/Zelda_Logo.png-299b248beabee6c9c88a2bf8f6fb5806.ctex"]
+source_file="res://Assets/UI/Buttons/YesHoverlFocust.png"
+dest_files=["res://.godot/imported/YesHoverlFocust.png-125c93b3b52f75813ae2c4500117a525.ctex"]
 
 [params]
 

@@ -77,7 +77,7 @@ public partial class Bow : Node, ITool
             GetTree().Root.GetChild<Node2D>(0).AddChild(arrow);
 
         }
-        //GD.Print("Used
+        ////GD.Print("Used
         //");
         PlayerChar.usingTool = false;
             charged = false;
@@ -103,17 +103,12 @@ public partial class Bow : Node, ITool
 
 	public bool Identify()
 	{
-		//GD.Print("I am Bow");
+		////GD.Print("I am Bow");
 		return true;
 	}
 
     public void Use(Vector2 direction)
     {
-
-
-
-
-
         if (charged)
         {
                 audioPlayer.PlaySound(shootSound);
@@ -193,7 +188,7 @@ public partial class Bow : Node, ITool
         }
         if (salmonBoySprite == null)
         {
-            //GD.Print("Bow Animator Setup");
+            ////GD.Print("Bow Animator Setup");
             salmonBoySprite = character;
             salmonBoySprite.AnimationFinished += () => Charge();
 
@@ -203,6 +198,7 @@ public partial class Bow : Node, ITool
 
     public void BecomeActiveTool()
     {
+        charged = false;
         shouldSound = true;
     }
 

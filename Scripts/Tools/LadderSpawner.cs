@@ -62,7 +62,7 @@ public partial class LadderSpawner : Node2D, ITool
 
     public bool Identify()
     {
-       // GD.Print("I am LadderSpawner");
+       // //GD.Print("I am LadderSpawner");
         return true;
     }
 
@@ -90,7 +90,7 @@ public partial class LadderSpawner : Node2D, ITool
         }
         if (salmonBoySprite == null)
         {
-            //GD.Print("Ladder Animator Setup");
+            ////GD.Print("Ladder Animator Setup");
             salmonBoySprite = character;
             salmonBoySprite.AnimationFinished += () => AnimationFinished();
         }
@@ -124,7 +124,7 @@ public partial class LadderSpawner : Node2D, ITool
         {
             if (!roofSpawnCheck.HasOverlappingBodies())
             {
-                //GD.Print("Placing");
+                ////GD.Print("Placing");
                 audioPlayer.PlaySound(placeSound);
                 PlaceLadder();
 

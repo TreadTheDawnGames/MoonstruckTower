@@ -19,15 +19,9 @@ public partial class RestartForVsyncPanel : TexturePanel_YesNoDialog
 
     protected override void YesPressed()
     {
+        base.YesPressed();
         WindowSizer.Instance.SetVsync(false);
-        
-/*        SettingsWindow.Vsync = false;
-        SettingsWindow.VsyncButton.TexturePressed = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncDisabledClick.png");
-        SettingsWindow.VsyncButton.TextureHover = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncDisabledHover.png");
-        SettingsWindow.VsyncButton.TextureNormal = GD.Load<Texture2D>("res://Assets/UI/Buttons/VSyncDisabledNormal.png");
-*/
         OS.SetRestartOnExit(true);
-
         GetTree().Quit();
     }
 

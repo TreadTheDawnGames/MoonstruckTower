@@ -49,7 +49,7 @@ public partial class ShootyPlant : EnemyBase
     }
     void ChargePellet()
     {
-        //GD.Print("Charged");
+        ////GD.Print("Charged");
         shootCharged = true;
     }
 

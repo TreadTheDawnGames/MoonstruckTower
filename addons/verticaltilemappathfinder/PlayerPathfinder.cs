@@ -43,7 +43,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         if (_prevTarget != null)
         {
 
-            GD.Print("Going to " + _target.Position);
+            //GD.Print("Going to " + _target.Position);
             
             //_pathFind2D.AddVisualPoint(_pathFind2D.ConvertPointPositionToMapPosition(_target.Position), new Color(1, 0, 0, 1f), scale:0.75f);
         }
@@ -143,7 +143,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         }
         if (_prevTarget.Position.Y < _target.Position.Y || UseDropthrough())
         {
-            GD.Print("Used Dropthrough");
+            //GD.Print("Used Dropthrough");
             GlobalPosition += new Vector2(0, 2);
             
             velocity.Y = 0;     //override jump velocity
@@ -167,7 +167,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         ) 
         {
             
-            GD.Print("Jump because Right to Left");
+            //GD.Print("Jump because Right to Left");
 
             return true;    // Return true, perform the jump
         }
@@ -184,7 +184,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         && _prevTarget.Position.X > _target.Position.X  // And the previous target is to the right of the target
         ) 
         {
-            GD.Print("Jump because Left To Right");
+            //GD.Print("Jump because Left To Right");
 
             return true;    // Return true, perform the jump
         }
@@ -198,7 +198,7 @@ public partial class PlayerPathfinder : CharacterBody2D
         && _prevTarget.Position.Y >= _target.Position.Y // And the previous target is above the target tile
         && _prevTarget.Position.X == _target.Position.X) // And the previous target is to the right of the target
         {
-        GD.Print("Jump because Dropthrough");
+        //GD.Print("Jump because Dropthrough");
             return true;    // Return true, perform the jump
         }
         return false;       // return false, don't perform the jump
@@ -208,7 +208,7 @@ public partial class PlayerPathfinder : CharacterBody2D
     {
         if(_prevTarget.Position.Y -8 > _target.Position.Y)
         {
-            GD.Print("Jump because Too Low");
+            //GD.Print("Jump because Too Low");
             return true;
         }
         return false;
@@ -239,17 +239,17 @@ public partial class PlayerPathfinder : CharacterBody2D
             int heightDistance = _pathFind2D.LocalToMap(_target.Position).Y - _pathFind2D.LocalToMap(_prevTarget.Position).Y;
             if (Mathf.Abs(heightDistance) <= 1.5)
             {
-                GD.Print("Tiny Jump");
+                //GD.Print("Tiny Jump");
                 velocity.Y = TinyJumpVelocity;
             }
             else if (Mathf.Abs(heightDistance) == 2.75)
             {
-                GD.Print("Medium Jump");
+                //GD.Print("Medium Jump");
                 velocity.Y = SmallJumpVelocity;
             }
             else
             {
-                GD.Print("High Jump");
+                //GD.Print("High Jump");
                 velocity.Y = JumpVelocity;
             }
         }

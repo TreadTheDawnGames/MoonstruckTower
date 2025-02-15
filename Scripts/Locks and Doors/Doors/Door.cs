@@ -33,8 +33,8 @@ public partial class Door : Node2D, IDoor
         catch(Exception ex) 
         {
             GD.PrintErr(Name + " has no assigned locklist");
-            GD.Print(ex.Message);
-            GD.Print(ex.StackTrace);
+            //GD.Print(ex.Message);
+            //GD.Print(ex.StackTrace);
         }
 
         

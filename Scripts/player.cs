@@ -13,6 +13,7 @@ public partial class Player : CharacterBody2D
     [Export] public float climbSpeed = 75.0f;
     [Export] public float JumpVelocity = -270.0f;
     [Export] private float damageWaitTime = 0.5f;
+    [Export] private float MAX_LERP_SPEED_Y = 1f;
 
 
     AnimatedSprite2D animator;
@@ -45,7 +46,6 @@ public partial class Player : CharacterBody2D
     Godot.Collections.Dictionary<string, AudioStream> sounds;
 
     CameraSmoother camera;
-    bool cameraPan = false;
 
     ITool selectedTool;
     public ITool[] toolBagList { get; private set; }
@@ -67,6 +67,7 @@ public partial class Player : CharacterBody2D
     public bool flippedSwitchThisAnimation = false;
 
     [Export] float camSmoothY = 0.07f;
+    [Export] float CamSmoothMultiplier = 10f;
 
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -254,13 +255,13 @@ public partial class Player : CharacterBody2D
             {
                 if (selectedTool.useRelease)
                 {
-                    // GD.Print("Used " + selectedTool.name);
+                    // //GD.Print("Used " + selectedTool.name);
                     selectedTool.PreUse(direction);
                 }
                 else
                 {
                     selectedTool.Use(direction);
-                    // GD.Print("PreUse for " + selectedTool.name);
+                    // //GD.Print("PreUse for " + selectedTool.name);
                 }
                 usingTool = true;
 
@@ -285,7 +286,9 @@ public partial class Player : CharacterBody2D
     void HandleToolSwap()
     {
         if (usingTool)
+        {
             usingTool = false;
+        }
 
         if (toolBagList.Length != 0)
         {
@@ -311,7 +314,7 @@ public partial class Player : CharacterBody2D
         }
     }
 
-    void HandleCamera(Vector2 direction)
+    void HandleCamera(Vector2 direction, double delta)
     {
         //if down control is held count up
         if (direction.Y > 0)
@@ -321,19 +324,18 @@ public partial class Player : CharacterBody2D
         //otherwise don't
         else
         {
-            cameraPan = false;
             cameraPanDownCounter = 0;
         }
 
         //if the counter is done move the camera down
         if (cameraPanDownCounter > 20)
         {
-            cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDownPosition, camSmoothY);
+            cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDownPosition, camSmoothY*(float)delta);
         }
 
         else
         {
-            cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDefaultPosition, camSmoothY);
+            cameraTrolley.Position = cameraTrolley.Position.Lerp(cameraDefaultPosition, camSmoothY*(float)delta);
 
             //this makes it so the camera keeps up if you fall infinitely
             if (Velocity.Y > 0)
@@ -346,11 +348,20 @@ public partial class Player : CharacterBody2D
                 fallTimeCounter = 0;
             }
 
-            if (camera.lerpSpeedY < 1f)
+            if (camera.lerpSpeedY < MAX_LERP_SPEED_Y && fallTimeCounter < fallTimeMax)
             {
-                camera.lerpSpeedY = Mathf.Lerp(camSmoothY, camSmoothY * 3f, fallTimeCounter / fallTimeMax);
+                camera.lerpSpeedY = Mathf.Lerp(camSmoothY, camSmoothY * CamSmoothMultiplier, Math.Min(fallTimeCounter / fallTimeMax, 1));
             }
         }
+
+        if(IsOnFloor() && camera.GlobalPosition.DistanceTo(cameraTrolley.GlobalPosition) < 200f)
+        {
+            camera.lerpSpeedY = camera.baseLerpSpeedY;
+        }
+       
+            //GD.Print("LerpSpeedY: " + camera.lerpSpeedY);
+            //GD.Print("fallTimeCounter / fallTimeMax: " + Math.Min(fallTimeCounter / fallTimeMax, 1));
+            //GD.Print("camera.GlobalPosition: " + camera.GlobalPosition);
     }
 
     void HandleCoyoteTime()
@@ -493,7 +504,7 @@ public partial class Player : CharacterBody2D
             audioPlayer.PlaySound(stream);
         }
         var direction = Mathf.Sign(GlobalPosition.X - box.GlobalPosition.X);
-        GD.Print("PLAYER TOOK DAMAGE");
+        //GD.Print("PLAYER TOOK DAMAGE");
 
         var hitVelX = Velocity.X;
         var hitVelY = Velocity.Y;
@@ -646,7 +657,7 @@ public partial class Player : CharacterBody2D
 
         HandleAnimation(direction);
 
-        HandleCamera(direction);
+        HandleCamera(direction, delta);
 
         velocity.X = velocity.X * (float)delta * 70;
 

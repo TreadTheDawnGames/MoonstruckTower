@@ -24,12 +24,12 @@ public partial class SoftlockPrevention_UnlockIfInArea : Area2D
 				foreach (var l in theDoor.lockList)
 					l.UnlockMe(null);
 				theDoor.AttemptToOpen();
-				GD.Print("SpawnCheckerFound");
+				//GD.Print("SpawnCheckerFound");
 			}
         }
         else
         {
-            GD.Print("NOT FOUND");
+            //GD.Print("NOT FOUND");
         }
     }
 
