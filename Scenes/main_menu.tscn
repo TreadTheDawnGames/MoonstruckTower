@@ -207,7 +207,6 @@ scale = Vector2(4, 4)
 display = true
 
 [node name="TextureRect" type="TextureRect" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0.498039)
 layout_mode = 0
 offset_right = 1161.0
@@ -215,7 +214,6 @@ offset_bottom = 653.0
 texture = ExtResource("4_v4721")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -298,6 +296,7 @@ offset_bottom = 746.0
 [node name="ButtonAudio" type="AudioStreamPlayer" parent="."]
 
 [node name="TextureRect2" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
