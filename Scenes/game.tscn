@@ -33,7 +33,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_11jo3")]
 process_mode = 1
-position = Vector2(12, -2261)
+position = Vector2(12, -2260)
 MAX_LERP_SPEED_Y = 60.0
 fallTimeMax = 10.0
 camSmoothY = 4.0

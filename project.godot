@@ -15,14 +15,12 @@ config/version="1.2.4"
 config/tags=PackedStringArray("platformer")
 run/main_scene="res://Scenes/main_menu.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
-run/max_fps=35
 config/icon="res://icon.svg"
 run/defaults/default_clear_color=Color(0.525736, 0.646145, 0.716511, 1)
 
 [display]
 
 window/size/mode=3
-window/size/resizable=false
 window/size/window_width_override=1152
 window/size/window_height_override=648
 window/stretch/mode="viewport"
